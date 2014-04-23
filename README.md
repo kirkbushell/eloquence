@@ -7,13 +7,9 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 
 ## Installation
 
-Step 1 - use composer, and add the following to your require packages:
+Install the package via composer:
 
-    "kirkbushell/eloquence": "dev-master"
-
-Then as per usual:
-
-    composer install
+    composer require kirkbushell/eloquence ~1.0
 
 ## Usage
 
