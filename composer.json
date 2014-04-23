@@ -1,0 +1,20 @@
+{
+    "name": "kirkbushell/eloquence",
+    "description": "",
+    "authors": [
+        {
+            "name": "Kirk Bushell",
+            "email": "torm3nt@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Kirkbushell\\Eloquence": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
