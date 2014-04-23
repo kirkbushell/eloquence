@@ -1,6 +1,6 @@
 {
     "name": "kirkbushell/eloquence",
-    "description": "",
+    "description": "Allows developers to work with Laravel 4 Eloquent models in the same fashion they'd use every other class - with camelCase methods and attributes.",
     "authors": [
         {
             "name": "Kirk Bushell",
