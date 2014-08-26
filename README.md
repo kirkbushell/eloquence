@@ -6,13 +6,13 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 
 ## Changelog
 
-### 1.1.0
+#### 1.1.0
 
 * UUIDModel trait added
 * CamelCaseModel trait added
 * Model class updated to use CamelCaseModel trait - deprecated, backwards-compatibility support only
 
-### 1.0.0
+#### 1.0.0
 
 * Initial implementation
 * Camel casing of model attributes now available for both setters and getters
