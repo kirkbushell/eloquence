@@ -15,11 +15,11 @@ Install the package via composer:
 
 First, add the eloquence service provider to your config/app.php file:
 
-    'KirkBushell\Eloquence\EloquenceServiceProvider',
+    'Eloquence\EloquenceServiceProvider',
 
 Now, update your Eloquent alias to instead point to the Eloquence model version:
 
-    'Eloquent' => 'KirkBushell\Eloquence\Database\Model',
+    'Eloquent' => 'Eloquence\Database\Model',
 
 You should now be good to go with your models.
 
