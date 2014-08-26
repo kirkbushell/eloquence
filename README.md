@@ -9,7 +9,7 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 
 Install the package via composer:
 
-    composer require kirkbushell/eloquence ~1.0
+    composer require kirkbushell/eloquence 1.1.x
 
 ## Usage
 
@@ -33,7 +33,9 @@ You can change this if you need certain models to not use this behaviour, simply
 
     public $enforceCamelCase = false;
 
+You can also, if necessary - use the CamelCaseModel trait, instead of extending the Model class directly (which now just uses the new trait).
+
 ## Note!
 
-It should be noted that Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations.
+It should be noted that Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within the Laravel community :)
 
