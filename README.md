@@ -4,6 +4,18 @@ Eloquence is a package to extend Laravel 4's base Eloquent models and functional
 
 It allows developers to continue using the PSR-0 standard when dealing with database field names in models. This package will be built on in the future to add more features to the great Eloquent library.
 
+## Changelog
+
+### 1.1.0
+
+* UUIDModel trait added
+* CamelCaseModel trait added
+* Model class updated to use CamelCaseModel trait - deprecated, backwards-compatibility support only
+
+### 1.0.0
+
+* Initial implementation
+* Camel casing of model attributes now available for both setters and getters
 
 ## Installation
 
