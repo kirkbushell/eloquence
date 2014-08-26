@@ -1,5 +1,5 @@
 <?php
 
-namespace KirkBushell\Eloquence\Database\Schema;
+namespace Eloquence\Database\Schema;
 
 class UUIDException extends \Exception {}

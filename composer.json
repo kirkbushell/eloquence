@@ -10,11 +10,12 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/database": "4.2.*"
+        "illuminate/database": "4.2.*",
+	    "rhumsaa/uuid": "3.0.*@dev"
     },
     "autoload": {
         "psr-0": {
-            "KirkBushell\\Eloquence": "src/"
+            "Eloquence": "src/"
         }
     },
     "minimum-stability": "stable"

@@ -1,9 +1,9 @@
 <?php
 
-namespace KirkBushell\Eloquence;
+namespace Eloquence;
 
 use Illuminate\Support\ServiceProvider;
-use KirkBushell\Eloquence\Database\Schema\Blueprint;
+use Eloquence\Database\Schema\Blueprint;
 
 class EloquenceServiceProvider extends ServiceProvider
 {
@@ -13,7 +13,6 @@ class EloquenceServiceProvider extends ServiceProvider
 	 * @var bool
 	 */
 	protected $defer = false;
-
 
 	/**
 	 * Initialises the service provider, and here we attach our own blueprint

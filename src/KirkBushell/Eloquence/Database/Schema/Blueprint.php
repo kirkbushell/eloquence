@@ -1,6 +1,6 @@
 <?php
 
-namespace KirkBushell\Eloquence\Database\Schema;
+namespace Eloquence\Database\Schema;
 
 /**
  * Class Blueprint
@@ -8,7 +8,7 @@ namespace KirkBushell\Eloquence\Database\Schema;
  * Extends Laravel's Blueprint functionality by supporting various other types of field creations,
  * mainly just to ensure that
  *
- * @package KirkBushell\Eloquence\Database\Schema
+ * @package Eloquence\Database\Schema
  */
 class Blueprint extends \Illuminate\Database\Schema\Blueprint
 {

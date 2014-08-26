@@ -1,6 +1,6 @@
 <?php
 
-namespace KirkBushell\Eloquence\Database;
+namespace Eloquence\Database\Traits;
 
 trait CamelCaseModel
 {
