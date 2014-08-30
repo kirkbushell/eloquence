@@ -11,6 +11,17 @@ Install the package via composer:
 
     composer require kirkbushell/eloquence ~1.0
 
+## Changelog
+
+#### 1.0.1
+
+* Fixed an issue with dependency resolution
+
+#### 1.0.0
+
+* Initial implementation
+* Camel casing of model attributes now available for both setters and getters
+
 ## Usage
 
 First, add the eloquence service provider to your config/app.php file:
