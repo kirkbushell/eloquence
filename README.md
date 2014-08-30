@@ -11,6 +11,7 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 * UUIDModel trait added
 * CamelCaseModel trait added
 * Model class updated to use CamelCaseModel trait - deprecated, backwards-compatibility support only
+* Eloquence now its own namespace
 
 #### 1.0.0
 
