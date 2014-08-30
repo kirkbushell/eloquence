@@ -13,6 +13,10 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 * Model class updated to use CamelCaseModel trait - deprecated, backwards-compatibility support only
 * Eloquence now its own namespace
 
+#### 1.0.1
+
+* Fixed an issue with dependency resolution
+
 #### 1.0.0
 
 * Initial implementation
@@ -30,9 +34,10 @@ First, add the eloquence service provider to your config/app.php file:
 
     'Eloquence\EloquenceServiceProvider',
 
-Now, update your Eloquent alias to instead point to the Eloquence model version:
-
-    'Eloquent' => 'Eloquence\Database\Model',
+It's important to note that this will automatically re-bind the Model class
+that Eloquent uses for many-to-many relationships. This is necessary because
+when the Pivot model is instantiated, we need it to utilise the parent model's
+information and traits that may be needed.
 
 You should now be good to go with your models.
 
