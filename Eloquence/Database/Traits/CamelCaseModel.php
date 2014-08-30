@@ -47,15 +47,38 @@ trait CamelCaseModel
 		$convertedAttributes = [];
 
 		foreach ($attributes as $key => $value) {
-			if ($this->enforceCamelCase) {
-				$key = camel_case($key);
-			}
+			$key = $this->trueKeyName($key);
 
-			$convertedAttributes[$key] = $value;
+            $convertedAttributes[$key] = $value;
 		}
 
 		return $convertedAttributes;
 	}
+
+    /**
+     * Retrieves the true key name for a key.
+     *
+     * @param $key
+     * @return string
+     */
+    protected function trueKeyName($key)
+    {
+        if ($this->isCamelCase()) {
+            $key = camel_case($key);
+        }
+
+        return $key;
+    }
+
+    /**
+     * Determines whether the model (or its parent) requires camelcasing.
+     *
+     * @return bool
+     */
+    protected function isCamelCase()
+    {
+        return $this->enforceCamelCase or ( isset( $this->parent ) && $this->parent->enforceCamelCase );
+    }
 
 	/**
 	 * If the field names need to be converted so that they can be accessed by camelCase, then we can do that here.
