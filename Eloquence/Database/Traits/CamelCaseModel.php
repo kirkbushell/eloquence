@@ -77,7 +77,7 @@ trait CamelCaseModel
      */
     protected function isCamelCase()
     {
-        return $this->enforceCamelCase or ( isset( $this->parent ) && $this->parent->enforceCamelCase );
+        return $this->enforceCamelCase or (isset($this->parent) && $this->parent->enforceCamelCase);
     }
 
 	/**

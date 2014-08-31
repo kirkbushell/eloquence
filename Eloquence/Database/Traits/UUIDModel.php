@@ -17,6 +17,8 @@ trait UUIDModel
 {
 	/**
 	 * Indicates if the IDs are auto-incrementing.
+     *
+     * @TODO put in docs rather than overwriting a property here.
 	 *
 	 * @var bool
 	 */
@@ -36,7 +38,9 @@ trait UUIDModel
 		 * for the `id` field (provided by $model->getKeyName())
 		 */
 		self::creating(function ($model) {
-			$model->{$model->getKeyName()} = (string)$model->generateNewId();
+            if ($model->incrementing) return;
+
+			$model->{$model->getKeyName()} = (string)$model->generateNewUuid();
 		});
 	}
 
@@ -45,7 +49,7 @@ trait UUIDModel
 	 *
 	 * @return \Rhumsaa\Uuid\Uuid
 	 */
-	public function generateNewId()
+	public function generateNewUuid()
 	{
 		return Uuid::uuid4();
 	}
