@@ -13,7 +13,7 @@ class CamelCaseModelTest extends \PHPUnit_Framework_TestCase
         $this->model = new ModelStub;
     }
 
-    public function testAttributesRetrieval()
+    public function testAttributesAsArray()
     {
         $attributes = $this->model->attributesToArray();
 
@@ -28,5 +28,10 @@ class CamelCaseModelTest extends \PHPUnit_Framework_TestCase
         $this->model->setAttribute('firstName', 'Andrew');
 
         $this->assertEquals('Andrew', $this->model->getAttribute('firstName'));
+    }
+
+    public function testAttributeRetrieval()
+    {
+        $this->assertEquals('Kirk', $this->model->getAttribute('firstName'));
     }
 }
