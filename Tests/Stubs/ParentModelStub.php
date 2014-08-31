@@ -20,4 +20,9 @@ class ParentModelStub
     {
         return $this->attributes[$key];
     }
+
+    public function setAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
+    }
 }
