@@ -71,13 +71,14 @@ trait CamelCaseModel
     }
 
     /**
-     * Determines whether the model (or its parent) requires camelcasing.
+     * Determines whether the model (or its parent) requires camelcasing. This is required
+     * for pivot models whereby they actually depend on their parents for this feature.
      *
      * @return bool
      */
-    protected function isCamelCase()
+    public function isCamelCase()
     {
-        return $this->enforceCamelCase or (isset($this->parent) && $this->parent->enforceCamelCase);
+        return $this->enforceCamelCase or (isset($this->parent) && method_exists($this->parent, 'isCamelCase') && $this->parent->isCamelCase());
     }
 
 	/**
