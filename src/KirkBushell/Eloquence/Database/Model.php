@@ -68,4 +68,25 @@ class Model extends \Illuminate\Database\Eloquent\Model
     {
         return snake_case($key);
     }
+    
+    /**
+     * Get the model's relationships, converting field casing if necessary.
+     *
+     * @return array
+     */
+    public function relationsToArray()
+    {
+        $attributes = parent::relationsToArray();
+        $convertedAttributes = [];
+
+        foreach ($attributes as $key => $value) {
+            if ($this->enforceCamelCase) {
+                $key = camel_case($key);
+            }
+
+            $convertedAttributes[$key] = $value;
+        }
+
+        return $convertedAttributes;
+    }
 }
