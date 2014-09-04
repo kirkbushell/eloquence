@@ -37,10 +37,10 @@ trait UUIDModel
 		 * Attach to the 'creating' Model Event to provide a UUID
 		 * for the `id` field (provided by $model->getKeyName())
 		 */
-		self::creating(function ($model) {
+		static::creating(function ($model) {
             if ($model->incrementing) return;
 
-			$model->{$model->getKeyName()} = (string)$model->generateNewUuid();
+			$model->{$model->getKeyName()} = (string) $model->generateNewUuid();
 		});
 	}
 

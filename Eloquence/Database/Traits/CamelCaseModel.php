@@ -43,17 +43,38 @@ trait CamelCaseModel
 	 */
 	public function attributesToArray()
 	{
-		$attributes = parent::attributesToArray();
-		$convertedAttributes = [];
+        return $this->convertAttributes(parent::attributesToArray());
+	}
 
-		foreach ($attributes as $key => $value) {
-			$key = $this->trueKeyName($key);
+    /**
+     * Get the model's relationships, converting field casing if necessary.
+     *
+     * @return array
+     */
+    public function relationsToArray()
+    {
+        return $this->convertAttributes(parent::relationsToArray());
+
+    }
+
+    /**
+     * Converts a given array of attribute keys to the casing required by CamelCaseModel.
+     * 
+     * @param $attributes
+     * @return array
+     */
+    private function convertAttributes($attributes)
+    {
+        $convertedAttributes = [];
+
+        foreach ($attributes as $key => $value) {
+            $key = $this->trueKeyName($key);
 
             $convertedAttributes[$key] = $value;
-		}
+        }
 
-		return $convertedAttributes;
-	}
+        return $convertedAttributes;
+    }
 
     /**
      * Retrieves the true key name for a key.
