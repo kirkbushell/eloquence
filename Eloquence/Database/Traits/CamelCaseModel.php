@@ -59,7 +59,7 @@ trait CamelCaseModel
 
     /**
      * Converts a given array of attribute keys to the casing required by CamelCaseModel.
-     * 
+     *
      * @param $attributes
      * @return array
      */
