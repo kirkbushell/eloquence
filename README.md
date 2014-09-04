@@ -11,7 +11,12 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 * UUIDModel trait added
 * CamelCaseModel trait added
 * Model class updated to use CamelCaseModel trait - deprecated, backwards-compatibility support only
-* Eloquence now its own namespace
+* Eloquence now its own namespace (breaking change)
+* EloquenceServiceProvider added use this if you want to overload the base model automatically (required for pivot model camel casing).
+
+#### 1.0.2
+
+* Relationships now support camelCasing for retrieval (thanks @linxgws)
 
 #### 1.0.1
 

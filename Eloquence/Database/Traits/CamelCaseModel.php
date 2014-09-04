@@ -43,7 +43,7 @@ trait CamelCaseModel
 	 */
 	public function attributesToArray()
 	{
-        return $this->convertAttributes(parent::attributesToArray());
+        return $this->convertAttributesToTrueCase(parent::attributesToArray());
 	}
 
     /**
@@ -53,7 +53,7 @@ trait CamelCaseModel
      */
     public function relationsToArray()
     {
-        return $this->convertAttributes(parent::relationsToArray());
+        return $this->convertAttributesToTrueCase(parent::relationsToArray());
 
     }
 
@@ -63,7 +63,7 @@ trait CamelCaseModel
      * @param $attributes
      * @return array
      */
-    private function convertAttributes($attributes)
+    private function convertAttributesToTrueCase($attributes)
     {
         $convertedAttributes = [];
 
