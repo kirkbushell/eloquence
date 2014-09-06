@@ -42,11 +42,11 @@ Eloquence DOES NOT CHANGE how you write your schema migrations. You should still
 
 Eloquence comes bundled with UUID capabilities that you can use in your models.
 
-Simply include the UUIDModel trait in your models:
+Simply include the UUIDModel trait:
 
     use Eloquence\Database\Traits\UUIDModel;
 
-This will turn off id autoincrementing in your model, and instead automatically generate a UUID4 value for your id field. One benefit of this is that you can actually know the id of your record BEFORE it's saved!
+This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One benefit of this is that you can actually know the id of your record BEFORE it's saved!
 
 You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following properties:
 
