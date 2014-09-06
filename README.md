@@ -4,34 +4,11 @@ Eloquence is a package to extend Laravel 4's base Eloquent models and functional
 
 It allows developers to continue using the PSR-0 standard when dealing with database field names in models. This package will be built on in the future to add more features to the great Eloquent library.
 
-## Changelog
-
-#### 1.1.0
-
-* UUIDModel trait added
-* CamelCaseModel trait added
-* Model class updated to use CamelCaseModel trait - deprecated, backwards-compatibility support only
-* Eloquence now its own namespace (breaking change)
-* EloquenceServiceProvider added use this if you want to overload the base model automatically (required for pivot model camel casing).
-
-#### 1.0.2
-
-* Relationships now support camelCasing for retrieval (thanks @linxgws)
-
-#### 1.0.1
-
-* Fixed an issue with dependency resolution
-
-#### 1.0.0
-
-* Initial implementation
-* Camel casing of model attributes now available for both setters and getters
-
 ## Installation
 
 Install the package via composer:
 
-    composer require kirkbushell/eloquence 1.1.x
+    composer require kirkbushell/eloquence ~1.1
 
 ## Usage
 
@@ -84,3 +61,34 @@ This will turn off id autoincrementing in your model, and instead automatically 
 
 It should be noted that Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within the Laravel community :)
 
+
+## Changelog
+
+#### 1.1.2
+
+* Removed the uuid column creation via custom blueprint
+
+#### 1.1.1
+
+* Dependency bug fix
+
+#### 1.1.0
+
+* UUIDModel trait added
+* CamelCaseModel trait added
+* Model class updated to use CamelCaseModel trait - deprecated, backwards-compatibility support only
+* Eloquence now its own namespace (breaking change)
+* EloquenceServiceProvider added use this if you want to overload the base model automatically (required for pivot model camel casing).
+
+#### 1.0.2
+
+* Relationships now support camelCasing for retrieval (thanks @linxgws)
+
+#### 1.0.1
+
+* Fixed an issue with dependency resolution
+
+#### 1.0.0
+
+* Initial implementation
+* Camel casing of model attributes now available for both setters and getters
