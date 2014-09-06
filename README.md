@@ -23,21 +23,36 @@ information and traits that may be needed.
 
 You should now be good to go with your models.
 
-## Options
+## Camel case all the things!
 
-The default behaviour for Eloquence is to override the default way to access attributes in your models. This is done like so:
+For those of us who prefer to work with a single coding standard right across our applications, using the CamelCaseModel trait
+will ensure that all those attributes, relationships and associated data from our Eloquent models persist through to our APIs
+in a camel-case manner. This is important if you are writing front-end applications, which are also using camelCase. This allows
+for a better standard across our application. To use:
 
-    public $enforceCamelCase = true;
+    use Eloquence\Database\Traits\CamelCaseModel;
 
-You can change this if you need certain models to not use this behaviour, simply by setting it to false:
+Put the above line in your models and that's it.
 
-    public $enforceCamelCase = false;
+### Note!
 
-You can also, if necessary - use the CamelCaseModel trait, instead of extending the Model class directly (which now just uses the new trait).
+Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within the Laravel community :)
 
-## Note!
+## UUIDs
 
-It should be noted that Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within the Laravel community :)
+Eloquence comes bundled with UUID capabilities that you can use in your models.
+
+Simply include the UUIDModel trait in your models:
+
+    use Eloquence\Database\Traits\UUIDModel;
+
+This will turn off id autoincrementing in your model, and instead automatically generate a UUID4 value for your id field. One benefit of this is that you can actually know the id of your record BEFORE it's saved!
+
+You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following properties:
+
+    $table->char('id', $length = 36)->index();
+
+It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID field searches are much slower than indexed integer fields (such as autoincrement id fields).
 
 
 ## Changelog
