@@ -6,6 +6,14 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 
 ## Changelog
 
+#### 1.1.2
+
+* Removed the uuid column creation via custom blueprint
+
+#### 1.1.1
+
+* Dependency bug fix
+
 #### 1.1.0
 
 * UUIDModel trait added
