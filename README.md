@@ -34,35 +34,33 @@ for a better standard across our application. To use:
 
 Put the above line in your models and that's it.
 
-## UUID migrations
+### Note!
 
-When you install Eloquence, two things happen automatically (if you use the service provider):
+Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within the Laravel community :)
 
-1. It will re-bind the model class to Eloquence's model class (to allow for certain features to work) and
-2. It will also re-bind the blueprint for schema migrations, allowing you to use UUID field migrations:
 
-    Schema::create('some_table', function(Blueprint $table) {
-        $table->uuid('name_of_column');
-    });
+## UUIDs
 
-Voila! You now have UUID column creation. This is simply a wrapper for doing the following:
+Eloquence comes bundled with UUID capabilities that you can use in your models.
 
-    Schema::create('some_table', function(Blueprint $table) {
-        $table->char('name_of_column', $length = 36);
-    });
-
-You're not done yet, though! Now just include the UUIDModel trait in your models:
+Simply include the UUIDModel trait:
 
     use Eloquence\Database\Traits\UUIDModel;
 
-This will turn off id autoincrementing in your model, and instead automatically generate a UUID4 value for your id field. One benefit of this is that you can actually know the id of your record BEFORE it's saved!
+This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One benefit of this is that you can actually know the id of your record BEFORE it's saved!
 
-## Note!
+You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following properties:
 
-It should be noted that Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within the Laravel community :)
+    $table->char('id', $length = 36)->index();
+
+It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID field searches are much slower than indexed integer fields (such as autoincrement id fields).
 
 
 ## Changelog
+
+#### 1.1.3
+
+* Removed the schema binding on the service provider
 
 #### 1.1.2
 

@@ -20,10 +20,6 @@ class EloquenceServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		$this->app['schema']->blueprintResolver(function($table, $callback) {
-			return new Blueprint($table, $callback);
-		});
-
         /**
          *  Overload the model class and rebind it to an Eloquence implementation so that we can
          * still make use of certain traits and features that Eloquence provides. Admittedly,
