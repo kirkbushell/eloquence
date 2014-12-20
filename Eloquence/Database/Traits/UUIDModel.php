@@ -2,6 +2,8 @@
 
 namespace Eloquence\Database\Traits;
 
+use Rhumsaa\Uuid\Uuid;
+
 /**
  * Class UUIDModel
  *
@@ -15,15 +17,6 @@ namespace Eloquence\Database\Traits;
 
 trait UUIDModel
 {
-	/**
-	 * Indicates if the IDs are auto-incrementing.
-     *
-     * @TODO put in docs rather than overwriting a property here.
-	 *
-	 * @var bool
-	 */
-	public $incrementing = false;
-
 	/**
 	 * The "booting" method of the model.
 	 *
@@ -53,4 +46,4 @@ trait UUIDModel
 	{
 		return Uuid::uuid4();
 	}
-} 
+}
