@@ -2,7 +2,7 @@
 
 namespace Eloquence\Database;
 
-use Eloquence\Database\CamelCaseModel;
+use Eloquence\Database\Traits\CamelCaseModel;
 use Eloquence\Database\Traits\UUIDModel;
 
 /**
@@ -17,4 +17,13 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
     use CamelCaseModel;
     use UUIDModel;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @TODO put in docs rather than overwriting a property here.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 }
