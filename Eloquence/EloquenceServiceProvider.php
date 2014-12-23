@@ -7,19 +7,19 @@ use Eloquence\Database\Schema\Blueprint;
 
 class EloquenceServiceProvider extends ServiceProvider
 {
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = false;
 
-	/**
-	 * Initialises the service provider, and here we attach our own blueprint
-	 * resolver to the schema, so as to provide the enhanced functionality.
-	 */
-	public function boot()
-	{
+    /**
+     * Initialises the service provider, and here we attach our own blueprint
+     * resolver to the schema, so as to provide the enhanced functionality.
+     */
+    public function boot()
+    {
         /**
          *  Overload the model class and rebind it to an Eloquence implementation so that we can
          * still make use of certain traits and features that Eloquence provides. Admittedly,
@@ -31,26 +31,26 @@ class EloquenceServiceProvider extends ServiceProvider
          * being dirty, dirty coders.
          */
         $this->app->bind('Illuminate\Database\Eloquent\Model', 'Eloquence\Database\Model');
-	}
+    }
 
-	/**
-	 * Register the service provider.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		//
-	}
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
 
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
-	public function provides()
-	{
-		return array();
-	}
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return array();
+    }
 
 }

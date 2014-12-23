@@ -17,33 +17,33 @@ use Rhumsaa\Uuid\Uuid;
 
 trait UUIDModel
 {
-	/**
-	 * The "booting" method of the model.
-	 *
-	 * @return void
-	 */
-	protected static function boot()
-	{
-		parent::boot();
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
 
-		/**
-		 * Attach to the 'creating' Model Event to provide a UUID
-		 * for the `id` field (provided by $model->getKeyName())
-		 */
-		static::creating(function ($model) {
+        /**
+         * Attach to the 'creating' Model Event to provide a UUID
+         * for the `id` field (provided by $model->getKeyName())
+         */
+        static::creating(function ($model) {
             if ($model->incrementing) return;
 
-			$model->{$model->getKeyName()} = (string) $model->generateNewUuid();
-		});
-	}
+            $model->{$model->getKeyName()} = (string) $model->generateNewUuid();
+        });
+    }
 
-	/**
-	 * Get a new version 4 (random) UUID.
-	 *
-	 * @return \Rhumsaa\Uuid\Uuid
-	 */
-	public function generateNewUuid()
-	{
-		return Uuid::uuid4();
-	}
+    /**
+     * Get a new version 4 (random) UUID.
+     *
+     * @return \Rhumsaa\Uuid\Uuid
+     */
+    public function generateNewUuid()
+    {
+        return Uuid::uuid4();
+    }
 }
