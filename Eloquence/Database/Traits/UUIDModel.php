@@ -31,7 +31,9 @@ trait UUIDModel
          * for the `id` field (provided by $model->getKeyName())
          */
         static::creating(function ($model) {
-            if ($model->incrementing) return;
+            if ($model->incrementing) {
+                return;
+            }
 
             $model->{$model->getKeyName()} = (string) $model->generateNewUuid();
         });

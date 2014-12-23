@@ -52,5 +52,4 @@ class EloquenceServiceProvider extends ServiceProvider
     {
         return array();
     }
-
 }

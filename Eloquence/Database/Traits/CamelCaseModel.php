@@ -18,7 +18,7 @@ trait CamelCaseModel
      * for field names in databases.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function setAttribute($key, $value)
     {
@@ -28,7 +28,7 @@ trait CamelCaseModel
     /**
      * Retrieve a given attribute but allow it to be accessed via alternative case methods (such as camelCase).
      *
-     * @param string $key
+     * @param  string $key
      * @return mixed
      */
     public function getAttribute($key)
@@ -54,7 +54,6 @@ trait CamelCaseModel
     public function relationsToArray()
     {
         return $this->convertAttributesToTrueCase(parent::relationsToArray());
-
     }
 
     /**
