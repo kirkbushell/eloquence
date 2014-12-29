@@ -21,8 +21,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Eloquence\\": "Eloquence/",
-            "Tests\\": "Tests/"
+            "Eloquence\\": "src/",
+            "Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable"
