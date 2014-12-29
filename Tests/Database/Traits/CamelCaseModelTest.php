@@ -35,6 +35,20 @@ class CamelCaseModelTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Kirk', $this->model->getAttribute('firstName'));
     }
 
+    public function testArrayRetrievalOfAttributes()
+    {
+        $expectedArray = [
+            'firstName' => 'Kirk',
+            'lastName' => 'Bushell',
+            'address' => 'Home',
+            'countryOfOrigin' => 'Australia'
+        ];
+
+        $actualArray = $this->model->getAttributes();
+
+        $this->assertEquals($expectedArray, $actualArray);
+    }
+
     public function testAttributeConversionOfAllAttributes()
     {
         $expectedAttributes = [
