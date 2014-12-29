@@ -11,7 +11,7 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/database": "~4.1",
-	    "rhumsaa/uuid": "~2.7"
+	    "rhumsaa/uuid": "~2.8"
     },
     "require-dev": {
         "phpunit/phpunit": "4.2.*"
