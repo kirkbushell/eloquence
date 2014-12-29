@@ -32,7 +32,7 @@ trait UUIDModel
 		parent::boot();
 
 		/**
-		 * Attach to the 'creating' Model Event to provide a UUID
+		 * Attach to the 'creating' BaseModel Event to provide a UUID
 		 * for the `id` field (provided by $model->getKeyName())
 		 */
 		self::creating(function ($model) {

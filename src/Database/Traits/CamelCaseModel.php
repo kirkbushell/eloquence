@@ -37,6 +37,16 @@ trait CamelCaseModel
 	}
 
 	/**
+	 * Converts the attributes to a camel-case version, if applicable.
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return $this->attributesToArray();
+	}
+
+	/**
 	 * Return the attributes for the model, converting field casing if necessary.
 	 *
 	 * @return array
