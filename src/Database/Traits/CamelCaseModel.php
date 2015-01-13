@@ -122,4 +122,18 @@ trait CamelCaseModel
 	{
 		return snake_case($key);
 	}
+
+    /**
+     * Because we are changing the case of keys and want to use camelCase throughout the application, whenever
+     * we do isset checks we need to ensure that we check using snake_case.
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function __isset($key)
+    {
+        $key = snake_case($key);
+
+        return parent::__isset($key);
+    }
 }
