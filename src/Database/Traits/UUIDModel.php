@@ -39,7 +39,7 @@ trait UUIDModel
          */
         static::creating(function ($model) {
             $key = $model->getKeyName();
-            
+
             if (empty($key)) {
                 $model->{$model->getKeyName()} = (string)$model->generateNewUuid();
             }

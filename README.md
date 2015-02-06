@@ -42,7 +42,9 @@ Put the above line in your models and that's it.
 
 ### Note!
 
-Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within the Laravel community :)
+Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields 
+and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within 
+the Laravel community :)
 
 
 ## UUIDs
@@ -53,13 +55,22 @@ Simply include the UUIDModel trait:
 
     use Eloquence\Database\Traits\UUIDModel;
 
-This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One benefit of this is that you can actually know the id of your record BEFORE it's saved!
+This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One 
+benefit of this is that you can actually know the id of your record BEFORE it's saved!
 
-You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following properties:
+You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following 
+properties:
 
     $table->char('id', $length = 36)->index();
 
-It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID field searches are much slower than indexed integer fields (such as autoincrement id fields).
+It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID 
+field searches are much slower than indexed integer fields (such as autoincrement id fields).
+
+
+### Custom UUIDs
+
+Should you need a custom UUID solution (aka, maybe you don't want to use a UUID4 id), you can simply define the value you wish on 
+the id field. The UUID model trait will not set the id if it has already been defined.
 
 
 ## Changelog
