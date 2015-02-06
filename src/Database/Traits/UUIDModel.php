@@ -7,7 +7,7 @@ use Rhumsaa\Uuid\Uuid;
  * Class UUIDModel
  *
  * Manages the usage of creating UUID values for primary keys. Drop into your models as
- * per normal to use this functionality. Works rightout of the box.
+ * per normal to use this functionality. Works right out of the box.
  *
  * Taken from: http://garrettstjohn.com/entry/using-uuids-laravel-eloquent-orm/
  *
@@ -16,6 +16,14 @@ use Rhumsaa\Uuid\Uuid;
 
 trait UUIDModel
 {
+    /**
+     * Turn off auto-incrementing feature. This allows the trait to manage its own
+     * ID creation.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
     /**
      * The "booting" method of the model.
      *
@@ -30,11 +38,11 @@ trait UUIDModel
          * for the `id` field (provided by $model->getKeyName())
          */
         static::creating(function ($model) {
-            if ($model->incrementing) {
-                return;
+            $key = $model->getKeyName();
+            
+            if (empty($key)) {
+                $model->{$model->getKeyName()} = (string)$model->generateNewUuid();
             }
-
-            $model->{$model->getKeyName()} = (string) $model->generateNewUuid();
         });
     }
 
