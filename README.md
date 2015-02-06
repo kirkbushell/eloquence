@@ -12,6 +12,10 @@ Install the package via composer:
 
     composer require kirkbushell/eloquence ~1.2
 
+For Laravel 4, please install the 1.1.4 release:
+
+    composer require kirkbushell/eloquence 1.1.4
+
 ## Usage
 
 First, add the eloquence service provider to your config/app.php file:
@@ -104,4 +108,4 @@ It's important to note that you should do your research before using UUID functi
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the MIT license
+The Laravel framework is open-sourced software licensed under the MIT license.
