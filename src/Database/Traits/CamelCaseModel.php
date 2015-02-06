@@ -1,5 +1,4 @@
 <?php
-
 namespace Eloquence\Database\Traits;
 
 trait CamelCaseModel

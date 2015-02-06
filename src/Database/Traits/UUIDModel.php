@@ -1,5 +1,4 @@
 <?php
-
 namespace Eloquence\Database\Traits;
 
 use Rhumsaa\Uuid\Uuid;

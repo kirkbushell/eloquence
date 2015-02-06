@@ -1,5 +1,4 @@
 <?php
-
 namespace Eloquence\Database;
 
 use Eloquence\Database\Traits\CamelCaseModel;

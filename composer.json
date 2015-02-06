@@ -1,7 +1,7 @@
 {
     "name": "kirkbushell/eloquence",
-    "description": "Allows developers to work with Laravel 4 Eloquent models in the same fashion they'd use every other class - with camelCase methods and attributes.",
-    "keywords": ["laravel", "eloquent", "camelcase", "camel", "case"],
+    "description": "Allows developers to work with Laravel 5 Eloquent models in the same fashion they'd use every other class - with camelCase methods and attributes.",
+    "keywords": ["laravel", "eloquent", "camelcase", "camel", "case", "snake_case", "snake"],
     "authors": [
         {
             "name": "Kirk Bushell",
@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/database": "~4.2",
+        "illuminate/database": "~5.0",
 	    "rhumsaa/uuid": "~2.8"
     },
     "require-dev": {
@@ -22,5 +22,5 @@
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
