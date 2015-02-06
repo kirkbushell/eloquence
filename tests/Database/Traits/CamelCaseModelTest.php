@@ -1,14 +1,14 @@
 <?php
-
 namespace Tests\Database\Traits;
 
 use Tests\Stubs\ModelStub;
+use Tests\TestCase;
 
-class CamelCaseModelTest extends \PHPUnit_Framework_TestCase
+class CamelCaseModelTest extends TestCase
 {
     private $model;
 
-    public function setUp()
+    public function init()
     {
         $this->model = new ModelStub;
     }

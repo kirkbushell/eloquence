@@ -55,6 +55,10 @@ Simply include the UUIDModel trait:
 
     use Eloquence\Database\Traits\UUIDModel;
 
+And then disable auto incrementing ids:
+
+    public $incrementing = false;
+
 This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One 
 benefit of this is that you can actually know the id of your record BEFORE it's saved!
 
@@ -74,6 +78,10 @@ the id field. The UUID model trait will not set the id if it has already been de
 
 
 ## Changelog
+
+#### 1.2.1
+
+* UUID models can now define their own UUIDs 
 
 #### 1.2.0
 

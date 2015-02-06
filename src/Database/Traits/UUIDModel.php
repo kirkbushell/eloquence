@@ -17,14 +17,6 @@ use Rhumsaa\Uuid\Uuid;
 trait UUIDModel
 {
     /**
-     * Turn off auto-incrementing feature. This allows the trait to manage its own
-     * ID creation.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
      * The "booting" method of the model.
      *
      * @return void

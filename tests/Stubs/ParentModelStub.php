@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Stubs;
 
 class ParentModelStub
