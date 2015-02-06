@@ -10,7 +10,7 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 
 Install the package via composer:
 
-    composer require kirkbushell/eloquence ~1.1
+    composer require kirkbushell/eloquence ~1.2
 
 ## Usage
 
@@ -59,6 +59,11 @@ It's important to note that you should do your research before using UUID functi
 
 
 ## Changelog
+
+#### 1.2.0
+
+* Laravel 5 support
+* Readme updates
 
 #### 1.1.4
 
