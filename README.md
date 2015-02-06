@@ -58,6 +58,10 @@ It's important to note that you should do your research before using UUID functi
 
 ## Changelog
 
+#### 1.1.4
+
+* UUID fix
+
 #### 1.1.3
 
 * Removed the schema binding on the service provider
@@ -90,3 +94,7 @@ It's important to note that you should do your research before using UUID functi
 
 * Initial implementation
 * Camel casing of model attributes now available for both setters and getters
+
+## License
+
+The Laravel framework is open-sourced software licensed under the MIT license
