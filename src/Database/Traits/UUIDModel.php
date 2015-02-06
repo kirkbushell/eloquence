@@ -38,7 +38,7 @@ trait UUIDModel
             $key = $model->getKeyName();
 
             if (empty($model->$key)) {
-                $model->{$model->getKeyName()} = (string)$model->generateNewUuid();
+                $model->$key = (string)$model->generateNewUuid();
             }
         });
     }
