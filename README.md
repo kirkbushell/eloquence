@@ -79,6 +79,10 @@ the id field. The UUID model trait will not set the id if it has already been de
 
 ## Changelog
 
+#### 1.3.0
+
+* Count cache model behaviour added
+
 #### 1.2.1
 
 * UUID models can now define their own UUIDs 
