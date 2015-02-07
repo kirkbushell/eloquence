@@ -69,6 +69,10 @@ It's important to note that you should do your research before using UUID functi
 * Laravel 5 support
 * Readme updates
 
+#### 1.1.5
+
+* UUID model trait now supports custom UUIDs (instead of only generating them for you)
+
 #### 1.1.4
 
 * UUID fix
