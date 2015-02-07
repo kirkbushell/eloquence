@@ -13,7 +13,6 @@ use Rhumsaa\Uuid\Uuid;
  *
  * @package Eloquence\Database\Traits
  */
-
 trait UUIDModel
 {
     /**
