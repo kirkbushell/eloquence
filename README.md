@@ -10,11 +10,11 @@ It allows developers to continue using the PSR-0 standard when dealing with data
 
 Install the package via composer:
 
-    composer require kirkbushell/eloquence ~1.2
+    composer require kirkbushell/eloquence:~1.2
 
 For Laravel 4, please install the 1.1.4 release:
 
-    composer require kirkbushell/eloquence 1.1.4
+    composer require kirkbushell/eloquence:1.1.5
 
 ## Usage
 
