@@ -122,22 +122,26 @@ trait CamelCaseModel
 	}
 
     /**
-     * Properly translates keys to snake_case when using Model::create($attributes) and returns the instance
+     * Fill the model with an array of attributes and properly translates keys
+     * to snake_case when using Model::fill($attributes) and returns the instance
      *
-     * @param array $attributes
-     * @return static
+     * @param  array  $attributes
+     * @return $this
+     *
+     * @throws \Illuminate\Database\Eloquent\MassAssignmentException
      */
 
-    public static function create(array $attributes)
+    public function fill(array $attributes)
     {
         $new_attributes = [];
 
-        array_walk($attributes, function($value, $key) use (&$new_attributes) {
-            $new_attributes[snake_case($key)] = $value;
+        array_walk($attributes, function ($value, $key) use (&$new_attributes) {
+            $new_attributes[$this->getTrueKey($key)] = $value;
         });
 
-        return parent::create($new_attributes);
+        return parent::fill($new_attributes);
     }
+
 
     /**
      * Because we are changing the case of keys and want to use camelCase throughout the application, whenever
