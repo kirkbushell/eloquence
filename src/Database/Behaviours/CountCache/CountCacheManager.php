@@ -138,19 +138,19 @@ class CountCacheManager
      */
     public function getTable($model)
     {
-        if (!is_object($model)) {
+        if (! is_object($model)) {
             $model = new $model;
         }
 
         return $model->getTable();
-
     }
 
     /**
      * Returns necessary defaults, overwritten by provided options.
      *
+     * @param $model
      * @param array $options
-     * @
+     * @return array
      */
     protected function defaults($model, $options)
     {

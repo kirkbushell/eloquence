@@ -76,6 +76,45 @@ field searches are much slower than indexed integer fields (such as autoincremen
 Should you need a custom UUID solution (aka, maybe you don't want to use a UUID4 id), you can simply define the value you wish on 
 the id field. The UUID model trait will not set the id if it has already been defined.
 
+## Behaviours
+
+Eloquence comes with a system for setting up behaviours, which are really just small libraries that you can use with your Eloquent models.
+The first of these is the count cache.
+
+### Count cache
+
+Count caching is where you cache the result of a count of a related table's records. A simple example of this is where you have a user who
+has many posts. In this example, you may want to count the number of posts a user has regularly - and perhaps even order by this. In SQL,
+ordering by a counted field is slow and unable to be indexed. You can get around this by caching the count of the posts the user
+has created on the user's record.
+
+To get this working, you need to do two steps:
+
+1. Configure the count cache on the model and
+2. Add the count cache observer to the model to listen for certain events
+
+#### Configure the count cache
+
+To setup the count cache configuration, we need to have the model implement the CountCache interface, like so:
+
+    class Post extends Eloquent implements CountCache {
+        public function countCaches() {
+            return [User::class];
+        }
+    }
+
+This tells the count cache manager that the Post model has a count cache on the User model. So, whenever a post is added, or modified or
+deleted, the count cache observer will update the appropriate user's count cache for their posts. In this case, it would update posts_count
+on the user model.
+
+#### Setup the observer
+
+You could do this in a service provider for your application:
+
+    Post::observe(new CountCacheObserver);
+
+With that, you're all done! Whenever a user deals with their posts in any way, the observer will make sure the appropriate count cache is updated!
+
 
 ## Changelog
 
