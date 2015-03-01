@@ -4,7 +4,8 @@
 
 Eloquence is a package to extend Laravel 5's base Eloquent models and functionality.
 
-It allows developers to continue using the PSR-0 standard when dealing with database field names in models. This package will be built on in the future to add more features to the great Eloquent library.
+It allows developers to continue using the PSR-0 standard when dealing with database field names in models. 
+This package will be built on in the future to add more features to the great Eloquent library.
 
 ## Installation
 
@@ -31,10 +32,11 @@ You should now be good to go with your models.
 
 ## Camel case all the things!
 
-For those of us who prefer to work with a single coding standard right across our applications, using the CamelCaseModel trait
-will ensure that all those attributes, relationships and associated data from our Eloquent models persist through to our APIs
-in a camel-case manner. This is important if you are writing front-end applications, which are also using camelCase. This allows
-for a better standard across our application. To use:
+For those of us who prefer to work with a single coding standard right across our applications, 
+using the CamelCaseModel trait will ensure that all those attributes, relationships and associated 
+data from our Eloquent models persist through to our APIs in a camel-case manner. This is important 
+if you are writing front-end applications, which are also using camelCase. This allows for a 
+better standard across our application. To use:
 
     use Eloquence\Database\Traits\CamelCaseModel;
 
@@ -42,9 +44,9 @@ Put the above line in your models and that's it.
 
 ### Note!
 
-Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case when setting up your fields 
-and tables in your database schema migrations. This is a good thing - snake_case of field names is the defacto standard within 
-the Laravel community :)
+Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case 
+when setting up your fields and tables in your database schema migrations. This is a good thing - 
+snake_case of field names is the defacto standard within the Laravel community :)
 
 
 ## UUIDs
@@ -111,7 +113,7 @@ on the user model.
 
 You could do this in a service provider for your application:
 
-    Post::observe(new CountCacheObserver);
+    Post::observe($this->app->make('Eloquence\Behaviours\CountCache\CountCacheObserver');
 
 With that, you're all done! Whenever a user deals with their posts in any way, the observer will make sure the appropriate count cache is updated!
 

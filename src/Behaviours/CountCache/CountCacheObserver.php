@@ -1,5 +1,5 @@
 <?php
-namespace Eloquence\Database\Behaviours\CountCache;
+namespace Eloquence\Behaviours\CountCache;
 
 use Illuminate\Database\Eloquent\Model;
 

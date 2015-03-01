@@ -1,5 +1,5 @@
 <?php
-namespace Eloquence\Database\Behaviours\CountCache;
+namespace Eloquence\Behaviours\CountCache;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +93,7 @@ class CountCacheManager
             'key' => $setup['key'],
             'value' => $value
         ];
-
+        
         return DB::statement('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $params);
     }
 
