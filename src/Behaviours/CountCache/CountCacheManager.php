@@ -33,8 +33,10 @@ class CountCacheManager
      */
     public function increment(Model $model)
     {
-        $this->applyToCountCache($model, function($setup) use ($model) {
-            $this->update($setup, '+', $model->{$setup['foreignKey']});
+        $this->model = $model;
+
+        $this->applyToCountCache($model, function($config) use ($model) {
+            $this->update($config, '+', $model->{$config['foreignKey']});
         });
     }
 
@@ -45,8 +47,10 @@ class CountCacheManager
      */
     public function decrement(Model $model)
     {
-        $this->applyToCountCache($model, function($setup) use ($model) {
-            $this->update($setup, '-', $model->{$setup['foreignKey']});
+        $this->model = $model;
+
+        $this->applyToCountCache($model, function($config) use ($model) {
+            $this->update($config, '-', $model->{$config['foreignKey']});
         });
     }
     
@@ -59,7 +63,7 @@ class CountCacheManager
     protected function applyToCountCache($model, \Closure $function)
     {
         foreach ($model->countCaches() as $key => $cache) {
-            $function($this->countCacheConfig($key, $cache));
+            $function($this->countCacheConfig($key, $cache, $model));
         }
     }
 
@@ -70,36 +74,41 @@ class CountCacheManager
      */
     public function updateCache(Model $model)
      {
-         $this->applyToCountCache($model, function($setup) use ($model) {
-             if ($model->{$setup['foreignKey']} != $this->original[$setup['foreignKey']]) {
-                 $this->update($setup, '-', $this->original[$setup['foreignKey']]);
-                 $this->update($setup, '+', $model->{$setup['foreignKey']});
+         $this->applyToCountCache($model, function($config) use ($model) {
+             if ($model->{$config['foreignKey']} != $this->original[$config['foreignKey']]) {
+                 $this->update($config, '-', $this->original[$config['foreignKey']]);
+                 $this->update($config, '+', $model->{$config['foreignKey']});
              }
          });
      }
 
     /**
-     * Updates a table's record based on the query information provided in the $setup variable.
+     * Updates a table's record based on the query information provided in the $config variable.
      *
-     * @param array $setup
+     * @param array $config
      * @param string $operation Whether to increment or decrement a value. Valid values: +/-
+     * @param $value
+     * @return
      */
-    protected function update(array $setup, $operation, $value)
+    protected function update(array $config, $operation, $value)
     {
         $params = [
-            'table' => $this->getTable($setup['model']),
-            'countField' => $setup['countField'],
+            'table' => $this->getTable($config['model']),
+            'countField' => $config['countField'],
             'operation' => $operation,
-            'key' => $setup['key'],
+            'key' => $config['key'],
             'value' => $value
         ];
-        
+
         return DB::statement('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $params);
     }
 
     /**
      * Takes a registered counter cache, and setups up defaults.
      *
+     * @param string $cacheKey
+     * @param array $cacheOptions
+     * @param object $model
      * @return array
      */
     protected function countCacheConfig($cacheKey, $cacheOptions)
@@ -108,9 +117,12 @@ class CountCacheManager
 
         // Smallest number of options provided, figure out the rest
         if (is_numeric($cacheKey)) {
-            $model = $cacheOptions;
+            $relatedModel = $cacheOptions;
         }
         else {
+            $relatedModel = $cacheOptions;
+            $opts['countField'] = $cacheKey;
+
             if (is_array($cacheOptions)) {
                 if (isset($cacheOptions[2])) {
                     $opts['key'] = $cacheOptions[2];
@@ -119,18 +131,16 @@ class CountCacheManager
                     $opts['foreignKey'] = $cacheOptions[1];
                 }
                 if (isset($cacheOptions[0])) {
-                    $model = $cacheOptions[0];
+                    $relatedModel = $cacheOptions[0];
                 }
             }
-
-            $opts['countField'] = $cacheKey;
         }
 
-        return $this->defaults($model, $opts);
+        return $this->defaults($opts, $relatedModel);
     }
 
     /**
-     * Returns the table for a given model. Model can be a model object, or a full namespaced
+     * Returns the table for a given model. Model can be an Eloquent model object, or a full namespaced
      * class string.
      *
      * @param string|object $model
@@ -148,21 +158,22 @@ class CountCacheManager
     /**
      * Returns necessary defaults, overwritten by provided options.
      *
-     * @param $model
+     * @param object $relatedModel
      * @param array $options
      * @return array
      */
-    protected function defaults($model, $options)
+    protected function defaults($options, $relatedModel)
     {
         $class = strtolower(class_basename($this->model));
+        $relatedClass = strtolower(class_basename($relatedModel));
 
         $defaults = [
-            'model' => $model,
+            'model' => $relatedModel,
             'countField' => $class.'_count',
-            'foreignKey' => strtolower($model.'_id'),
+            'foreignKey' => $relatedClass.'_id',
             'key' => 'id'
         ];
-
+        
         return array_merge($defaults, $options);
     }
 }
