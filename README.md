@@ -121,7 +121,7 @@ These are, however - configurable:
     class Post extends Eloquent implements CountCache {
         public function countCaches() {
             return [
-                'num_posts' => ['Post', 'users_id', 'id']            
+                'num_posts' => ['User', 'users_id', 'id']
             ];
         }
     }
