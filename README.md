@@ -142,10 +142,6 @@ With that, you're all done! Whenever a user deals with their posts in any way, t
 
 * Count cache model behaviour added
 
-#### 1.2.1
-
-* UUID models can now define their own UUIDs 
-
 #### 1.2.0
 
 * Laravel 5 support
