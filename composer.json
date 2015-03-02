@@ -1,6 +1,6 @@
 {
     "name": "kirkbushell/eloquence",
-    "description": "Allows developers to work with Laravel 5 Eloquent models in the same fashion they'd use every other class - with camelCase methods and attributes.",
+    "description": "A set of extensions adding additional functionality and consistency to Laravel's awesome Eloquent library.",
     "keywords": ["laravel", "eloquent", "camelcase", "camel", "case", "snake_case", "snake"],
     "authors": [
         {
@@ -14,6 +14,7 @@
 	    "rhumsaa/uuid": "~2.8"
     },
     "require-dev": {
+        "mockery/mockery": "0.9.*@dev",
         "phpunit/phpunit": "4.3.*"
     },
     "autoload": {

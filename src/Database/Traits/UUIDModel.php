@@ -7,13 +7,12 @@ use Rhumsaa\Uuid\Uuid;
  * Class UUIDModel
  *
  * Manages the usage of creating UUID values for primary keys. Drop into your models as
- * per normal to use this functionality. Works rightout of the box.
+ * per normal to use this functionality. Works right out of the box.
  *
  * Taken from: http://garrettstjohn.com/entry/using-uuids-laravel-eloquent-orm/
  *
  * @package Eloquence\Database\Traits
  */
-
 trait UUIDModel
 {
     /**
@@ -30,14 +29,10 @@ trait UUIDModel
          * for the `id` field (provided by $model->getKeyName())
          */
         static::creating(function ($model) {
-            if ($model->incrementing) {
-                return;
-            }
-
             $key = $model->getKeyName();
 
             if (empty($model->$key)) {
-                $model->$key = (string)$model->generateNewUuid();
+                $model->$key = (string) $model->generateNewUuid();
             }
         });
     }
