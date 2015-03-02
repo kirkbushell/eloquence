@@ -109,6 +109,24 @@ This tells the count cache manager that the Post model has a count cache on the 
 deleted, the count cache observer will update the appropriate user's count cache for their posts. In this case, it would update posts_count
 on the user model.
 
+The example above uses the following conventions:
+
+* post_count is a defined field on the User model table
+* user_id is the field representing the foreign key on the post model
+* id is the primary key on the user model table
+
+These are, however - configurable:
+
+    class Post extends Eloquent implements CountCache {
+        public function countCaches() {
+            return [
+                'num_posts' => ['Post', 'users_id', 'id']            
+            ];
+        }
+    }
+
+This example customises the count cache field, and the related foreign key, with num_posts and users_id, respectively.
+
 #### Setup the observer
 
 You could do this in a service provider for your application:
@@ -116,7 +134,6 @@ You could do this in a service provider for your application:
     Post::observe($this->app->make('Eloquence\Behaviours\CountCache\CountCacheObserver');
 
 With that, you're all done! Whenever a user deals with their posts in any way, the observer will make sure the appropriate count cache is updated!
-
 
 ## Changelog
 
