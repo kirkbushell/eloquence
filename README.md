@@ -4,18 +4,19 @@
 
 Eloquence is a package to extend Laravel 5's base Eloquent models and functionality.
 
-It allows developers to continue using the PSR-0 standard when dealing with database field names in models. 
-This package will be built on in the future to add more features to the great Eloquent library.
+It provides a number of utilities and classes to work with Eloquent in new and useful ways, 
+such as camel cased attributes (for JSON apis), count caching, uuids and more.
 
 ## Installation
 
 Install the package via composer:
 
-    composer require kirkbushell/eloquence ~1.2
+    composer require kirkbushell/eloquence:~1.3
 
-For Laravel 4, please install the 1.1.4 release:
+For Laravel 4, please install the 1.1.4 release. Please note that this is no longer supported 
+and won't receive any new features, only security updates.
 
-    composer require kirkbushell/eloquence 1.1.4
+    composer require kirkbushell/eloquence:1.1.4
 
 ## Usage
 
