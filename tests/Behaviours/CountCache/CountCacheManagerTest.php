@@ -10,6 +10,8 @@ use Tests\TestCase;
 
 class CountCacheManagerTest extends TestCase
 {
+    private $manager;
+
     public function init()
     {
         $this->manager = new CountCacheManager;
@@ -65,5 +67,36 @@ class CountCacheManagerTest extends TestCase
         DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $secondOperationParams)->once();
 
         $this->manager->decrement($comment);
+    }
+
+    public function testUpdateCache()
+    {
+        $comment = new Comment;
+        $comment->post_id = 1;
+        $comment->syncOriginal();
+        $comment->post_id = 2;
+
+        $this->manager->setOriginal($comment->getOriginal());
+
+        $firstOperationParams = [
+            'table' => 'posts',
+            'countField' => 'num_comments',
+            'operation' => '-',
+            'key' => 'id',
+            'value' => 1
+        ];
+
+        $secondOperationParams = [
+            'table' => 'posts',
+            'countField' => 'num_comments',
+            'operation' => '+',
+            'key' => 'id',
+            'value' => 2
+        ];
+
+        DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $firstOperationParams)->once();
+        DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $secondOperationParams)->once();
+
+        $this->manager->updateCache($comment);
     }
 }

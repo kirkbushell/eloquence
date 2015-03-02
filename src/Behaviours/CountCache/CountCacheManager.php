@@ -75,7 +75,7 @@ class CountCacheManager
     public function updateCache(Model $model)
      {
          $this->applyToCountCache($model, function($config) use ($model) {
-             if ($model->{$config['foreignKey']} != $this->original[$config['foreignKey']]) {
+             if (isset($this->original[$config['foreignKey']]) && $model->{$config['foreignKey']} != $this->original[$config['foreignKey']]) {
                  $this->update($config, '-', $this->original[$config['foreignKey']]);
                  $this->update($config, '+', $model->{$config['foreignKey']});
              }
