@@ -35,8 +35,8 @@ class CountCacheManager
     {
         $this->model = $model;
 
-        $this->applyToCountCache($model, function($config) use ($model) {
-            $this->update($config, '+', $model->{$config['foreignKey']});
+        $this->applyToCountCache(function($config) {
+            $this->update($config, '+', $this->model->{$config['foreignKey']});
         });
     }
 
@@ -49,21 +49,20 @@ class CountCacheManager
     {
         $this->model = $model;
 
-        $this->applyToCountCache($model, function($config) use ($model) {
-            $this->update($config, '-', $model->{$config['foreignKey']});
+        $this->applyToCountCache(function($config) {
+            $this->update($config, '-', $this->model->{$config['foreignKey']});
         });
     }
     
     /**
      * Applies the provided function to the count cache setup/configuration.
-     *
-     * @param CountCache $model
+     *\
      * @param callable $function
      */
-    protected function applyToCountCache(CountCache $model, \Closure $function)
+    protected function applyToCountCache(\Closure $function)
     {
-        foreach ($model->countCaches() as $key => $cache) {
-            $function($this->countCacheConfig($key, $cache, $model));
+        foreach ($this->model->countCaches() as $key => $cache) {
+            $function($this->countCacheConfig($key, $cache));
         }
     }
 
@@ -74,10 +73,12 @@ class CountCacheManager
      */
     public function updateCache(Model $model)
      {
-         $this->applyToCountCache($model, function($config) use ($model) {
-             if (isset($this->original[$config['foreignKey']]) && $model->{$config['foreignKey']} != $this->original[$config['foreignKey']]) {
+         $this->model = $model;
+
+         $this->applyToCountCache(function($config) {
+             if (isset($this->original[$config['foreignKey']]) && $this->model->{$config['foreignKey']} != $this->original[$config['foreignKey']]) {
                  $this->update($config, '-', $this->original[$config['foreignKey']]);
-                 $this->update($config, '+', $model->{$config['foreignKey']});
+                 $this->update($config, '+', $this->model->{$config['foreignKey']});
              }
          });
      }
@@ -108,7 +109,6 @@ class CountCacheManager
      *
      * @param string $cacheKey
      * @param array $cacheOptions
-     * @param object $model
      * @return array
      */
     protected function countCacheConfig($cacheKey, $cacheOptions)
@@ -158,8 +158,8 @@ class CountCacheManager
     /**
      * Returns necessary defaults, overwritten by provided options.
      *
-     * @param object $relatedModel
      * @param array $options
+     * @param string $relatedModel
      * @return array
      */
     protected function defaults($options, $relatedModel)
