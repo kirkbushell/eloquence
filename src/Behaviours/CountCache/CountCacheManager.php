@@ -57,10 +57,10 @@ class CountCacheManager
     /**
      * Applies the provided function to the count cache setup/configuration.
      *
-     * @param object $model
+     * @param CountCache $model
      * @param callable $function
      */
-    protected function applyToCountCache($model, \Closure $function)
+    protected function applyToCountCache(CountCache $model, \Closure $function)
     {
         foreach ($model->countCaches() as $key => $cache) {
             $function($this->countCacheConfig($key, $cache, $model));
@@ -173,7 +173,7 @@ class CountCacheManager
             'foreignKey' => $relatedClass.'_id',
             'key' => 'id'
         ];
-        
+
         return array_merge($defaults, $options);
     }
 }
