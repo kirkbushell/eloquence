@@ -60,4 +60,26 @@ class CamelCaseModelTest extends TestCase
 
         $this->assertEquals($expectedAttributes, $this->model->attributesToArray());
     }
+
+    public function testCreatingModelByUsingCreate()
+    {
+        $attributes = [
+            'address' => 'Home',
+            'countryOfOrigin' => 'Australia',
+            'firstName' => 'Kirk',
+            'lastName' => 'Bushell'
+        ];
+
+        $expectedAttributes = [
+            'address' => 'Home',
+            'country_of_origin' => 'Australia',
+            'first_name' => 'Kirk',
+            'last_name' => 'Bushell'
+        ];
+
+        $model = ModelStub::create($attributes); //Create local instance of ModelStub since we are testing an alternative method of creating a model.
+
+        $this->assertEquals($expectedAttributes, $model->rawAttributesToArray());
+
+    }
 }
