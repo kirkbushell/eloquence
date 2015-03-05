@@ -29,14 +29,14 @@ class CountCacheManagerTest extends TestCase
         $post->user_id = 2;
 
         $params = [
-            'table' => 'users',
-            'countField' => 'posts_count',
-            'operation' => '+',
-            'key' => 'id',
-            'value' => 2
+            'users',
+            'posts_count',
+            '+',
+            'id',
+            2
         ];
 
-        DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $params);
+        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $params);
 
         $this->manager->increment($post);
     }
@@ -48,23 +48,23 @@ class CountCacheManagerTest extends TestCase
         $comment->user_id = 1;
 
         $firstOperationParams = [
-            'table' => 'posts',
-            'countField' => 'num_comments',
-            'operation' => '-',
-            'key' => 'id',
-            'value' => 7
+            'posts',
+            'num_comments',
+            '-',
+            'id',
+            7
         ];
 
         $secondOperationParams = [
-            'table' => 'users',
-            'countField' => 'comment_count',
-            'operation' => '-',
-            'key' => 'id',
-            'value' => 1
+            'users',
+            'comment_count',
+            '-',
+            'id',
+            1
         ];
 
-        DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $firstOperationParams)->once();
-        DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $secondOperationParams)->once();
+        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $firstOperationParams)->once();
+        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $secondOperationParams)->once();
 
         $this->manager->decrement($comment);
     }
@@ -79,23 +79,23 @@ class CountCacheManagerTest extends TestCase
         $this->manager->setOriginal($comment->getOriginal());
 
         $firstOperationParams = [
-            'table' => 'posts',
-            'countField' => 'num_comments',
-            'operation' => '-',
-            'key' => 'id',
-            'value' => 1
+            'posts',
+            'num_comments',
+            '-',
+            'id',
+            1
         ];
 
         $secondOperationParams = [
-            'table' => 'posts',
-            'countField' => 'num_comments',
-            'operation' => '+',
-            'key' => 'id',
-            'value' => 2
+            'posts',
+            'num_comments',
+            '+',
+            'id',
+            2
         ];
 
-        DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $firstOperationParams)->once();
-        DB::shouldReceive('statement')->with('UPDATE :table SET :countField = :countField :operation 1 WHERE :key = :value', $secondOperationParams)->once();
+        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $firstOperationParams)->once();
+        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $secondOperationParams)->once();
 
         $this->manager->updateCache($comment);
     }
