@@ -141,6 +141,7 @@ With that, you're all done! Whenever a user deals with their posts in any way, t
 #### 1.3.0
 
 * Count cache model behaviour added
+* Many-many relationship casing fix
 
 #### 1.2.0
 
