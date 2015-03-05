@@ -28,13 +28,7 @@ class CountCacheManagerTest extends TestCase
         $post = new Post;
         $post->user_id = 2;
 
-        $params = [
-            '+',
-            'id',
-            2
-        ];
-
-        DB::shouldReceive('update')->with('UPDATE `users` SET `posts_count` = `posts_count` ? 1 WHERE ? = ?', $params);
+        DB::shouldReceive('update')->with('UPDATE `users` SET `posts_count` = `posts_count` + 1 WHERE `id` = 2');
 
         $this->manager->increment($post);
     }
@@ -45,20 +39,8 @@ class CountCacheManagerTest extends TestCase
         $comment->post_id = 7;
         $comment->user_id = 1;
 
-        $firstOperationParams = [
-            '-',
-            'id',
-            7
-        ];
-
-        $secondOperationParams = [
-            '-',
-            'id',
-            1
-        ];
-
-        DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` ? 1 WHERE ? = ?', $firstOperationParams)->once();
-        DB::shouldReceive('update')->with('UPDATE `users` SET `comment_count` = `comment_count` ? 1 WHERE ? = ?', $secondOperationParams)->once();
+        DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` - 1 WHERE `id` = 7')->once();
+        DB::shouldReceive('update')->with('UPDATE `users` SET `comment_count` = `comment_count` - 1 WHERE `id` = 1')->once();
 
         $this->manager->decrement($comment);
     }
@@ -72,20 +54,8 @@ class CountCacheManagerTest extends TestCase
 
         $this->manager->setOriginal($comment->getOriginal());
 
-        $firstOperationParams = [
-            '-',
-            'id',
-            1
-        ];
-
-        $secondOperationParams = [
-            '+',
-            'id',
-            2
-        ];
-
-        DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` ? 1 WHERE ? = ?', $firstOperationParams)->once();
-        DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` ? 1 WHERE ? = ?', $secondOperationParams)->once();
+        DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` - 1 WHERE `id` = 1')->once();
+        DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` + 1 WHERE `id` = 2')->once();
 
         $this->manager->updateCache($comment);
     }

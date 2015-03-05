@@ -96,13 +96,7 @@ class CountCacheManager
         $table = $this->getTable($config['model']);
         $field = $config['countField'];
 
-        $params = [
-            $operation,
-            $config['key'],
-            $value
-        ];
-
-        return DB::update("UPDATE `{$table}` SET `{$field}` = `{$field}` ? 1 WHERE ? = ?", $params);
+        return DB::update("UPDATE `{$table}` SET `{$field}` = `{$field}` {$operation} 1 WHERE `{$config['key']}` = {$value}");
     }
 
     /**
