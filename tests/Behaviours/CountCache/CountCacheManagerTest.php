@@ -37,7 +37,7 @@ class CountCacheManagerTest extends TestCase
             2
         ];
 
-        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $params);
+        DB::shouldReceive('update')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $params);
 
         $this->manager->increment($post);
     }
@@ -65,9 +65,9 @@ class CountCacheManagerTest extends TestCase
             'id',
             1
         ];
-
-        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $firstOperationParams)->once();
-        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $secondOperationParams)->once();
+        
+        DB::shouldReceive('update')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $firstOperationParams)->once();
+        DB::shouldReceive('update')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $secondOperationParams)->once();
 
         $this->manager->decrement($comment);
     }
@@ -99,8 +99,8 @@ class CountCacheManagerTest extends TestCase
             2
         ];
 
-        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $firstOperationParams)->once();
-        DB::shouldReceive('statement')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $secondOperationParams)->once();
+        DB::shouldReceive('update')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $firstOperationParams)->once();
+        DB::shouldReceive('update')->with('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $secondOperationParams)->once();
 
         $this->manager->updateCache($comment);
     }

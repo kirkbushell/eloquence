@@ -102,7 +102,7 @@ class CountCacheManager
             $value
         ];
 
-        return DB::statement('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $params);
+        return DB::update('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $params);
     }
 
     /**
