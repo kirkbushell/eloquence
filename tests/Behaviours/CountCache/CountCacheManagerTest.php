@@ -31,6 +31,7 @@ class CountCacheManagerTest extends TestCase
         $params = [
             'users',
             'posts_count',
+            'posts_count',
             '+',
             'id',
             2
@@ -50,6 +51,7 @@ class CountCacheManagerTest extends TestCase
         $firstOperationParams = [
             'posts',
             'num_comments',
+            'num_comments',
             '-',
             'id',
             7
@@ -57,6 +59,7 @@ class CountCacheManagerTest extends TestCase
 
         $secondOperationParams = [
             'users',
+            'comment_count',
             'comment_count',
             '-',
             'id',
@@ -81,6 +84,7 @@ class CountCacheManagerTest extends TestCase
         $firstOperationParams = [
             'posts',
             'num_comments',
+            'num_comments',
             '-',
             'id',
             1
@@ -88,6 +92,7 @@ class CountCacheManagerTest extends TestCase
 
         $secondOperationParams = [
             'posts',
+            'num_comments',
             'num_comments',
             '+',
             'id',

@@ -96,6 +96,7 @@ class CountCacheManager
         $params = [
             $this->getTable($config['model']),
             $config['countField'],
+            $config['countField'],
             $operation,
             $config['key'],
             $value
