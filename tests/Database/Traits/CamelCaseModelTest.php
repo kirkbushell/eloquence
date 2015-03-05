@@ -2,6 +2,7 @@
 namespace Tests\Database\Traits;
 
 use Tests\Stubs\ModelStub;
+use Tests\Stubs\PivotModelStub;
 use Tests\TestCase;
 
 class CamelCaseModelTest extends TestCase
@@ -59,5 +60,17 @@ class CamelCaseModelTest extends TestCase
         ];
 
         $this->assertEquals($expectedAttributes, $this->model->attributesToArray());
+    }
+
+    public function testAttributeConversionLeavesPivotFieldsAlone()
+    {
+        $model = new PivotModelStub;
+
+        $expectedAttributes = [
+            'firstName' => 'Kirk',
+            'pivot_field' => 'whatever'
+        ];
+
+        $this->assertEquals($expectedAttributes, $model->attributesToArray());
     }
 }
