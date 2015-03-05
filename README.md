@@ -142,6 +142,7 @@ With that, you're all done! Whenever a user deals with their posts in any way, t
 
 * Count cache model behaviour added
 * Many-many relationship casing fix
+* Fixed an issue when using ::create
 
 #### 1.2.0
 
