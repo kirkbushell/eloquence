@@ -93,16 +93,16 @@ class CountCacheManager
      */
     protected function update(array $config, $operation, $value)
     {
+        $table = $this->getTable($config['model']);
+        $field = $config['countField'];
+
         $params = [
-            $this->getTable($config['model']),
-            $config['countField'],
-            $config['countField'],
             $operation,
             $config['key'],
             $value
         ];
 
-        return DB::update('UPDATE ? SET ? = ? ? 1 WHERE ? = ?', $params);
+        return DB::update("UPDATE `{$table}` SET `{$field}` = `{$field}` ? 1 WHERE ? = ?", $params);
     }
 
     /**
