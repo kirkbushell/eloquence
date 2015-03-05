@@ -76,6 +76,12 @@ trait CamelCaseModel
         $convertedAttributes = [];
 
         foreach ($attributes as $key => $value) {
+            // If the key is a pivot key, leave it alone - this is required internal behaviour
+            // of Eloquent for dealing with many:many relationships.
+            if (strpos($key, 'pivot_') === 0) {
+                continue;
+            }
+
             $key = $this->trueKeyName($key);
 
             $convertedAttributes[$key] = $value;
