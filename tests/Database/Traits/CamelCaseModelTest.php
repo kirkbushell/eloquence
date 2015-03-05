@@ -3,6 +3,7 @@ namespace Tests\Database\Traits;
 
 use Tests\Stubs\ModelStub;
 use Tests\Stubs\PivotModelStub;
+use Tests\Stubs\RealModelStub;
 use Tests\TestCase;
 
 class CamelCaseModelTest extends TestCase
@@ -72,5 +73,12 @@ class CamelCaseModelTest extends TestCase
         ];
 
         $this->assertEquals($expectedAttributes, $model->attributesToArray());
+    }
+
+    public function testModelFilling()
+    {
+        $model = new RealModelStub(['myField' => 'value']);
+
+        $this->assertEquals($model->myField, 'value');
     }
 }

@@ -21,7 +21,7 @@ trait CamelCaseModel
      */
     public function setAttribute($key, $value)
     {
-        parent::setAttribute($this->getTrueKey($key), $value);
+        parent::setAttribute($this->getSnakeKey($key), $value);
     }
 
     /**
@@ -32,7 +32,7 @@ trait CamelCaseModel
      */
     public function getAttribute($key)
     {
-        return parent::getAttribute($this->getTrueKey($key));
+        return parent::getAttribute($this->getSnakeKey($key));
     }
 
     /**
@@ -42,7 +42,7 @@ trait CamelCaseModel
      */
     public function attributesToArray()
     {
-        return $this->convertAttributesToTrueCase(parent::attributesToArray());
+        return $this->toCamelCase(parent::attributesToArray());
     }
 
     /**
@@ -62,7 +62,25 @@ trait CamelCaseModel
      */
     public function relationsToArray()
     {
-        return $this->convertAttributesToTrueCase(parent::relationsToArray());
+        return $this->toCamelCase(parent::relationsToArray());
+    }
+
+    /**
+     * Converts a given array of attribute keys to the casing required by CamelCaseModel.
+     *
+     * @param mixed $attributes
+     * @return array
+     */
+    public function toCamelCase($attributes)
+    {
+        $convertedAttributes = [];
+
+        foreach ($attributes as $key => $value) {
+            $key = $this->getTrueKey($key);
+            $convertedAttributes[$key] = $value;
+        }
+
+        return $convertedAttributes;
     }
 
     /**
@@ -71,18 +89,12 @@ trait CamelCaseModel
      * @param $attributes
      * @return array
      */
-    private function convertAttributesToTrueCase($attributes)
+    private function toSnakeCase($attributes)
     {
         $convertedAttributes = [];
 
         foreach ($attributes as $key => $value) {
-            // If the key is a pivot key, leave it alone - this is required internal behaviour
-            // of Eloquent for dealing with many:many relationships.
-            if (strpos($key, 'pivot_') === false) {
-                $key = $this->trueKeyName($key);
-            }
-
-            $convertedAttributes[$key] = $value;
+            $convertedAttributes[$this->getSnakeKey($key)] = $value;
         }
 
         return $convertedAttributes;
@@ -94,9 +106,11 @@ trait CamelCaseModel
      * @param $key
      * @return string
      */
-    protected function trueKeyName($key)
+    protected function getTrueKey($key)
     {
-        if ($this->isCamelCase()) {
+        // If the key is a pivot key, leave it alone - this is required internal behaviour
+        // of Eloquent for dealing with many:many relationships.
+        if ($this->isCamelCase() && strpos($key, 'pivot_') === false) {
             $key = camel_case($key);
         }
 
@@ -114,13 +128,37 @@ trait CamelCaseModel
         return $this->enforceCamelCase or (isset($this->parent) && method_exists($this->parent, 'isCamelCase') && $this->parent->isCamelCase());
     }
 
+    /**
+     * Get the fillable attributes of a given array.
+     *
+     * @param  array  $attributes
+     * @return array
+     */
+    protected function fillableFromArray(array $attributes)
+    {
+        $attributes = $this->toSnakeCase($attributes);
+
+        return parent::fillableFromArray($attributes);
+    }
+
+    /**
+     * Determine if the given attribute may be mass assigned.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function isFillable($key)
+    {
+        return parent::isFillable($this->getSnakeKey($key));
+    }
+
 	/**
 	 * If the field names need to be converted so that they can be accessed by camelCase, then we can do that here.
 	 *
 	 * @param $key
 	 * @return string
 	 */
-	protected function getTrueKey($key)
+	protected function getSnakeKey($key)
 	{
 		return snake_case($key);
 	}
