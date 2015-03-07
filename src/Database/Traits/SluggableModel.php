@@ -5,45 +5,34 @@ use Eloquence\Behaviours\Slugged\Slug;
 
 trait SluggableModel
 {
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function($model) {
-            $strategy = static::strategy();
-
-            if ($strategy == 'uuid') {
-                $model->generateIdSlug();
-            }
-            elseif ($strategy != 'id') {
-                $model->generateTitleSlug($strategy);
-            }
-        });
-
-        static::created(function($model) {
-            if (static::strategy() == 'id') {
-                $model->generateIdSlug();
-                $model->save();
-            }
-        });
-    }
-
     /**
      * Generate a slug based on the main model key.
      */
     public function generateIdSlug()
     {
-        $this->{$this->slugField()} = Slug::fromId($this->getKey());
+        $this->setSlugValue(Slug::fromId($this->getKey()));
     }
 
     /**
      * Generate a slug string based on the fields required.
      */
-    public function generateTitleSlug($fields)
+    public function generateTitleSlug(array $fields)
     {
-        array_map(function($field) { return $this->$field; }, explode('.', $fields));
+        $fields = array_map(function($field) {
+            return $this->$field;
+        }, $fields);
 
-        $this->{$this->slugField()} = Slug::fromTitle(implode(' ', $fields));
+        $this->setSlugValue(Slug::fromTitle(implode(' ', $fields)));
+    }
+
+    /**
+     * Set the value of the slug.
+     *
+     * @param $value
+     */
+    public function setSlugValue(Slug $value)
+    {
+        $this->{$this->slugField()} = (string) $value;
     }
 
     /**
@@ -90,5 +79,5 @@ trait SluggableModel
      *
      * @return string
      */
-    abstract protected static function strategy();
+    abstract public function slugStrategy();
 }

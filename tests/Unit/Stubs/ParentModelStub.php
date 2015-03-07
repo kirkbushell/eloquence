@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Stubs;
+namespace Tests\Unit\Stubs;
 
 class ParentModelStub
 {

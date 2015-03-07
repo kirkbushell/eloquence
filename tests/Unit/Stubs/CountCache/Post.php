@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Stubs\CountCache;
+namespace Tests\Unit\Stubs\CountCache;
 
 use Eloquence\Behaviours\CountCache\CountCache;
 use Eloquence\Database\Model;

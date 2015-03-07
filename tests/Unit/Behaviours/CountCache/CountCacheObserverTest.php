@@ -1,10 +1,10 @@
 <?php
-namespace Tests\Behaviours\CountCache;
+namespace Tests\Unit\Behaviours\CountCache;
 
 use Eloquence\Behaviours\CountCache\CountCacheObserver;
 use Mockery as m;
-use Tests\Stubs\RealModelStub;
-use Tests\TestCase;
+use Tests\Unit\Stubs\RealModelStub;
+use Tests\Unit\TestCase;
 
 class CountCacheObserverTest extends TestCase
 {

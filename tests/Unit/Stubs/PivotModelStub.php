@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Stubs;
+namespace Tests\Unit\Stubs;
 
 use Eloquence\Database\Traits\CamelCaseModel;
 

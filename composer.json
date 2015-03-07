@@ -15,7 +15,9 @@
 	    "rhumsaa/uuid": "~2.8"
     },
     "require-dev": {
+        "illuminate/events": "~5.0",
         "mockery/mockery": "0.9.*@dev",
+        "orchestra/testbench": "3.1.*",
         "phpunit/phpunit": "4.3.*"
     },
     "autoload": {

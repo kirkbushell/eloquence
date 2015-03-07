@@ -1,10 +1,10 @@
 <?php
-namespace Tests\Database\Traits;
+namespace Tests\Unit\Database\Traits;
 
-use Tests\Stubs\ModelStub;
-use Tests\Stubs\PivotModelStub;
-use Tests\Stubs\RealModelStub;
-use Tests\TestCase;
+use Tests\Unit\Stubs\ModelStub;
+use Tests\Unit\Stubs\PivotModelStub;
+use Tests\Unit\Stubs\RealModelStub;
+use Tests\Unit\TestCase;
 
 class CamelCaseModelTest extends TestCase
 {

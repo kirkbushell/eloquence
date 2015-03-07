@@ -1,12 +1,12 @@
 <?php
-namespace Tests\Behaviours\CountCache;
+namespace Tests\Unit\Behaviours\CountCache;
 
 use Eloquence\Behaviours\CountCache\CountCacheManager;
 use Illuminate\Support\Facades\DB;
-use Tests\Stubs\CountCache\Comment;
-use Tests\Stubs\CountCache\Post;
-use Tests\Stubs\RealModelStub;
-use Tests\TestCase;
+use Tests\Unit\Stubs\CountCache\Comment;
+use Tests\Unit\Stubs\CountCache\Post;
+use Tests\Unit\Stubs\RealModelStub;
+use Tests\Unit\TestCase;
 
 class CountCacheManagerTest extends TestCase
 {
@@ -20,7 +20,7 @@ class CountCacheManagerTest extends TestCase
     public function testGetTable()
     {
         $this->assertEquals('real_model_stubs', $this->manager->getTable(new RealModelStub));
-        $this->assertEquals('real_model_stubs', $this->manager->getTable('Tests\Stubs\RealModelStub'));
+        $this->assertEquals('real_model_stubs', $this->manager->getTable('Tests\Unit\Stubs\RealModelStub'));
     }
 
     public function testIncrementRelatedModel()
