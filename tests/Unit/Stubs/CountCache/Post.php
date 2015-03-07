@@ -9,7 +9,7 @@ class Post extends Model implements CountCache
     public function countCaches()
     {
         return [
-            'posts_count' => ['Tests\Stubs\CountCache\User', 'user_id', 'id']
+            'posts_count' => ['Tests\Unit\Stubs\CountCache\User', 'user_id', 'id']
         ];
     }
 }

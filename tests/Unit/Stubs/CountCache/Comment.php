@@ -9,8 +9,8 @@ class Comment extends Model implements CountCache
     public function countCaches()
     {
         return [
-            'num_comments' => 'Tests\Stubs\CountCache\Post',
-            'Tests\Stubs\CountCache\User'
+            'num_comments' => 'Tests\Unit\Stubs\CountCache\Post',
+            'Tests\Unit\Stubs\CountCache\User'
         ];
     }
 }
