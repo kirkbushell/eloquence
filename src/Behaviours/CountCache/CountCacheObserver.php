@@ -51,6 +51,7 @@ class CountCacheObserver
     public function updated(Model $model)
     {
         $this->manager->updateCache($model);
+        $this->manager->setOriginal([]);
     }
 
     /**

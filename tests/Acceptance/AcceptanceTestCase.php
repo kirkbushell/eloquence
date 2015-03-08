@@ -35,6 +35,7 @@ class AcceptanceTestCase extends \Orchestra\Testbench\TestCase
             $table->string('first_name');
             $table->string('last_name');
             $table->string('slug')->nullable();
+            $table->integer('comment_count')->default(0);
             $table->integer('post_count')->default(0);
             $table->timestamps();
         });
@@ -43,6 +44,14 @@ class AcceptanceTestCase extends \Orchestra\Testbench\TestCase
             $table->increments('id');
             $table->integer('user_id')->nullable();
             $table->string('slug')->nullable();
+            $table->integer('comment_count')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('comments', function(Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->integer('post_id');
             $table->timestamps();
         });
     }
