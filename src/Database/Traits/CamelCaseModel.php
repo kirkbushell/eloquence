@@ -84,6 +84,18 @@ trait CamelCaseModel
     }
 
     /**
+     * Get the model's original attribute values.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return array
+     */
+    public function getOriginal($key = null, $default = null)
+    {
+        return array_get($this->toCamelCase($this->original), $key, $default);
+    }
+
+    /**
      * Converts a given array of attribute keys to the casing required by CamelCaseModel.
      *
      * @param $attributes
@@ -106,7 +118,7 @@ trait CamelCaseModel
      * @param $key
      * @return string
      */
-    protected function getTrueKey($key)
+    public function getTrueKey($key)
     {
         // If the key is a pivot key, leave it alone - this is required internal behaviour
         // of Eloquent for dealing with many:many relationships.

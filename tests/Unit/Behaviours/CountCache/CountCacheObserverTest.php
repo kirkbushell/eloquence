@@ -15,7 +15,8 @@ class CountCacheObserverTest extends TestCase
     public function init()
     {
         $this->mockManager = m::spy('Eloquence\Behaviours\CountCache\CountCacheManager');
-        $this->observer = new CountCacheObserver($this->mockManager);
+        $this->observer = new CountCacheObserver;
+        $this->observer->setManager($this->mockManager);
         $this->model = new RealModelStub;
     }
 
@@ -23,12 +24,6 @@ class CountCacheObserverTest extends TestCase
     {
         $this->observer->created($this->model);
         $this->mockManager->shouldHaveReceived('increment')->with($this->model)->once();
-    }
-
-    public function testUpdating()
-    {
-        $this->observer->updating($this->model);
-        $this->mockManager->shouldHaveReceived('setOriginal')->with([])->once();
     }
 
     public function testUpdated()

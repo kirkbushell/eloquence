@@ -52,8 +52,6 @@ class CountCacheManagerTest extends TestCase
         $comment->syncOriginal();
         $comment->post_id = 2;
 
-        $this->manager->setOriginal($comment->getOriginal());
-
         DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` - 1 WHERE `id` = 1')->once();
         DB::shouldReceive('update')->with('UPDATE `posts` SET `num_comments` = `num_comments` + 1 WHERE `id` = 2')->once();
 

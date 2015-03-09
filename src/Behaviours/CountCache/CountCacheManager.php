@@ -12,21 +12,6 @@ class CountCacheManager
     private $model;
 
     /**
-     * Stores the original data that was set when the model was loaded.
-     *
-     * @var array
-     */
-    private $original = [];
-
-    /**
-     * @param array $original
-     */
-    public function setOriginal(array $original)
-    {
-        $this->original = $original;
-    }
-
-    /**
      * Increase a model's related count cache by 1.
      *
      * @param Model $model
@@ -76,9 +61,11 @@ class CountCacheManager
          $this->model = $model;
 
          $this->applyToCountCache(function($config) {
-             if (isset($this->original[$config['foreignKey']]) && $this->model->{$config['foreignKey']} != $this->original[$config['foreignKey']]) {
-                 $this->update($config, '-', $this->original[$config['foreignKey']]);
-                 $this->update($config, '+', $this->model->{$config['foreignKey']});
+             $foreignKey = $this->key($this->model, $config['foreignKey']);
+
+             if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
+                 $this->update($config, '-', $this->model->getOriginal($foreignKey));
+                 $this->update($config, '+', $this->model->{$foreignKey});
              }
          });
      }
@@ -88,15 +75,21 @@ class CountCacheManager
      *
      * @param array $config
      * @param string $operation Whether to increment or decrement a value. Valid values: +/-
-     * @param $value
+     * @param string $foreignKey
      * @return
      */
-    protected function update(array $config, $operation, $value)
+    protected function update(array $config, $operation, $foreignKey)
     {
         $table = $this->getTable($config['model']);
-        $field = $config['countField'];
 
-        return DB::update("UPDATE `{$table}` SET `{$field}` = `{$field}` {$operation} 1 WHERE `{$config['key']}` = {$value}");
+        // the following is required for camel-cased models, in case users are defining their attributes as camelCase
+        $field = snake_case($config['countField']);
+        $key = snake_case($config['key']);
+        $foreignKey = snake_case($foreignKey);
+
+        $sql = "UPDATE `{$table}` SET `{$field}` = `{$field}` {$operation} 1 WHERE `{$key}` = {$foreignKey}";
+
+        return DB::update($sql);
     }
 
     /**
@@ -159,16 +152,44 @@ class CountCacheManager
      */
     protected function defaults($options, $relatedModel)
     {
-        $class = strtolower(class_basename($this->model));
-        $relatedClass = strtolower(class_basename($relatedModel));
-
         $defaults = [
             'model' => $relatedModel,
-            'countField' => $class.'_count',
-            'foreignKey' => $relatedClass.'_id',
+            'countField' => $this->field($this->model, 'count'),
+            'foreignKey' => $this->field($relatedModel, 'id'),
             'key' => 'id'
         ];
 
         return array_merge($defaults, $options);
+    }
+
+    /**
+     * Creates the key based on model properties and rules.
+     *
+     * @param string $class
+     * @param string $field
+     * @return string
+     */
+    protected function field($model, $field)
+    {
+        $class = strtolower(class_basename($model));
+        $field = $class.'_'.$field;
+
+        return $field;
+    }
+
+    /**
+     * Returns the true key for a given field.
+     *
+     * @param object $model
+     * @param string $field
+     * @return mixed
+     */
+    protected function key($model, $field)
+    {
+        if (method_exists($model, 'getTrueKey')) {
+            return $model->getTrueKey($field);
+        }
+
+        return $field;
     }
 }

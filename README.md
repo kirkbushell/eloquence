@@ -132,11 +132,18 @@ This example customises the count cache field, and the related foreign key, with
 
 You could do this in a service provider for your application:
 
-    Post::observe($this->app->make('Eloquence\Behaviours\CountCache\CountCacheObserver');
+    Post::observe(new Eloquence\Behaviours\CountCache\CountCacheObserver);
 
 With that, you're all done! Whenever a user deals with their posts in any way, the observer will make sure the appropriate count cache is updated!
 
 ## Changelog
+
+#### 1.3.1
+
+* Relationship fixes
+* Fillable attributes bug fix
+* Count cache update for changing relationships fix
+* Small update for implementing count cache observer
 
 #### 1.3.0
 

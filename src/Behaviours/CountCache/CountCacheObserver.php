@@ -13,33 +13,13 @@ class CountCacheObserver
     private $manager;
 
     /**
-     * @param CountCacheManager $manager
-     */
-    public function __construct(CountCacheManager $manager)
-    {
-        $this->manager = $manager;
-    }
-
-    /**
      * Whenever a new model is created, we want to increment the related model's count cache.
      *
      * @param Model $model
      */
     public function created(Model $model)
     {
-        $this->manager->increment($model);
-    }
-
-    /**
-     * Store the original data before the model is updated. When a model is updated the original
-     * array is set to the newly updated data, so it's impossible to figure out whether a related
-     * column value has changed.
-     *
-     * @param Model $model
-     */
-    public function updating(Model $model)
-    {
-        $this->manager->setOriginal($model->getOriginal());
+        $this->manager()->increment($model);
     }
 
     /**
@@ -50,8 +30,7 @@ class CountCacheObserver
      */
     public function updated(Model $model)
     {
-        $this->manager->updateCache($model);
-        $this->manager->setOriginal([]);
+        $this->manager()->updateCache($model);
     }
 
     /**
@@ -61,7 +40,7 @@ class CountCacheObserver
      */
     public function deleted(Model $model)
     {
-        $this->manager->decrement($model);
+        $this->manager()->decrement($model);
     }
 
     /**
@@ -72,6 +51,28 @@ class CountCacheObserver
      */
     public function restored(Model $model)
     {
-        $this->manager->increment($model);
+        $this->manager()->increment($model);
+    }
+
+    /**
+     * Manages the count cache manager instance.
+     *
+     * @return CountCacheManager
+     */
+    protected function manager()
+    {
+        if (! $this->manager) {
+            $this->manager = new CountCacheManager;
+        }
+
+        return $this->manager;
+    }
+
+    /**
+     * @param CountCacheManager $manager
+     */
+    public function setManager(CountCacheManager $manager)
+    {
+        $this->manager = $manager;
     }
 }

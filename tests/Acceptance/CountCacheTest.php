@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Acceptance\CountCache;
 
-use Eloquence\Behaviours\CountCache\CountCacheManager;
 use Eloquence\Behaviours\CountCache\CountCacheObserver;
 use Tests\Acceptance\AcceptanceTestCase;
 use Tests\Acceptance\Models\Comment;
@@ -14,10 +13,8 @@ class CountCacheTest extends AcceptanceTestCase
 
     public function init()
     {
-        $observer = new CountCacheObserver(new CountCacheManager);
-
-        Comment::observe($observer);
-        Post::observe($observer);
+        Comment::observe(new CountCacheObserver);
+        Post::observe(new CountCacheObserver);
 
         $this->data = $this->setupUserAndPost();
     }
@@ -45,7 +42,7 @@ class CountCacheTest extends AcceptanceTestCase
 
         $comment->postId = $post->id;
         $comment->save();
-        dd(Post::get());
+
         $this->assertEquals(0, Post::first()->commentCount);
         $this->assertEquals(1, Post::get()[1]->commentCount);
     }
