@@ -7,7 +7,7 @@ use Eloquence\Database\Model;
 
 class RealModelStub extends Model implements CountCache
 {
-    public $fillable = ['my_field'];
+    public $fillable = ['myField', 'anotherField'];
 
     /**
      * Should return an array of the count caches that need to be updated when this

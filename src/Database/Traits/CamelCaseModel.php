@@ -140,30 +140,6 @@ trait CamelCaseModel
         return $this->enforceCamelCase or (isset($this->parent) && method_exists($this->parent, 'isCamelCase') && $this->parent->isCamelCase());
     }
 
-    /**
-     * Get the fillable attributes of a given array.
-     *
-     * @param  array  $attributes
-     * @return array
-     */
-    protected function fillableFromArray(array $attributes)
-    {
-        $attributes = $this->toSnakeCase($attributes);
-
-        return parent::fillableFromArray($attributes);
-    }
-
-    /**
-     * Determine if the given attribute may be mass assigned.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function isFillable($key)
-    {
-        return parent::isFillable($this->getSnakeKey($key));
-    }
-
 	/**
 	 * If the field names need to be converted so that they can be accessed by camelCase, then we can do that here.
 	 *

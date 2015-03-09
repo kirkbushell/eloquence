@@ -77,10 +77,9 @@ class CamelCaseModelTest extends TestCase
 
     public function testModelFilling()
     {
-        $model = new RealModelStub(['myField' => 'value']);
-        $model2 = new RealModelStub(['my_field' => 'value']);
+        $model = new RealModelStub(['myField' => 'value', 'anotherField' => 'yeah']);
 
         $this->assertEquals($model->myField, 'value');
-        $this->assertEquals($model2->myField, 'value');
+        $this->assertEquals($model->anotherField, 'yeah');
     }
 }
