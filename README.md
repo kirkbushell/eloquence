@@ -136,7 +136,40 @@ You could do this in a service provider for your application:
 
 With that, you're all done! Whenever a user deals with their posts in any way, the observer will make sure the appropriate count cache is updated!
 
+### Sluggable models
+
+Slugged is another behaviour that allows for the easy addition of model slugs. To use, implement the SluggableModel trait:
+
+    class User extends Eloquent {
+        use SluggableModel;
+    
+        public function slugStrategy() {
+            return 'username';
+        }
+    }
+
+Then add the observer:
+
+    User::observe(new Eloquence\Behaviours\Slugged\SlugObserver);
+
+In the example above, a slug will be created based on the username field of the User model. There are two other
+slugs that are supported however, as well:
+
+* id and
+* uuid
+
+The only difference between the two above, is that if you're using uuids, the slug will be generated previous
+to the save, based on the uuid field. With ids, which are generally auto-increment strategies - the slug has
+to be generated after the record has been saved - which results in a secondary save call to the database.
+
+That's it! Easy huh?
+
 ## Changelog
+
+#### 1.3.2
+
+* Slugged behaviour
+* Fix for fillable attributes
 
 #### 1.3.1
 
