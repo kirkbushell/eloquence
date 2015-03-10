@@ -32,6 +32,10 @@ trait CamelCaseModel
      */
     public function getAttribute($key)
     {
+        if (method_exists($this, $key)) {
+            return $this->getRelationshipFromMethod($key);
+        }
+
         return parent::getAttribute($this->getSnakeKey($key));
     }
 
