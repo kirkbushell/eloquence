@@ -9,6 +9,11 @@ class RealModelStub extends Model implements CountCache
 {
     public $fillable = ['myField', 'anotherField', 'some_field'];
 
+    public function fakeRelationship()
+    {
+        return 'nothing';
+    }
+
     /**
      * Should return an array of the count caches that need to be updated when this
      * model's state changes. Use the following array below as an example when a User

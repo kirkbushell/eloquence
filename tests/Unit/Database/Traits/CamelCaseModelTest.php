@@ -87,4 +87,12 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals($model->anotherField, 'yeah');
         $this->assertNull($model->someField);
     }
+
+    public function testRelationalMethods()
+    {
+        $this->setExpectedException('LogicException');
+
+        $model = new RealModelStub;
+        $model->fakeRelationship;
+    }
 }
