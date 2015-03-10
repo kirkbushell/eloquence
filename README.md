@@ -166,6 +166,10 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 1.3.3
+
+* Fixed a bug with relationships not being accessible via model properties
+
 #### 1.3.2
 
 * Slugged behaviour
