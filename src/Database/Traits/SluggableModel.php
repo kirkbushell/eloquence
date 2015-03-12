@@ -79,5 +79,8 @@ trait SluggableModel
      *
      * @return string
      */
-    abstract public function slugStrategy();
+    public function slugStrategy()
+    {
+        return 'id';
+    }
 }
