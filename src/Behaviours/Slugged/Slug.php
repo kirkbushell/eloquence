@@ -29,7 +29,7 @@ class Slug
      */
     public static function fromId($id)
     {
-        $salt = md5($id);
+        $salt = md5(uniqid().$id);
         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $slug = with(new Hashids($salt, $length = 8, $alphabet))->encode($id);
 
