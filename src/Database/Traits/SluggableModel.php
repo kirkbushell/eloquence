@@ -18,18 +18,16 @@ trait SluggableModel
      */
     public function generateTitleSlug(array $fields)
     {
-        $delimiter = '////';
-
-        $fields = array_map(function($field) use ($delimiter) {
+        $fields = array_map(function($field) {
             if (str_contains($field, '.')) {
-                return object_get($this, $field).'////'; // this acts as a delimiter, which we can replace with /
+                return object_get($this, $field); // this acts as a delimiter, which we can replace with /
             }
             else {
                 return $this->{$field};
             }
         }, $fields);
-        
-        $this->setSlugValue(Slug::fromTitle(str_replace($delimiter, '/', implode('-', $fields))));
+
+        $this->setSlugValue(Slug::fromTitle(implode('-', $fields)));
     }
 
     /**
