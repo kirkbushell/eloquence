@@ -19,10 +19,10 @@ trait SluggableModel
     public function generateTitleSlug(array $fields)
     {
         $fields = array_map(function($field) {
-            return $this->$field;
+            return object_get($this, $field);
         }, $fields);
 
-        $this->setSlugValue(Slug::fromTitle(implode(' ', $fields)));
+        $this->setSlugValue(Slug::fromTitle(implode('/', $fields)));
     }
 
     /**
