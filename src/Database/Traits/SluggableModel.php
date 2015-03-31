@@ -18,6 +18,8 @@ trait SluggableModel
      */
     public function generateTitleSlug(array $fields)
     {
+        static $attempts = 0;
+
         $fields = array_map(function($field) {
             if (str_contains($field, '.')) {
                 return object_get($this, $field); // this acts as a delimiter, which we can replace with /
@@ -27,7 +29,31 @@ trait SluggableModel
             }
         }, $fields);
 
-        $this->setSlugValue(Slug::fromTitle(implode('-', $fields)));
+        $titleSlug = Slug::fromTitle(implode('-', $fields));
+
+        // This is not the first time we've attempted to create a title slug, so - let's make it more unique
+        if ($attempts > 0) {
+            $titleSlug . "-{$attempts}";
+        }
+
+        $this->setSlugValue($titleSlug);
+        
+        $attempts++;
+    }
+
+    /**
+     * Generate the slug for the model based on the model's slug strategy.
+     */
+    public function generateSlug()
+    {
+        $strategy = $this->slugStrategy();
+
+        if ($strategy == 'uuid') {
+            $this->generateIdSlug();
+        }
+        elseif ($strategy != 'id') {
+            $this->generateTitleSlug((array) $strategy);
+        }
     }
 
     /**
@@ -87,5 +113,31 @@ trait SluggableModel
     public function slugStrategy()
     {
         return 'id';
+    }
+
+    /**
+     * Unfortunately we need to overload the save method. The reason for this is simple - Eloquence
+     * does not require you to configure your model for slugging uniqueness - it lets the database
+     * tell it if something goes awry during slug creation. If it does, it'll attempt again with
+     * a fresh set of unique slug values.
+     *
+     * @param array $options
+     * @return mixed
+     * @throws \Exception
+     */
+    public function save(array $options = [])
+    {
+        try {
+            return parent::save($options);
+        } catch (\Exception $e) {
+            if (str_contains($e->getMessage(), 'Duplicate') && str_contains($e->getMessage(), $this->slugField)) {
+                $this->generateSlug();
+
+                return $this->save($options);
+            }
+            else {
+                throw $e;
+            }
+        }
     }
 }

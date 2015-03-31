@@ -13,14 +13,7 @@ class SlugObserver
      */
     public function creating(Model $model)
     {
-        $strategy = $model->slugStrategy();
-
-        if ($strategy == 'uuid') {
-            $model->generateIdSlug();
-        }
-        elseif ($strategy != 'id') {
-            $model->generateTitleSlug((array) $strategy);
-        }
+        $model->generateSlug();
     }
 
     /**
