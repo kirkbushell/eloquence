@@ -20,6 +20,27 @@ trait SluggableModel
     {
         static $attempts = 0;
 
+        $titleSlug = Slug::fromTitle(implode('-', $this->getTitleFields($fields)));
+
+        // This is not the first time we've attempted to create a title slug, so - let's make it more unique
+        if ($attempts > 0) {
+            $titleSlug . "-{$attempts}";
+        }
+
+        $this->setSlugValue($titleSlug);
+
+        $attempts++;
+    }
+
+    /**
+     * Because a title slug can be created from multiple sources (such as an article title, a category title.etc.),
+     * this allows us to search out those fields from related objects and return the combined values.
+     *
+     * @param array $fields
+     * @return array
+     */
+    public function getTitleFields(array $fields)
+    {
         $fields = array_map(function($field) {
             if (str_contains($field, '.')) {
                 return object_get($this, $field); // this acts as a delimiter, which we can replace with /
@@ -29,16 +50,7 @@ trait SluggableModel
             }
         }, $fields);
 
-        $titleSlug = Slug::fromTitle(implode('-', $fields));
-
-        // This is not the first time we've attempted to create a title slug, so - let's make it more unique
-        if ($attempts > 0) {
-            $titleSlug . "-{$attempts}";
-        }
-
-        $this->setSlugValue($titleSlug);
-        
-        $attempts++;
+        return $fields;
     }
 
     /**
