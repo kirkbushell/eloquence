@@ -166,6 +166,10 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 1.4.0
+
+* Slugs when retrieved from a model now return Slug value objects.
+
 #### 1.3.4
 
 * More random, less predictable slugs for id strategies
