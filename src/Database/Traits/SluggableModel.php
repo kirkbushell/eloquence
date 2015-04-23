@@ -75,7 +75,7 @@ trait SluggableModel
      */
     public function setSlugValue(Slug $value)
     {
-        $this->{$this->slugField()} = (string) $value;
+        $this->{$this->slugField()} = $value;
     }
 
     /**
@@ -128,28 +128,22 @@ trait SluggableModel
     }
 
     /**
-     * Unfortunately we need to overload the save method. The reason for this is simple - Eloquence
-     * does not require you to configure your model for slugging uniqueness - it lets the database
-     * tell it if something goes awry during slug creation. If it does, it'll attempt again with
-     * a fresh set of unique slug values.
+     * Sets the slug attribute with the Slug value object.
      *
-     * @param array $options
-     * @return mixed
-     * @throws \Exception
+     * @param Slug $slug
      */
-    public function save(array $options = [])
+    public function setSlugAttribute(Slug $slug)
     {
-        try {
-            return parent::save($options);
-        } catch (\Exception $e) {
-            if (str_contains($e->getMessage(), 'Duplicate') && str_contains($e->getMessage(), $this->slugField)) {
-                $this->generateSlug();
+        $this->attributes[$this->slugField()] = (string) $slug;
+    }
 
-                return $this->save($options);
-            }
-            else {
-                throw $e;
-            }
-        }
+    /**
+     * Returns the slug attribute as a Slug value object.
+     *
+     * @return Slug
+     */
+    public function getSlugAttribute()
+    {
+        return new Slug($this->attributes[$this->slugField()]);
     }
 }

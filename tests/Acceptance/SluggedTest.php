@@ -16,7 +16,7 @@ class SluggedTest extends AcceptanceTestCase
         $user->lastName = 'Bushell';
         $user->save();
 
-        $this->assertEquals('kirk-bushell', $user->slug);
+        $this->assertEquals('kirk-bushell', (string) $user->slug);
     }
 
     public function testPostSlug()
@@ -26,6 +26,6 @@ class SluggedTest extends AcceptanceTestCase
         $post = new Post;
         $post->save();
 
-        $this->assertRegExp('/^[a-z0-9]{8}$/i', $post->slug);
+        $this->assertRegExp('/^[a-z0-9]{8}$/i', (string) $post->slug);
     }
 }
