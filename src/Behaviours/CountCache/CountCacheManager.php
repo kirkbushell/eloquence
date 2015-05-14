@@ -80,6 +80,10 @@ class CountCacheManager
      */
     protected function update(array $config, $operation, $foreignKey)
     {
+        if (is_null($foreignKey)) {
+            return;
+        }
+
         $table = $this->getTable($config['model']);
 
         // the following is required for camel-cased models, in case users are defining their attributes as camelCase
