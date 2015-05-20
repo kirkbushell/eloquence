@@ -15,9 +15,14 @@ class Slug
      * Creates a new instance of the Slug class based on the slug string provided.
      *
      * @param string $slug
+     * @throws \Exception
      */
     public function __construct($slug)
     {
+        if (!is_string($slug)) {
+            throw new \Exception('$slug parameter must be a string.');
+        }
+
         $this->slug = $slug;
     }
 
