@@ -59,6 +59,6 @@ class Slug
      */
     public function __toString()
     {
-        return $this->slug;
+        return (string) $this->slug;
     }
 }
