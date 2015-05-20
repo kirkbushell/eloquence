@@ -19,10 +19,6 @@ class Slug
      */
     public function __construct($slug)
     {
-        if (!is_string($slug)) {
-            throw new \Exception('$slug parameter must be a string. Current value is: '.print_r($slug, true));
-        }
-
         $this->slug = $slug;
     }
 
