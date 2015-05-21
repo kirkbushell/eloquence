@@ -1,7 +1,7 @@
 <?php
 namespace Eloquence\Database\Traits;
 
-use Ramsey\Uuid\Uuid;
+use Rhumsaa\Uuid\Uuid;
 
 /**
  * Class UUIDModel
@@ -40,7 +40,7 @@ trait UUIDModel
     /**
      * Get a new version 4 (random) UUID.
      *
-     * @return \Ramsey\Uuid\Uuid
+     * @return \Rhumsaa\Uuid\Uuid
      */
     public function generateNewUuid()
     {
