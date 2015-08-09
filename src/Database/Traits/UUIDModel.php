@@ -20,7 +20,7 @@ trait UUIDModel
      *
      * @return void
      */
-    protected static function boot()
+    protected static function bootUUIDModel()
     {
         parent::boot();
 
