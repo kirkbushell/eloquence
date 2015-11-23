@@ -114,4 +114,15 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals('secrets!', $model->getAttribute('hiddenField'));
         $this->assertEquals('1234', $model->getAttribute('passwordHash'));
     }
+
+    public function testModelDateFieldHandling()
+    {
+        $model = new RealModelStub([
+            'myField' => '2011-11-11T11:11:11Z',
+            'dateField' => '2011-11-11T11:11:11Z',
+        ]);
+
+        $this->assertFalse($model->myField instanceof \Carbon\Carbon);
+        $this->assertTrue($model->dateField instanceof \Carbon\Carbon);
+    }
 }

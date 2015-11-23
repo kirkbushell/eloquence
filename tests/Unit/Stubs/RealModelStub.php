@@ -8,9 +8,13 @@ use Eloquence\Database\Model;
 class RealModelStub extends Model implements CountCache
 {
 
+    protected $dateFormat = \DateTime::ISO8601;
+
+    protected $dates = ['dateField'];
+
     public $hidden = ['hiddenField', 'password_hash'];
 
-    public $fillable = ['myField', 'anotherField', 'some_field', 'hiddenField', 'passwordHash'];
+    public $fillable = ['myField', 'anotherField', 'some_field', 'hiddenField', 'passwordHash', 'dateField'];
 
     public function fakeRelationship()
     {
