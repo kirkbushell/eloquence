@@ -95,4 +95,19 @@ class CamelCaseModelTest extends TestCase
         $model = new RealModelStub;
         $model->fakeRelationship;
     }
+
+    public function testModelHidesHiddenFields()
+    {
+        $model = new RealModelStub([
+            'myField' => 'value',
+            'anotherField' => 'yeah',
+            'someField' => 'whatever',
+            'hiddenField' => 'secrets!',
+        ]);
+
+        $modelArray = $model->toArray();
+
+        $this->assertFalse(isset($modelArray['hiddenField']));
+        $this->assertEquals('secrets!', $model->getAttribute('hiddenField'));
+    }
 }
