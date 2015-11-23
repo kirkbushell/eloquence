@@ -68,6 +68,30 @@ trait CamelCaseModel
     {
         return $this->toCamelCase(parent::relationsToArray());
     }
+    
+    /**
+     * Overloads eloquent's getHidden method to ensure that hidden fields declared
+     * in camelCase are actually hidden and not exposed when models are turned
+     * into arrays.
+     *
+     * @return array
+     */
+    public function getHidden()
+    {
+        return array_map('snake_case', $this->hidden);
+    }
+
+    /**
+     * Overloads the eloquent getDates method to ensure that date field declarations
+     * can be made in camelCase but mapped to/from DB in snake_case.
+     *
+     * @return array
+     */
+    public function getDates()
+    {
+        $dates = parent::getDates();
+        return array_map('snake_case', $dates);
+    }
 
     /**
      * Converts a given array of attribute keys to the casing required by CamelCaseModel.
