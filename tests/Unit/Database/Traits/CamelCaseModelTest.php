@@ -115,6 +115,27 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals('1234', $model->getAttribute('passwordHash'));
     }
 
+    public function testModelExposesHiddenFields()
+    {
+        $model = new RealModelStub([
+            'myField' => 'value',
+            'anotherField' => 'yeah',
+            'someField' => 'whatever',
+            'hiddenField' => 'secrets!',
+            'passwordHash' => '1234',
+        ]);
+
+        $modelArray = $model
+            ->withHidden(['hiddenField', 'password_hash'])
+            ->toArray();
+
+        $this->assertTrue(isset($modelArray['hiddenField']));
+        $this->assertTrue(isset($modelArray['passwordHash']));
+        
+        $this->assertEquals('secrets!', $modelArray['hiddenField']);
+        $this->assertEquals('1234', $modelArray['passwordHash']);
+    }
+
     public function testModelDateFieldHandling()
     {
         $model = new RealModelStub([
