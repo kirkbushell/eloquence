@@ -8,9 +8,9 @@ use Eloquence\Database\Model;
 class RealModelStub extends Model implements CountCache
 {
 
-    public $hidden = ['hiddenField'];
+    public $hidden = ['hiddenField', 'password_hash'];
 
-    public $fillable = ['myField', 'anotherField', 'some_field', 'hiddenField'];
+    public $fillable = ['myField', 'anotherField', 'some_field', 'hiddenField', 'passwordHash'];
 
     public function fakeRelationship()
     {

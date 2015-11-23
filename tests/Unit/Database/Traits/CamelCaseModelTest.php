@@ -103,11 +103,15 @@ class CamelCaseModelTest extends TestCase
             'anotherField' => 'yeah',
             'someField' => 'whatever',
             'hiddenField' => 'secrets!',
+            'passwordHash' => '1234',
         ]);
 
         $modelArray = $model->toArray();
 
         $this->assertFalse(isset($modelArray['hiddenField']));
+        $this->assertFalse(isset($modelArray['passwordHash']));
+        
         $this->assertEquals('secrets!', $model->getAttribute('hiddenField'));
+        $this->assertEquals('1234', $model->getAttribute('passwordHash'));
     }
 }
