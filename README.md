@@ -130,7 +130,7 @@ This example customises the count cache field, and the related foreign key, with
 
 #### Setup the observer
 
-You could do this in a service provider for your application:
+You could do this in a service provider for your application (for example, in the `boot` method of `App\Providers\AppServiceProvider`):
 
     Post::observe(new Eloquence\Behaviours\CountCache\CountCacheObserver);
 
