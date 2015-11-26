@@ -1,6 +1,8 @@
 # Eloquence
 
-[![Latest Stable Version](https://poser.pugx.org/kirkbushell/eloquence/v/stable.svg)](https://packagist.org/packages/kirkbushell/eloquence) [![Total Downloads](https://poser.pugx.org/kirkbushell/eloquence/downloads.svg)](https://packagist.org/packages/kirkbushell/eloquence) [![Latest Unstable Version](https://poser.pugx.org/kirkbushell/eloquence/v/unstable.svg)](https://packagist.org/packages/kirkbushell/eloquence)
+[![Version](https://img.shields.io/packagist/v/kirkbushell/eloquence.svg)]
+[![Downloads](https://img.shields.io/github/downloads/kirkbushell/eloquence/total.svg)]
+[![Status](https://img.shields.io/travis/kirkbushell/eloquence/master.svg)]
 
 Eloquence is a package to extend Laravel 5's base Eloquent models and functionality.
 
