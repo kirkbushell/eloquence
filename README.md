@@ -1,8 +1,8 @@
 # Eloquence
 
-[Version](https://img.shields.io/packagist/v/kirkbushell/eloquence.svg)
-[Downloads](https://img.shields.io/packagist/dt/kirkbushell/eloquence.svg)
-[Status](https://img.shields.io/travis/kirkbushell/eloquence/master.svg)
+![Version](https://img.shields.io/packagist/v/kirkbushell/eloquence.svg)
+![Downloads](https://img.shields.io/packagist/dt/kirkbushell/eloquence.svg)
+![Status](https://img.shields.io/travis/kirkbushell/eloquence/master.svg)
 
 Eloquence is a package to extend Laravel 5's base Eloquent models and functionality.
 
