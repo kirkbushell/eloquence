@@ -95,4 +95,55 @@ class CamelCaseModelTest extends TestCase
         $model = new RealModelStub;
         $model->fakeRelationship;
     }
+
+    public function testModelHidesHiddenFields()
+    {
+        $model = new RealModelStub([
+            'myField' => 'value',
+            'anotherField' => 'yeah',
+            'someField' => 'whatever',
+            'hiddenField' => 'secrets!',
+            'passwordHash' => '1234',
+        ]);
+
+        $modelArray = $model->toArray();
+
+        $this->assertFalse(isset($modelArray['hiddenField']));
+        $this->assertFalse(isset($modelArray['passwordHash']));
+        
+        $this->assertEquals('secrets!', $model->getAttribute('hiddenField'));
+        $this->assertEquals('1234', $model->getAttribute('passwordHash'));
+    }
+
+    public function testModelExposesHiddenFields()
+    {
+        $model = new RealModelStub([
+            'myField' => 'value',
+            'anotherField' => 'yeah',
+            'someField' => 'whatever',
+            'hiddenField' => 'secrets!',
+            'passwordHash' => '1234',
+        ]);
+
+        $modelArray = $model
+            ->withHidden(['hiddenField', 'password_hash'])
+            ->toArray();
+
+        $this->assertTrue(isset($modelArray['hiddenField']));
+        $this->assertTrue(isset($modelArray['passwordHash']));
+        
+        $this->assertEquals('secrets!', $modelArray['hiddenField']);
+        $this->assertEquals('1234', $modelArray['passwordHash']);
+    }
+
+    public function testModelDateFieldHandling()
+    {
+        $model = new RealModelStub([
+            'myField' => '2011-11-11T11:11:11Z',
+            'dateField' => '2011-11-11T11:11:11Z',
+        ]);
+
+        $this->assertFalse($model->myField instanceof \Carbon\Carbon);
+        $this->assertTrue($model->dateField instanceof \Carbon\Carbon);
+    }
 }
