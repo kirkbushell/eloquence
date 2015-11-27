@@ -1,8 +1,7 @@
 <?php
-namespace Tests\Acceptance\CountCache;
+namespace Tests\Acceptance;
 
 use Eloquence\Behaviours\CountCache\CountCacheObserver;
-use Tests\Acceptance\AcceptanceTestCase;
 use Tests\Acceptance\Models\Comment;
 use Tests\Acceptance\Models\Post;
 use Tests\Acceptance\Models\User;

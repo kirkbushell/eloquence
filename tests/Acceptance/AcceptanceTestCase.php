@@ -54,5 +54,19 @@ class AcceptanceTestCase extends \Orchestra\Testbench\TestCase
             $table->integer('post_id');
             $table->timestamps();
         });
+
+        Schema::create('orders', function(Blueprint $table) {
+            $table->increments('id');
+            $table->integer('item_total')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('items', function(Blueprint $table) {
+            $table->increments('id');
+            $table->integer('order_id');
+            $table->integer('total');
+            $table->timestamps();
+        });
+
     }
 }
