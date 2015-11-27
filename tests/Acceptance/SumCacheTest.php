@@ -16,7 +16,7 @@ class SumCacheTest extends AcceptanceTestCase
         $this->data = $this->setupOrderAndItem();
     }
 
-	public function testOrderCountCache()
+	public function testOrderSumCache()
     {
         $order = Order::first();
 
