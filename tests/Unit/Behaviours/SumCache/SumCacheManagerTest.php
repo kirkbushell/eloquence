@@ -26,10 +26,10 @@ class SumCacheManagerTest extends TestCase
     public function testIncrementRelatedModel()
     {
         $item = new Item;
-        $item->total = 100;
+        $item->total = 34;
         $item->order_id = 2;
 
-        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` + (100) WHERE `id` = 2');
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` + (34) WHERE `id` = 2');
 
         $this->manager->increment($item);
     }
@@ -37,10 +37,10 @@ class SumCacheManagerTest extends TestCase
     public function testDecrementRelatedModel()
     {
         $item = new Item;
-        $item->total = 100;
+        $item->total = 34;
         $item->order_id = 2;
 
-        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` - (100) WHERE `id` = 2')->once();
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` - (34) WHERE `id` = 2')->once();
 
         $this->manager->decrement($item);
     }
@@ -48,13 +48,13 @@ class SumCacheManagerTest extends TestCase
     public function testUpdateCache()
     {
         $item = new Item;
-        $item->total = 100;
+        $item->total = 34;
         $item->order_id = 1;
         $item->syncOriginal();
         $item->order_id = 2;
 
-        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` - (100) WHERE `id` = 1')->once();
-        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` + (100) WHERE `id` = 2')->once();
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` - (34) WHERE `id` = 1')->once();
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` + (34) WHERE `id` = 2')->once();
 
         $this->manager->updateCache($item);
     }

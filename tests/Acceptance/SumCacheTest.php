@@ -20,28 +20,27 @@ class SumCacheTest extends AcceptanceTestCase
     {
         $order = Order::first();
 
-        $this->assertEquals(100, $order->itemTotal);
+        $this->assertEquals(34, $order->itemTotal);
     }
 
     public function testAdditionalSumCache()
     {
-        $firstOrder = Order::first();
-        $secondOrder = new Order;
-        $secondOrder->save();
+        $order = new Order;
+        $order->save();
 
         $item = new Item;
-        $item->orderId = $secondOrder->id;
-        $item->total = 23;
+        $item->orderId = $this->data['order']->id;
+        $item->total = 45;
         $item->save();
 
-        $this->assertEquals(100, Order::first()->itemTotal);
-        $this->assertEquals(23,  Order::get()[1]->itemTotal);
+        $this->assertEquals(79, Order::first()->itemTotal);
+        $this->assertEquals(0,  Order::get()[1]->itemTotal);
 
-        $item->orderId = $firstOrder->id;
+        $item->orderId = $order->id;
         $item->save();
 
-        $this->assertEquals(123, Order::first()->itemTotal);
-        $this->assertEquals(0,   Order::get()[1]->itemTotal);
+        $this->assertEquals(34, Order::first()->itemTotal);
+        $this->assertEquals(45, Order::get()[1]->itemTotal);
 
     }
 
@@ -51,7 +50,7 @@ class SumCacheTest extends AcceptanceTestCase
         $order->save();
 
         $item = new Item;
-        $item->total = 100;
+        $item->total = 34;
         $item->orderId = $order->id;
         $item->save();
 
