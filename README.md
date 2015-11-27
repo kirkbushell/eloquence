@@ -109,16 +109,16 @@ To setup the count cache configuration, we need to have the model implement the 
     }
 
 This tells the count cache manager that the Post model has a count cache on the User model. So, whenever a post is added, or modified or
-deleted, the count cache observer will update the appropriate user's count cache for their posts. In this case, it would update posts_count
+deleted, the count cache observer will update the appropriate user's count cache for their posts. In this case, it would update `post_count`
 on the user model.
 
 The example above uses the following conventions:
 
-* post_count is a defined field on the User model table
-* user_id is the field representing the foreign key on the post model
-* id is the primary key on the user model table
+* `post_count` is a defined field on the User model table
+* `user_id` is the field representing the foreign key on the post model
+* `id` is the primary key on the user model table
 
-These are, however - configurable:
+These are, however, configurable:
 
     class Post extends Eloquent implements CountCache {
         public function countCaches() {
@@ -128,7 +128,7 @@ These are, however - configurable:
         }
     }
 
-This example customises the count cache field, and the related foreign key, with num_posts and users_id, respectively.
+This example customises the count cache field, and the related foreign key, with `num_posts` and `users_id`, respectively.
 
 #### Setup the observer
 
@@ -137,6 +137,59 @@ You could do this in a service provider for your application (for example, in th
     Post::observe(new Eloquence\Behaviours\CountCache\CountCacheObserver);
 
 With that, you're all done! Whenever a user deals with their posts in any way, the observer will make sure the appropriate count cache is updated!
+
+
+### Sum cache
+
+Sum caching is similar to count caching, except that instead of caching a _count_ of a related table's records, you cache a _sum_
+or a particular field on the related table's records. A simple example of this is where you have an order that has many items.
+Using sum caching, you can cache the sum all the items' prices, and store that sum in the order table.
+
+To get this working -- just like count caching -- you need to do two steps:
+
+1. Configure the sum cache on the model and
+2. Add the sum cache observer to the model to listen for certain events
+
+#### Configure the sum cache
+
+To setup the sum cache configuration, we need to have the model implement the SumCache interface, like so:
+
+    class Item extends Eloquent implements SumCache {
+        public function sumCaches() {
+            return [Order::class];
+        }
+    }
+
+This tells the sum cache manager that the Item model has a sum cache on the Order model. So, whenever an item is added, modified, or
+deleted, the sum cache observer will update the appropriate order's sum cache for their items. In this case, it would update `item_total`
+on the user model.
+
+The example above uses the following conventions:
+
+* `item_total` is a defined field on the Order model table
+* `total` is a defined field on the Item model table (the column we are summing) 
+* `order_id` is the field representing the foreign key on the item model
+* `id` is the primary key on the order model table
+
+These are, however, configurable:
+
+    class Item extends Eloquent implements SumCache {
+        public function sumCaches() {
+            return [
+                'item_total' => ['Order', 'total', 'order_id', 'id']
+            ];
+        }
+    }
+
+This example implements the default settings, but in the verbose format.
+
+#### Setup the observer
+
+You could do this in a service provider for your application (for example, in the `boot` method of `App\Providers\AppServiceProvider`):
+
+    Item::observe(new Eloquence\Behaviours\SumCache\SumCacheObserver);
+
+With that, you're all done! Whenever an order interacts with its items in any way, the observer will make sure the appropriate sum cache is updated!
 
 ### Sluggable models
 
@@ -167,6 +220,10 @@ to be generated after the record has been saved - which results in a secondary s
 That's it! Easy huh?
 
 ## Changelog
+
+#### 1.x.x
+
+* Sum cache model behaviour added
 
 #### 1.4.0
 
