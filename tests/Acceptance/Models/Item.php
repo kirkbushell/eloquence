@@ -13,6 +13,13 @@ class Item extends Model implements SumCache
     {
         return [
             'Tests\Acceptance\Models\Order',
+            [
+                'model' => 'Tests\Acceptance\Models\Order',
+                'sumField' => 'itemTotalExplicit',
+                'columnToSum' => 'total',
+                'foreignKey' => 'orderId',
+                'key' => 'id',
+            ]
         ];
     }
 }

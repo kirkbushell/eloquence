@@ -10,6 +10,13 @@ class Item extends Model implements SumCache
     {
         return [
             'Tests\Unit\Stubs\SumCache\Order',
+            [
+                'model' => 'Tests\Unit\Stubs\SumCache\Order',
+                'sumField' => 'itemTotalExplicit',
+                'columnToSum' => 'total',
+                'foreignKey' => 'itemId',
+                'key' => 'id',
+            ]
         ];
     }
 }

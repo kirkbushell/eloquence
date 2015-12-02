@@ -10,6 +10,9 @@ use Tests\Unit\TestCase;
 
 class SumCacheManagerTest extends TestCase
 {
+    /**
+     * @var SumCacheManager
+     */
     private $manager;
 
     public function init()
@@ -23,26 +26,28 @@ class SumCacheManagerTest extends TestCase
         $this->assertEquals('real_model_stubs', $this->manager->getTable('Tests\Unit\Stubs\RealModelStub'));
     }
 
-    public function testIncrementRelatedModel()
+    public function testIncreaseRelatedModel()
     {
         $item = new Item;
         $item->total = 34;
         $item->order_id = 2;
 
         DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` + (34) WHERE `id` = 2');
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total_explicit` = `item_total_explicit` + (34) WHERE `id` = 2');
 
-        $this->manager->increment($item);
+        $this->manager->increase($item);
     }
 
-    public function testDecrementRelatedModel()
+    public function testDecreaseRelatedModel()
     {
         $item = new Item;
         $item->total = 34;
         $item->order_id = 2;
 
         DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` - (34) WHERE `id` = 2')->once();
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total_explicit` = `item_total_explicit` - (34) WHERE `id` = 2')->once();
 
-        $this->manager->decrement($item);
+        $this->manager->decrease($item);
     }
 
     public function testUpdateCache()
@@ -55,6 +60,8 @@ class SumCacheManagerTest extends TestCase
 
         DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` - (34) WHERE `id` = 1')->once();
         DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total` = `item_total` + (34) WHERE `id` = 2')->once();
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total_explicit` = `item_total_explicit` - (34) WHERE `id` = 1')->once();
+        DB::shouldReceive('update')->with('UPDATE `orders` SET `item_total_explicit` = `item_total_explicit` + (34) WHERE `id` = 2')->once();
 
         $this->manager->updateCache($item);
     }
