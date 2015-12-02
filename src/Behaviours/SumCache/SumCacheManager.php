@@ -16,7 +16,7 @@ class SumCacheManager
      *
      * @param Model $model
      */
-    public function increment(Model $model)
+    public function increase(Model $model)
     {
         $this->model = $model;
 
@@ -27,11 +27,11 @@ class SumCacheManager
     }
 
     /**
-     * Decrease a model's related count cache by an amount.
+     * Decrease a model's related sum cache by an amount.
      *
      * @param Model $model
      */
-    public function decrement(Model $model)
+    public function decrease(Model $model)
     {
         $this->model = $model;
 
@@ -77,10 +77,9 @@ class SumCacheManager
      * Updates a table's record based on the query information provided in the $config variable.
      *
      * @param array $config
-     * @param string $operation Whether to increment or decrement a value. Valid values: +/-
+     * @param string $operation Whether to increase or decrease a value. Valid values: +/-
      * @param int|float|double $amount
      * @param string $foreignKey
-     * @return
      */
     protected function update(array $config, $operation, $amount, $foreignKey)
     {
@@ -91,7 +90,7 @@ class SumCacheManager
         $table = $this->getTable($config['model']);
 
         // the following is required for camel-cased models, in case users are defining their attributes as camelCase
-        $field = snake_case($config['countField']);
+        $field = snake_case($config['sumField']);
         $key = snake_case($config['key']);
         $foreignKey = snake_case($foreignKey);
 
@@ -111,11 +110,18 @@ class SumCacheManager
     {
         $opts = [];
 
-        // Smallest number of options provided, figure out the rest
         if (is_numeric($cacheKey)) {
-            $relatedModel = $cacheOptions;
+            if (is_array($cacheOptions)) {
+                // Most explicit configuration provided
+                $opts = $cacheOptions;
+                $relatedModel = array_get($opts, 'model');
+            } else {
+                // Smallest number of options provided, figure out the rest
+                $relatedModel = $cacheOptions;
+            }
         }
         else {
+            // Semi-verbose configuration provided
             $relatedModel = $cacheOptions;
             $opts['sumField'] = $cacheKey;
 
@@ -166,7 +172,7 @@ class SumCacheManager
         $defaults = [
             'model' => $relatedModel,
             'columnToSum' => 'total',
-            'countField' => $this->field($this->model, 'total'),
+            'sumField' => $this->field($this->model, 'total'),
             'foreignKey' => $this->field($relatedModel, 'id'),
             'key' => 'id'
         ];

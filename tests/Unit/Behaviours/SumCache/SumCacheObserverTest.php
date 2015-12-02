@@ -23,7 +23,7 @@ class SumCacheObserverTest extends TestCase
     public function testCreated()
     {
         $this->observer->created($this->model);
-        $this->mockManager->shouldHaveReceived('increment')->with($this->model)->once();
+        $this->mockManager->shouldHaveReceived('increase')->with($this->model)->once();
     }
 
     public function testUpdated()
@@ -35,12 +35,12 @@ class SumCacheObserverTest extends TestCase
     public function testDeleted()
     {
         $this->observer->deleted($this->model);
-        $this->mockManager->shouldHaveReceived('decrement')->with($this->model)->once();
+        $this->mockManager->shouldHaveReceived('decrease')->with($this->model)->once();
     }
 
     public function testRestored()
     {
         $this->observer->restored($this->model);
-        $this->mockManager->shouldHaveReceived('increment')->with($this->model)->once();
+        $this->mockManager->shouldHaveReceived('increase')->with($this->model)->once();
     }
 }

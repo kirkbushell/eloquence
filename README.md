@@ -199,8 +199,24 @@ These are, however, configurable:
             ];
         }
     }
+    
+Or using the verbose syntax:
 
-This example implements the default settings, but in the verbose format.
+    class Post extends Eloquent implements CountCache {
+        public function countCaches() {
+            return [
+                [
+                    'model'       => 'Order',
+                    'columnToSum' => 'total',
+                    'sumField'    => 'item_total'
+                    'foreignKey'  => 'order_id',
+                    'key'         => 'id'
+                ]
+            ];
+        }
+    }
+
+Both of these examples implements the default settings.
 
 #### Setup the observer
 
@@ -233,7 +249,7 @@ slugs that are supported however, as well:
 * uuid
 
 The only difference between the two above, is that if you're using uuids, the slug will be generated previous
-to the save, based on the uuid field. With ids, which are generally auto-increment strategies - the slug has
+to the save, based on the uuid field. With ids, which are generally auto-increase strategies - the slug has
 to be generated after the record has been saved - which results in a secondary save call to the database.
 
 That's it! Easy huh?
