@@ -106,12 +106,12 @@ class CountCacheManager
     protected function countCacheConfig($cacheKey, $cacheOptions)
     {
         $opts = [];
-        $relatedModel = null;
 
         if (is_numeric($cacheKey)) {
             if (is_array($cacheOptions)) {
                 // Most explicit configuration provided
                 $opts = $cacheOptions;
+                $relatedModel = array_get($opts, 'model');
             } else {
                 // Smallest number of options provided, figure out the rest
                 $relatedModel = $cacheOptions;
