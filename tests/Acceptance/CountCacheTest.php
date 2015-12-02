@@ -24,6 +24,7 @@ class CountCacheTest extends AcceptanceTestCase
         $user = User::first();
 
         $this->assertEquals(1, $user->postCount);
+        $this->assertEquals(1, $user->postCountExplicit);
     }
 
     public function testComplexCountCache()
@@ -36,6 +37,9 @@ class CountCacheTest extends AcceptanceTestCase
         $comment->userId = $this->data['user']->id;
         $comment->postId = $this->data['post']->id;
         $comment->save();
+
+        $this->assertEquals(2, User::first()->postCount);
+        $this->assertEquals(2, User::first()->postCountExplicit);
 
         $this->assertEquals(1, User::first()->commentCount);
         $this->assertEquals(1, Post::first()->commentCount);

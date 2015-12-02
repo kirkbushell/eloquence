@@ -106,12 +106,19 @@ class CountCacheManager
     protected function countCacheConfig($cacheKey, $cacheOptions)
     {
         $opts = [];
+        $relatedModel = null;
 
-        // Smallest number of options provided, figure out the rest
         if (is_numeric($cacheKey)) {
-            $relatedModel = $cacheOptions;
+            if (is_array($cacheOptions)) {
+                // Most explicit configuration provided
+                $opts = $cacheOptions;
+            } else {
+                // Smallest number of options provided, figure out the rest
+                $relatedModel = $cacheOptions;
+            }
         }
         else {
+            // Semi-verbose configuration provided
             $relatedModel = $cacheOptions;
             $opts['countField'] = $cacheKey;
 

@@ -13,7 +13,15 @@ class Post extends Model implements CountCache
 
     public function countCaches()
     {
-        return ['postCount' => ['Tests\Acceptance\Models\User', 'userId', 'id']];
+        return [
+            'postCount' => ['Tests\Acceptance\Models\User', 'userId', 'id'],
+            [
+                'model' => 'Tests\Acceptance\Models\User',
+                'countField' => 'postCountExplicit',
+                'foreignKey' => 'userId',
+                'key' => 'id',
+            ]
+        ];
     }
 
     public function slugStrategy()

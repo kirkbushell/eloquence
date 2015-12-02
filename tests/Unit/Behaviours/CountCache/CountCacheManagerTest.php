@@ -29,6 +29,7 @@ class CountCacheManagerTest extends TestCase
         $post->user_id = 2;
 
         DB::shouldReceive('update')->with('UPDATE `users` SET `posts_count` = `posts_count` + 1 WHERE `id` = 2');
+        DB::shouldReceive('update')->with('UPDATE `users` SET `posts_count_explicit` = `posts_count_explicit` + 1 WHERE `id` = 2');
 
         $this->manager->increment($post);
     }
