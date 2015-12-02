@@ -37,6 +37,7 @@ class AcceptanceTestCase extends \Orchestra\Testbench\TestCase
             $table->string('slug')->nullable();
             $table->integer('comment_count')->default(0);
             $table->integer('post_count')->default(0);
+            $table->integer('post_count_explicit')->default(0);
             $table->timestamps();
         });
 

@@ -107,11 +107,18 @@ class CountCacheManager
     {
         $opts = [];
 
-        // Smallest number of options provided, figure out the rest
         if (is_numeric($cacheKey)) {
-            $relatedModel = $cacheOptions;
+            if (is_array($cacheOptions)) {
+                // Most explicit configuration provided
+                $opts = $cacheOptions;
+                $relatedModel = array_get($opts, 'model');
+            } else {
+                // Smallest number of options provided, figure out the rest
+                $relatedModel = $cacheOptions;
+            }
         }
         else {
+            // Semi-verbose configuration provided
             $relatedModel = $cacheOptions;
             $opts['countField'] = $cacheKey;
 
