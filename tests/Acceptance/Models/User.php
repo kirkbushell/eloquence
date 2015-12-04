@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    use \Eloquence\Behaviours\CamelCasing;
-    use \Eloquence\Behaviours\Sluggable;
+    use CamelCasing;
+    use Sluggable;
 
     public function posts()
     {

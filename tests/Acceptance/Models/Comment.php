@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use \Eloquence\Behaviours\CamelCasing;
-    use \Eloquence\Behaviours\Countable;
+    use CamelCasing;
+    use Countable;
 
     public function countCaches()
     {

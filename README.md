@@ -96,21 +96,23 @@ has created on the user's record.
 
 To get this working, you need to do two steps:
 
-1. Configure the count cache on the model and
-2. Add the count cache observer to the model to listen for certain events
+1. Use the Countable trait on the model and 
+2. Configure the count cache settings
 
 #### Configure the count cache
 
-To setup the count cache configuration, we need to have the model implement the CountCache interface, like so:
+To setup the count cache configuration, we need to have the model use Countable trait, like so:
 
-    class Post extends Eloquent implements CountCache {
+    class Post extends Eloquent {
+        use Countable;
+        
         public function countCaches() {
             return [User::class];
         }
     }
 
-This tells the count cache manager that the Post model has a count cache on the User model. So, whenever a post is added, or modified or
-deleted, the count cache observer will update the appropriate user's count cache for their posts. In this case, it would update `post_count`
+This tells the count cache that the Post model has a count cache on the User model. So, whenever a post is added, or modified or
+deleted, the count cache behaviour will update the appropriate user's count cache for their posts. In this case, it would update `post_count`
 on the user model.
 
 The example above uses the following standard conventions:
@@ -121,7 +123,9 @@ The example above uses the following standard conventions:
 
 These are, however, configurable:
 
-    class Post extends Eloquent implements CountCache {
+    class Post extends Eloquent {
+        use Countable;
+        
         public function countCaches() {
             return [
                 'num_posts' => ['User', 'users_id', 'id']
@@ -134,12 +138,14 @@ This example customises the count cache field, and the related foreign key, with
 Alternatively, you can be very explicit about the configuration (useful if you are using count caching on several tables
 and use the same column name on each of them):
 
-    class Post extends Eloquent implements CountCache {
+    class Post extends {
+        use Countable;
+        
         public function countCaches() {
             return [
                 [
                     'model'      => 'User',
-                    'countField' => 'num_posts',
+                    'field'      => 'num_posts',
                     'foreignKey' => 'users_id',
                     'key'        => 'id'
                 ]
@@ -150,39 +156,35 @@ and use the same column name on each of them):
 If using the explicit configuration, at a minimum you will need to define the "model" parameter.  The "countField", "foreignKey",
 and "key" parameters will be calculated using the standard conventions mentioned above if they are omitted.
 
-#### Setup the observer
-
-You could do this in a service provider for your application (for example, in the `boot` method of `App\Providers\AppServiceProvider`):
-
-    Post::observe(new Eloquence\Behaviours\CountCache\CountCacheObserver);
-
-With that, you're all done! Whenever a user deals with their posts in any way, the observer will make sure the appropriate count cache is updated!
+With this configuration now setup - you're ready to go!
 
 
 ### Sum cache
 
 Sum caching is similar to count caching, except that instead of caching a _count_ of a related table's records, you cache a _sum_
-or a particular field on the related table's records. A simple example of this is where you have an order that has many items.
-Using sum caching, you can cache the sum all the items' prices, and store that sum in the order table.
+of a particular field on the related table's records. A simple example of this is where you have an order that has many items.
+Using sum caching, you can cache the sum of all the items' prices, and store that sum in the order table.
 
 To get this working -- just like count caching -- you need to do two steps:
 
-1. Configure the sum cache on the model and
-2. Add the sum cache observer to the model to listen for certain events
+1. Utilise the Summable trait on the model and
+2. Configure the model for any sum caches
 
 #### Configure the sum cache
 
-To setup the sum cache configuration, we need to have the model implement the SumCache interface, like so:
+To setup the sum cache configuration, simply do the following:
 
-    class Item extends Eloquent implements SumCache {
+    class Item extends Eloquent {
+        use Summable;
+        
         public function sumCaches() {
             return [Order::class];
         }
     }
 
 This tells the sum cache manager that the Item model has a sum cache on the Order model. So, whenever an item is added, modified, or
-deleted, the sum cache observer will update the appropriate order's sum cache for their items. In this case, it would update `item_total`
-on the user model.
+deleted, the sum cache behaviour will update the appropriate order's sum cache for their items. In this case, it would update `item_total`
+on the Order model.
 
 The example above uses the following conventions:
 
@@ -193,7 +195,9 @@ The example above uses the following conventions:
 
 These are, however, configurable:
 
-    class Item extends Eloquent implements SumCache {
+    class Item extends Eloquent {
+        use Summable;
+        
         public function sumCaches() {
             return [
                 'item_total' => ['Order', 'total', 'order_id', 'id']
@@ -203,13 +207,15 @@ These are, however, configurable:
     
 Or using the verbose syntax:
 
-    class Post extends Eloquent implements CountCache {
-        public function countCaches() {
+    class Item extends Eloquent {
+        use Summable;
+        
+        public function sumCaches() {
             return [
                 [
                     'model'       => 'Order',
                     'columnToSum' => 'total',
-                    'sumField'    => 'item_total'
+                    'field'       => 'item_total'
                     'foreignKey'  => 'order_id',
                     'key'         => 'id'
                 ]
@@ -219,17 +225,11 @@ Or using the verbose syntax:
 
 Both of these examples implements the default settings.
 
-#### Setup the observer
-
-You could do this in a service provider for your application (for example, in the `boot` method of `App\Providers\AppServiceProvider`):
-
-    Item::observe(new Eloquence\Behaviours\SumCache\SumCacheObserver);
-
-With that, you're all done! Whenever an order interacts with its items in any way, the observer will make sure the appropriate sum cache is updated!
+With these settings configured, you will now see the related model's sum cache updated every time an item is added, updated, or removed.
 
 ### Sluggable models
 
-Slugged is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
+Sluggable is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
 
     class User extends Eloquent {
         use Sluggable;
@@ -257,7 +257,8 @@ That's it! Easy huh?
 
 * Sum cache model behaviour added
 * Booting of behaviours now done via Laravel trait booting
-* Simplification of all behaviours and their uses (see upgrade guide)
+* Simplification of all behaviours and their uses
+* Updated readme/configuration guide
 
 #### 1.4.0
 

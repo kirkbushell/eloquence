@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use \Eloquence\Behaviours\CamelCasing;
+    use CamelCasing;
 
     public function items()
     {

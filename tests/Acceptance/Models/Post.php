@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use \Eloquence\Behaviours\CamelCasing;
-    use \Eloquence\Behaviours\Sluggable;
-    use \Eloquence\Behaviours\Countable;
+    use CamelCasing;
+    use Sluggable;
+    use Countable;
 
     public function countCaches()
     {
