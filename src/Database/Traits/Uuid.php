@@ -13,7 +13,7 @@ use Rhumsaa\Uuid\Uuid as RhumsaaUuid;
  *
  * @package Eloquence\Database\Traits
  */
-trait UuidModel
+trait Uuid
 {
     /**
      * The "booting" method of the model.

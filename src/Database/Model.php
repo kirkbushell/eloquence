@@ -2,7 +2,7 @@
 namespace Eloquence\Database;
 
 use Eloquence\Database\Traits\CamelCasing;
-use Eloquence\Database\Traits\UuidModel;
+use Eloquence\Database\Traits\Uuid;
 
 /**
  * Class Model
@@ -14,5 +14,5 @@ use Eloquence\Database\Traits\UuidModel;
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
     use CamelCasing;
-    use UuidModel;
+    use Uuid;
 }
