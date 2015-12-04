@@ -231,13 +231,15 @@ With these settings configured, you will now see the related model's sum cache u
 
 Sluggable is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
 
-    class User extends Eloquent {
-        use Sluggable;
-    
-        public function slugStrategy() {
-            return 'username';
-        }
+```php
+class User extends Eloquent {
+    use Sluggable;
+
+    public function slugStrategy() {
+        return 'username';
     }
+}
+ ```
 
 In the example above, a slug will be created based on the username field of the User model. There are two other
 slugs that are supported however, as well:
