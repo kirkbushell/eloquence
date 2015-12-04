@@ -4,7 +4,7 @@ namespace Eloquence\Database\Traits;
 use Rhumsaa\Uuid\Uuid as RhumsaaUuid;
 
 /**
- * Class UUIDModel
+ * Class Uuid
  *
  * Manages the usage of creating UUID values for primary keys. Drop into your models as
  * per normal to use this functionality. Works right out of the box.
@@ -20,7 +20,7 @@ trait Uuid
      *
      * @return void
      */
-    protected static function bootUUIDModel()
+    protected static function bootUuid()
     {
         /**
          * Attach to the 'creating' Model Event to provide a UUID

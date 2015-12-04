@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Unit\Stubs\CountCache;
 
-use Eloquence\Database\Traits\Slugged;
+use Eloquence\Database\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    use Slugged;
+    use Sluggable;
 
     protected function slugStrategy()
     {

@@ -3,7 +3,7 @@ namespace Eloquence\Database\Traits;
 
 use Eloquence\Behaviours\Slugged\Slug;
 
-trait Slugged
+trait Sluggable
 {
     /**
      * When added to a model, the trait will bind to the creating and created

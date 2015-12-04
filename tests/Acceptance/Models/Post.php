@@ -3,13 +3,13 @@ namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\CountCache\CountCache;
 use Eloquence\Database\Traits\CamelCasing;
-use Eloquence\Database\Traits\Slugged;
+use Eloquence\Database\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model implements CountCache
 {
     use CamelCasing;
-    use Slugged;
+    use Sluggable;
 
     public function countCaches()
     {

@@ -2,13 +2,13 @@
 namespace Tests\Acceptance\Models;
 
 use Eloquence\Database\Traits\CamelCasing;
-use Eloquence\Database\Traits\Slugged;
+use Eloquence\Database\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
     use CamelCasing;
-    use Slugged;
+    use Sluggable;
 
     public function posts()
     {
