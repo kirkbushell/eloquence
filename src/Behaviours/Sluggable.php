@@ -1,7 +1,7 @@
 <?php
-namespace Eloquence\Database\Traits;
+namespace Eloquence\Behaviours;
 
-use Eloquence\Behaviours\Slugged\Slug;
+use Eloquence\Behaviours\Slug;
 
 trait Sluggable
 {
@@ -158,7 +158,7 @@ trait Sluggable
     /**
      * Returns the slug attribute as a Slug value object.
      *
-     * @return Slug
+     * @return \Eloquence\Behaviours\Slug
      */
     public function getSlugAttribute()
     {

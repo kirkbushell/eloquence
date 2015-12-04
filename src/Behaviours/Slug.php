@@ -1,5 +1,5 @@
 <?php
-namespace Eloquence\Behaviours\Slugged;
+namespace Eloquence\Behaviours;
 
 use Hashids\Hashids;
 use Illuminate\Support\Str;

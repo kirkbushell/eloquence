@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Unit\Stubs;
 
-use Eloquence\Database\Traits\CamelCasing;
+use Eloquence\Behaviours\CamelCasing;
 
 class ModelStub extends ParentModelStub
 {
-    use CamelCasing;
+    use \Eloquence\Behaviours\CamelCasing;
 
     protected $attributes = [
         'first_name' => 'Kirk',

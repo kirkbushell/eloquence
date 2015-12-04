@@ -1,5 +1,5 @@
 <?php
-namespace Eloquence\Database\Traits;
+namespace Eloquence\Behaviours;
 
 trait CamelCasing
 {

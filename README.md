@@ -41,7 +41,7 @@ data from our Eloquent models persist through to our APIs in a camel-case manner
 if you are writing front-end applications, which are also using camelCase. This allows for a 
 better standard across our application. To use:
 
-    use Eloquence\Database\Traits\CamelCasing;
+    use Eloquence\Behaviours\CamelCasing;
 
 Put the above line in your models and that's it.
 
@@ -58,7 +58,7 @@ Eloquence comes bundled with UUID capabilities that you can use in your models.
 
 Simply include the Uuid trait:
 
-    use Eloquence\Database\Traits\Uuid;
+    use Eloquence\Behaviours\Uuid;
 
 And then disable auto incrementing ids:
 

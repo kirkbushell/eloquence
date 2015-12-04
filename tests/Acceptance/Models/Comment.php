@@ -1,14 +1,14 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\CountCache\Countable;
-use Eloquence\Database\Traits\CamelCasing;
+use Eloquence\Behaviours\Countable;
+use Eloquence\Behaviours\CamelCasing;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use CamelCasing;
-    use Countable;
+    use \Eloquence\Behaviours\CamelCasing;
+    use \Eloquence\Behaviours\Countable;
 
     public function countCaches()
     {

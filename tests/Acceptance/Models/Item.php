@@ -1,12 +1,11 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\SumCache\SumCache;
-use Eloquence\Behaviours\SumCache\Summable;
-use Eloquence\Database\Traits\CamelCasing;
+use Eloquence\Behaviours\Summable;
+use Eloquence\Behaviours\CamelCasing;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model implements SumCache
+class Item extends Model
 {
     use CamelCasing;
     use Summable;

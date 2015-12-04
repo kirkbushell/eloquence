@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Database\Traits\CamelCasing;
+use Eloquence\Behaviours\CamelCasing;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use CamelCasing;
+    use \Eloquence\Behaviours\CamelCasing;
 
     public function items()
     {
