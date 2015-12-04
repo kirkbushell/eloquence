@@ -2,12 +2,14 @@
 namespace Tests\Unit\Stubs;
 
 use Eloquence\Behaviours\CountCache\CacheConfig;
+use Eloquence\Behaviours\CountCache\Countable;
 use Eloquence\Behaviours\CountCache\CountCache;
 use Eloquence\Database\Model;
 
-class RealModelStub extends Model implements CountCache
+class RealModelStub extends Model
 {
-
+    use Countable;
+    
     protected $dateFormat = \DateTime::ISO8601;
 
     protected $dates = ['dateField'];
