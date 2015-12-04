@@ -13,9 +13,9 @@ such as camel cased attributes (for JSON apis), count caching, uuids and more.
 
 Install the package via composer:
 
-    composer require kirkbushell/eloquence:~1.5
+    composer require kirkbushell/eloquence:~2.0
 
-For Laravel 4, please install the 1.1.4 release. Please note that this is no longer supported 
+For Laravel 4, please install the 1.1.5 release. Please note that this is no longer supported 
 and won't receive any new features, only security updates.
 
     composer require kirkbushell/eloquence:1.1.5
@@ -41,7 +41,7 @@ data from our Eloquent models persist through to our APIs in a camel-case manner
 if you are writing front-end applications, which are also using camelCase. This allows for a 
 better standard across our application. To use:
 
-    use Eloquence\Database\Traits\CamelCaseModel;
+    use Eloquence\Database\Traits\CamelCasing;
 
 Put the above line in your models and that's it.
 
@@ -56,9 +56,9 @@ snake_case of field names is the defacto standard within the Laravel community :
 
 Eloquence comes bundled with UUID capabilities that you can use in your models.
 
-Simply include the UUIDModel trait:
+Simply include the Uuid trait:
 
-    use Eloquence\Database\Traits\UUIDModel;
+    use Eloquence\Database\Traits\Uuid;
 
 And then disable auto incrementing ids:
 
@@ -79,7 +79,8 @@ field searches are much slower than indexed integer fields (such as autoincremen
 ### Custom UUIDs
 
 Should you need a custom UUID solution (aka, maybe you don't want to use a UUID4 id), you can simply define the value you wish on 
-the id field. The UUID model trait will not set the id if it has already been defined.
+the id field. The UUID model trait will not set the id if it has already been defined. In this use-case however, it's probably no good
+to use the Uuid trait, as it's practically useless in this scenario.
 
 ## Behaviours
 
@@ -228,19 +229,15 @@ With that, you're all done! Whenever an order interacts with its items in any wa
 
 ### Sluggable models
 
-Slugged is another behaviour that allows for the easy addition of model slugs. To use, implement the SluggableModel trait:
+Slugged is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
 
     class User extends Eloquent {
-        use SluggableModel;
+        use Sluggable;
     
         public function slugStrategy() {
             return 'username';
         }
     }
-
-Then add the observer:
-
-    User::observe(new Eloquence\Behaviours\Slugged\SlugObserver);
 
 In the example above, a slug will be created based on the username field of the User model. There are two other
 slugs that are supported however, as well:
@@ -248,7 +245,7 @@ slugs that are supported however, as well:
 * id and
 * uuid
 
-The only difference between the two above, is that if you're using uuids, the slug will be generated previous
+The only difference between the two above, is that if you're using UUIDs, the slug will be generated previous
 to the save, based on the uuid field. With ids, which are generally auto-increase strategies - the slug has
 to be generated after the record has been saved - which results in a secondary save call to the database.
 
@@ -256,10 +253,11 @@ That's it! Easy huh?
 
 ## Changelog
 
-#### 1.5.0
+#### 2.0.0
 
 * Sum cache model behaviour added
 * Booting of behaviours now done via Laravel trait booting
+* Simplification of all behaviours and their uses (see upgrade guide)
 
 #### 1.4.0
 
