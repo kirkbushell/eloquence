@@ -256,9 +256,10 @@ That's it! Easy huh?
 
 ## Changelog
 
-#### 1.x.x
+#### 1.5.0
 
 * Sum cache model behaviour added
+* Booting of behaviours now done via Laravel trait booting
 
 #### 1.4.0
 

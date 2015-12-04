@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Database\Traits;
 
+use Carbon\Carbon;
 use Tests\Unit\Stubs\ModelStub;
 use Tests\Unit\Stubs\PivotModelStub;
 use Tests\Unit\Stubs\RealModelStub;
@@ -12,6 +13,8 @@ class CamelCaseModelTest extends TestCase
 
     public function init()
     {
+        date_default_timezone_set('Australia/Sydney');
+
         $this->model = new ModelStub;
     }
 
@@ -125,15 +128,13 @@ class CamelCaseModelTest extends TestCase
             'passwordHash' => '1234',
         ]);
 
-        $modelArray = $model
-            ->withHidden(['hiddenField', 'password_hash'])
-            ->toArray();
+        $hidden = $model->withHidden(['hiddenField', 'passwordHash'])->toArray();
 
-        $this->assertTrue(isset($modelArray['hiddenField']));
-        $this->assertTrue(isset($modelArray['passwordHash']));
+        $this->assertTrue(isset($hidden['hiddenField']));
+        $this->assertTrue(isset($hidden['passwordHash']));
         
-        $this->assertEquals('secrets!', $modelArray['hiddenField']);
-        $this->assertEquals('1234', $modelArray['passwordHash']);
+        $this->assertEquals('secrets!', $hidden['hiddenField']);
+        $this->assertEquals('1234', $hidden['passwordHash']);
     }
 
     public function testModelDateFieldHandling()
@@ -143,7 +144,7 @@ class CamelCaseModelTest extends TestCase
             'dateField' => '2011-11-11T11:11:11Z',
         ]);
 
-        $this->assertFalse($model->myField instanceof \Carbon\Carbon);
-        $this->assertTrue($model->dateField instanceof \Carbon\Carbon);
+        $this->assertFalse($model->myField instanceof Carbon);
+        $this->assertTrue($model->dateField instanceof Carbon);
     }
 }

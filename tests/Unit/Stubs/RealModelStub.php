@@ -12,7 +12,7 @@ class RealModelStub extends Model implements CountCache
 
     protected $dates = ['dateField'];
 
-    public $hidden = ['hiddenField', 'password_hash'];
+    public $hidden = ['hiddenField', 'passwordHash'];
 
     public $fillable = ['myField', 'anotherField', 'some_field', 'hiddenField', 'passwordHash', 'dateField'];
 

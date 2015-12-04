@@ -4,7 +4,6 @@ namespace Tests\Unit\Behaviours\SumCache;
 use Eloquence\Behaviours\SumCache\SumCacheManager;
 use Illuminate\Support\Facades\DB;
 use Tests\Unit\Stubs\SumCache\Item;
-use Tests\Unit\Stubs\SumCache\Order;
 use Tests\Unit\Stubs\RealModelStub;
 use Tests\Unit\TestCase;
 
