@@ -1,7 +1,7 @@
 <?php
 namespace Eloquence\Database\Traits;
 
-use Rhumsaa\Uuid\Uuid;
+use Rhumsaa\Uuid\Uuid as RhumsaaUuid;
 
 /**
  * Class UUIDModel
@@ -13,7 +13,7 @@ use Rhumsaa\Uuid\Uuid;
  *
  * @package Eloquence\Database\Traits
  */
-trait UUIDModel
+trait UuidModel
 {
     /**
      * The "booting" method of the model.
@@ -42,6 +42,6 @@ trait UUIDModel
      */
     public function generateNewUuid()
     {
-        return Uuid::uuid4();
+        return RhumsaaUuid::uuid4();
     }
 }

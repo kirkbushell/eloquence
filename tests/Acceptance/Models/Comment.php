@@ -2,12 +2,12 @@
 namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\CountCache\CountCache;
-use Eloquence\Database\Traits\CamelCaseModel;
+use Eloquence\Database\Traits\CamelCasing;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model implements CountCache
 {
-    use CamelCaseModel;
+    use CamelCasing;
 
     public function countCaches()
     {

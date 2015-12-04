@@ -1,8 +1,8 @@
 <?php
 namespace Eloquence\Database;
 
-use Eloquence\Database\Traits\CamelCaseModel;
-use Eloquence\Database\Traits\UUIDModel;
+use Eloquence\Database\Traits\CamelCasing;
+use Eloquence\Database\Traits\UuidModel;
 
 /**
  * Class Model
@@ -13,6 +13,6 @@ use Eloquence\Database\Traits\UUIDModel;
  */
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
-    use CamelCaseModel;
-    use UUIDModel;
+    use CamelCasing;
+    use UuidModel;
 }

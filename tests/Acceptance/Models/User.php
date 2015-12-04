@@ -1,14 +1,14 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Database\Traits\CamelCaseModel;
-use Eloquence\Database\Traits\SluggableModel;
+use Eloquence\Database\Traits\CamelCasing;
+use Eloquence\Database\Traits\Slugged;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    use CamelCaseModel;
-    use SluggableModel;
+    use CamelCasing;
+    use Slugged;
 
     public function posts()
     {

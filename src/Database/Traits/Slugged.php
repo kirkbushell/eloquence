@@ -3,8 +3,26 @@ namespace Eloquence\Database\Traits;
 
 use Eloquence\Behaviours\Slugged\Slug;
 
-trait SluggableModel
+trait Slugged
 {
+    /**
+     * When added to a model, the trait will bind to the creating and created
+     * events, generating the appropriate slugs as necessary.
+     */
+    public static function bootSluggable()
+    {
+        static::creating(function($model) {
+            $model->generateSlug();
+        });
+
+        static::created(function($model) {
+            if ($model->slugStrategy() == 'id') {
+                $model->generateIdSlug();
+                $model->save();
+            }
+        });
+    }
+
     /**
      * Generate a slug based on the main model key.
      */

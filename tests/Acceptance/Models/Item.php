@@ -2,12 +2,12 @@
 namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\SumCache\SumCache;
-use Eloquence\Database\Traits\CamelCaseModel;
+use Eloquence\Database\Traits\CamelCasing;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model implements SumCache
 {
-    use CamelCaseModel;
+    use CamelCasing;
 
     public function sumCaches()
     {

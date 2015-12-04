@@ -1,7 +1,7 @@
 <?php
 namespace Eloquence\Database\Traits;
 
-trait CamelCaseModel
+trait CamelCasing
 {
     /**
      * Alter eloquent model behaviour so that model attributes can be accessed via camelCase, but more importantly,
