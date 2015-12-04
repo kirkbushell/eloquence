@@ -12,9 +12,6 @@ class CountCacheTest extends AcceptanceTestCase
 
     public function init()
     {
-        Comment::observe(new CountCacheObserver);
-        Post::observe(new CountCacheObserver);
-
         $this->data = $this->setupUserAndPost();
     }
 
