@@ -1,10 +1,12 @@
 <?php
 namespace Eloquence;
 
+use Eloquence\Commands\UpdateCaches;
 use Illuminate\Support\ServiceProvider;
 
 class EloquenceServiceProvider extends ServiceProvider
 {
+
     /**
      * Initialises the service provider, and here we attach our own blueprint
      * resolver to the schema, so as to provide the enhanced functionality.
@@ -31,6 +33,8 @@ class EloquenceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Nothing to see here!
+        $this->app->bind('command.eloquence:update-caches', UpdateCaches::class);
+
+        $this->commands(['command.eloquence:update-caches']);
     }
 }

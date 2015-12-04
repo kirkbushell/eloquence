@@ -29,13 +29,25 @@ trait Countable
 
     /**
      * Applies the provided function to the count cache setup/configuration.
-     *\
-     * @param callable $function
+     *
+     * @param \Closure $function
      */
     protected function applyToCountCache(\Closure $function)
     {
         foreach ($this->countCaches() as $key => $cache) {
             $function($this->countCacheConfig($key, $cache));
+        }
+    }
+
+    /**
+     * Rebuild the count caches for all models
+     */
+    public function rebuildCountCaches()
+    {
+        foreach ($this->countCaches() as $key => $cache) {
+            $config = $this->countCacheConfig($key, $cache);
+            $foreignKey = $this->key($config['foreignKey']);
+            $this->rebuildCacheRecord($config, $foreignKey, 'COUNT');
         }
     }
 

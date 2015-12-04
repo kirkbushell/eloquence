@@ -42,6 +42,18 @@ trait Summable
     }
 
     /**
+     * Rebuild the sum caches for all models
+     */
+    public function rebuildSumCaches()
+    {
+        foreach ($this->sumCaches() as $key => $cache) {
+            $config = $this->countCacheConfig($key, $cache);
+            $foreignKey = $this->key($config['foreignKey']);
+            $this->rebuildCacheRecord($config, $foreignKey, 'SUM', $config['columnToSum']);
+        }
+    }
+
+    /**
      * Update the cache for all operations.
      */
     public function updateCache()
