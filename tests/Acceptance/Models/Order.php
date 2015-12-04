@@ -12,5 +12,4 @@ class Order extends Model
     {
         return $this->hasMany('Tests\Acceptance\Models\Item');
     }
-
 }

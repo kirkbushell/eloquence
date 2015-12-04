@@ -9,7 +9,7 @@ use Eloquence\Database\Model;
 class RealModelStub extends Model
 {
     use Countable;
-    
+
     protected $dateFormat = \DateTime::ISO8601;
 
     protected $dates = ['dateField'];

@@ -11,8 +11,6 @@ class SumCacheTest extends AcceptanceTestCase
 
     public function init()
     {
-        Item::observe(new SumCacheObserver);
-
         $this->data = $this->setupOrderAndItem();
     }
 

@@ -70,7 +70,7 @@ trait Countable
         $table = $this->getModelTable($config['model']);
 
         // the following is required for camel-cased models, in case users are defining their attributes as camelCase
-        $field = snake_case($config['countField']);
+        $field = snake_case($config['field']);
         $key = snake_case($config['key']);
         $foreignKey = snake_case($foreignKey);
 
@@ -105,7 +105,7 @@ trait Countable
         else {
             // Semi-verbose configuration provided
             $relatedModel = $cacheOptions;
-            $opts['countField'] = $cacheKey;
+            $opts['field'] = $cacheKey;
 
             if (is_array($cacheOptions)) {
                 if (isset($cacheOptions[2])) {
@@ -134,7 +134,7 @@ trait Countable
     {
         $defaults = [
             'model' => $relatedModel,
-            'countField' => $this->field($this, 'count'),
+            'field' => $this->field($this, 'count'),
             'foreignKey' => $this->field($relatedModel, 'id'),
             'key' => 'id'
         ];

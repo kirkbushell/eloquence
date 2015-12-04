@@ -1,46 +1,34 @@
 <?php
 namespace Eloquence\Behaviours\SumCache;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class SumCacheManager
+trait Summable
 {
     /**
-     * @var \Illuminate\Database\Eloquent\Model
+     * Boot the trait and its event bindings when a model is created.
      */
-    private $model;
-
-    /**
-     * Increase a model's related sum cache by an amount.
-     *
-     * @param Model $model
-     */
-    public function increase(Model $model)
+    public static function bootSummable()
     {
-        $this->model = $model;
+        static::created(function($model) {
+            $model->applyToSumCache(function($config) use ($model) {
+                $amount = $model->{$config['columnToSum']};
+                $model->updateSumCache($config, '+', $amount, $model->{$config['foreignKey']});
+            });
+        });
 
-        $this->applyToSumCache(function($config) {
-            $amount = $this->model->{$config['columnToSum']};
-            $this->update($config, '+', $amount, $this->model->{$config['foreignKey']});
+        static::updated(function($model) {
+            $model->updateCache();
+        });
+
+        static::deleted(function($model) {
+            $model->applyToSumCache(function($config) use ($model) {
+                $amount = $model->{$config['columnToSum']};
+                $model->updateSumCache($config, '-', $amount, $model->{$config['foreignKey']});
+            });
         });
     }
 
-    /**
-     * Decrease a model's related sum cache by an amount.
-     *
-     * @param Model $model
-     */
-    public function decrease(Model $model)
-    {
-        $this->model = $model;
-
-        $this->applyToSumCache(function($config) {
-            $amount = $this->model->{$config['columnToSum']};
-            $this->update($config, '-', $amount, $this->model->{$config['foreignKey']});
-        });
-    }
-    
     /**
      * Applies the provided function to the count cache setup/configuration.
      *
@@ -48,30 +36,26 @@ class SumCacheManager
      */
     protected function applyToSumCache(\Closure $function)
     {
-        foreach ($this->model->sumCaches() as $key => $cache) {
+        foreach ($this->sumCaches() as $key => $cache) {
             $function($this->sumCacheConfig($key, $cache));
         }
     }
 
     /**
      * Update the cache for all operations.
-     *
-     * @param Model $model
      */
-    public function updateCache(Model $model)
-     {
-         $this->model = $model;
+    public function updateCache()
+    {
+        $this->applyToSumCache(function($config) {
+            $foreignKey = $this->key($config['foreignKey']);
+            $amount = $this->{$config['columnToSum']};
 
-         $this->applyToSumCache(function($config) {
-             $foreignKey = $this->key($this->model, $config['foreignKey']);
-             $amount = $this->model->{$config['columnToSum']};
-
-             if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
-                 $this->update($config, '-', $amount, $this->model->getOriginal($foreignKey));
-                 $this->update($config, '+', $amount, $this->model->{$foreignKey});
-             }
-         });
-     }
+            if ($this->getOriginal($foreignKey) && $this->{$foreignKey} != $this->getOriginal($foreignKey)) {
+                $this->updateSumCache($config, '-', $amount, $this->getOriginal($foreignKey));
+                $this->updateSumCache($config, '+', $amount, $this->{$foreignKey});
+            }
+        });
+    }
 
     /**
      * Updates a table's record based on the query information provided in the $config variable.
@@ -81,16 +65,16 @@ class SumCacheManager
      * @param int|float|double $amount
      * @param string $foreignKey
      */
-    protected function update(array $config, $operation, $amount, $foreignKey)
+    public function updateSumCache(array $config, $operation, $amount, $foreignKey)
     {
         if (is_null($foreignKey)) {
             return;
         }
 
-        $table = $this->getTable($config['model']);
+        $table = $this->getModelTable($config['model']);
 
         // the following is required for camel-cased models, in case users are defining their attributes as camelCase
-        $field = snake_case($config['sumField']);
+        $field = snake_case($config['field']);
         $key = snake_case($config['key']);
         $foreignKey = snake_case($foreignKey);
 
@@ -123,7 +107,7 @@ class SumCacheManager
         else {
             // Semi-verbose configuration provided
             $relatedModel = $cacheOptions;
-            $opts['sumField'] = $cacheKey;
+            $opts['field'] = $cacheKey;
 
             if (is_array($cacheOptions)) {
                 if (isset($cacheOptions[3])) {
@@ -151,7 +135,7 @@ class SumCacheManager
      * @param string|object $model
      * @return mixed
      */
-    public function getTable($model)
+    public function getModelTable($model)
     {
         if (! is_object($model)) {
             $model = new $model;
@@ -172,7 +156,7 @@ class SumCacheManager
         $defaults = [
             'model' => $relatedModel,
             'columnToSum' => 'total',
-            'sumField' => $this->field($this->model, 'total'),
+            'field' => $this->field($this, 'total'),
             'foreignKey' => $this->field($relatedModel, 'id'),
             'key' => 'id'
         ];
@@ -198,16 +182,46 @@ class SumCacheManager
     /**
      * Returns the true key for a given field.
      *
-     * @param object $model
      * @param string $field
      * @return mixed
      */
-    protected function key($model, $field)
+    protected function key($field)
     {
-        if (method_exists($model, 'getTrueKey')) {
-            return $model->getTrueKey($field);
+        if (method_exists($this, 'getTrueKey')) {
+            return $this->getTrueKey($field);
         }
 
         return $field;
     }
+
+    /**
+     * Should return an array of the sum caches that need to be updated when this
+     * model's state changes. Use the following array below as an example when an Order
+     * needs to update a User's order sum cache. These represent the default values used
+     * by the behaviour.
+     *
+     *   return [ 'order_total' => [ 'User', 'total', 'user_id', 'id' ] ];
+     *
+     * So, to extend, the first argument should be an index representing the sum cache
+     * field on the associated model. Next is a numerical array:
+     *
+     * 0 = The model to be used for the update
+     * 1 = The remote field that represents the value to sum *optional
+     * 2 = The foreign_key for the relationship that RelatedSum will watch *optional
+     * 3 = The remote field that represents the key *optional
+     *
+     * If the latter 2 options are not provided, or if the sum cache option is a string representing
+     * the model, then RelatedSum will assume the ID fields based on conventional standards.
+     *
+     * Ie. another way to setup a sum cache is like below. This is an identical configuration to above.
+     *
+     *   return [ 'order_total' => [ 'User', 'total' ] ];
+     *
+     * This can be simplified even further, like this:
+     *
+     *   return [ 'User' ];
+     *
+     * @return array
+     */
+    public abstract function sumCaches();
 }

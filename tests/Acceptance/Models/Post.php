@@ -18,7 +18,7 @@ class Post extends Model
             'postCount' => ['Tests\Acceptance\Models\User', 'userId', 'id'],
             [
                 'model' => 'Tests\Acceptance\Models\User',
-                'countField' => 'postCountExplicit',
+                'field' => 'postCountExplicit',
                 'foreignKey' => 'userId',
                 'key' => 'id',
             ]
