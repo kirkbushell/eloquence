@@ -12,7 +12,8 @@
         "php": ">=5.5.0",
         "hashids/hashids": "1.0.5",
         "illuminate/database": "~5.1",
-	    "ramsey/uuid": "~2.8"
+	    "ramsey/uuid": "~2.8",
+        "hanneskod/classtools": "~1.0"
     },
     "require-dev": {
         "illuminate/events": "~5.0",
