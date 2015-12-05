@@ -18,7 +18,7 @@ trait Summable
         });
 
         static::updated(function($model) {
-            $model->updateCache();
+            $model->updateSumCache();
         });
 
         static::deleted(function($model) {
@@ -44,7 +44,7 @@ trait Summable
     /**
      * Update the cache for all operations.
      */
-    public function updateCache()
+    public function updateSumCache()
     {
         $this->applyToSumCache(function($config) {
             $foreignKey = $this->key($config['foreignKey']);
@@ -99,7 +99,7 @@ trait Summable
             }
         }
 
-        return $this->defaults($opts, $relatedModel);
+        return $this->sumDefaults($opts, $relatedModel);
     }
 
     /**
@@ -109,7 +109,7 @@ trait Summable
      * @param string $relatedModel
      * @return array
      */
-    protected function defaults($options, $relatedModel)
+    protected function sumDefaults($options, $relatedModel)
     {
         $defaults = [
             'model' => $relatedModel,

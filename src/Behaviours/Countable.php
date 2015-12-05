@@ -17,7 +17,7 @@ trait Countable
         });
 
         static::updated(function($model) {
-            $model->updateCache();
+            $model->updateCountCache();
         });
 
         static::deleted(function($model) {
@@ -42,7 +42,7 @@ trait Countable
     /**
      * Update the cache for all operations.
      */
-    public function updateCache()
+    public function updateCountCache()
     {
         $this->applyToCountCache(function($config) {
             $foreignKey = $this->key($config['foreignKey']);
@@ -93,7 +93,7 @@ trait Countable
             }
         }
 
-        return $this->defaults($opts, $relatedModel);
+        return $this->countDefaults($opts, $relatedModel);
     }
 
     /**
@@ -103,7 +103,7 @@ trait Countable
      * @param string $relatedModel
      * @return array
      */
-    protected function defaults($options, $relatedModel)
+    protected function countDefaults($options, $relatedModel)
     {
         $defaults = [
             'model' => $relatedModel,
