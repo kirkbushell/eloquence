@@ -103,13 +103,15 @@ To get this working, you need to do two steps:
 
 To setup the count cache configuration, we need to have the model use Countable trait, like so:
 
-    class Post extends Eloquent {
-        use Countable;
-        
-        public function countCaches() {
-            return [User::class];
-        }
+```php
+class Post extends Eloquent {
+    use Countable;
+    
+    public function countCaches() {
+        return [User::class];
     }
+}
+```
 
 This tells the count cache that the Post model has a count cache on the User model. So, whenever a post is added, or modified or
 deleted, the count cache behaviour will update the appropriate user's count cache for their posts. In this case, it would update `post_count`
@@ -123,35 +125,39 @@ The example above uses the following standard conventions:
 
 These are, however, configurable:
 
-    class Post extends Eloquent {
-        use Countable;
-        
-        public function countCaches() {
-            return [
-                'num_posts' => ['User', 'users_id', 'id']
-            ];
-        }
+```php
+class Post extends Eloquent {
+    use Countable;
+    
+    public function countCaches() {
+        return [
+            'num_posts' => ['User', 'users_id', 'id']
+        ];
     }
+}
+```
 
 This example customises the count cache field, and the related foreign key, with `num_posts` and `users_id`, respectively.
 
 Alternatively, you can be very explicit about the configuration (useful if you are using count caching on several tables
 and use the same column name on each of them):
 
-    class Post extends {
-        use Countable;
-        
-        public function countCaches() {
-            return [
-                [
-                    'model'      => 'User',
-                    'field'      => 'num_posts',
-                    'foreignKey' => 'users_id',
-                    'key'        => 'id'
-                ]
-            ];
-        }
+```php
+class Post extends {
+    use Countable;
+    
+    public function countCaches() {
+        return [
+            [
+                'model'      => 'User',
+                'field'      => 'num_posts',
+                'foreignKey' => 'users_id',
+                'key'        => 'id'
+            ]
+        ];
     }
+}
+```
 
 If using the explicit configuration, at a minimum you will need to define the "model" parameter.  The "countField", "foreignKey",
 and "key" parameters will be calculated using the standard conventions mentioned above if they are omitted.
@@ -174,13 +180,15 @@ To get this working -- just like count caching -- you need to do two steps:
 
 To setup the sum cache configuration, simply do the following:
 
-    class Item extends Eloquent {
-        use Summable;
-        
-        public function sumCaches() {
-            return [Order::class];
-        }
+```php
+class Item extends Eloquent {
+    use Summable;
+    
+    public function sumCaches() {
+        return [Order::class];
     }
+}
+```
 
 This tells the sum cache manager that the Item model has a sum cache on the Order model. So, whenever an item is added, modified, or
 deleted, the sum cache behaviour will update the appropriate order's sum cache for their items. In this case, it would update `item_total`
@@ -195,33 +203,37 @@ The example above uses the following conventions:
 
 These are, however, configurable:
 
-    class Item extends Eloquent {
-        use Summable;
-        
-        public function sumCaches() {
-            return [
-                'item_total' => ['Order', 'total', 'order_id', 'id']
-            ];
-        }
+```php
+class Item extends Eloquent {
+    use Summable;
+    
+    public function sumCaches() {
+        return [
+            'item_total' => ['Order', 'total', 'order_id', 'id']
+        ];
     }
+}
+```
     
 Or using the verbose syntax:
 
-    class Item extends Eloquent {
-        use Summable;
-        
-        public function sumCaches() {
-            return [
-                [
-                    'model'       => 'Order',
-                    'columnToSum' => 'total',
-                    'field'       => 'item_total'
-                    'foreignKey'  => 'order_id',
-                    'key'         => 'id'
-                ]
-            ];
-        }
+```php
+class Item extends Eloquent {
+    use Summable;
+    
+    public function sumCaches() {
+        return [
+            [
+                'model'       => 'Order',
+                'columnToSum' => 'total',
+                'field'       => 'item_total'
+                'foreignKey'  => 'order_id',
+                'key'         => 'id'
+            ]
+        ];
     }
+}
+```
 
 Both of these examples implements the default settings.
 
@@ -231,13 +243,15 @@ With these settings configured, you will now see the related model's sum cache u
 
 Sluggable is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
 
-    class User extends Eloquent {
-        use Sluggable;
-    
-        public function slugStrategy() {
-            return 'username';
-        }
+```php
+class User extends Eloquent {
+    use Sluggable;
+
+    public function slugStrategy() {
+        return 'username';
     }
+}
+ ```
 
 In the example above, a slug will be created based on the username field of the User model. There are two other
 slugs that are supported however, as well:
