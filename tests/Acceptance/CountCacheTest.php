@@ -1,5 +1,5 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
 use Eloquence\Behaviours\CountCache\CountCacheObserver;
 use Tests\Acceptance\Models\Comment;

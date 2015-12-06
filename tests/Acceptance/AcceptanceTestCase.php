@@ -1,10 +1,11 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Orchestra\Testbench\TestCase;
 
-class AcceptanceTestCase extends \Orchestra\Testbench\TestCase
+class AcceptanceTestCase extends TestCase
 {
     public function setUp()
     {

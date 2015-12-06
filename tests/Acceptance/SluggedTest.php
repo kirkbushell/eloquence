@@ -1,7 +1,6 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
-use Eloquence\Behaviours\Slugged\SlugObserver;
 use Tests\Acceptance\Models\Post;
 use Tests\Acceptance\Models\User;
 

@@ -1,5 +1,5 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
 use Eloquence\Behaviours\SumCache\SumCacheObserver;
 use Tests\Acceptance\Models\Item;
