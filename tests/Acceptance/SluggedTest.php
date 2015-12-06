@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Acceptance;
+namespace tests\Acceptance;
 
 use Eloquence\Behaviours\Slugged\SlugObserver;
 use Tests\Acceptance\Models\Post;
@@ -7,7 +7,7 @@ use Tests\Acceptance\Models\User;
 
 class SluggedTest extends AcceptanceTestCase
 {
-	public function testUserSlug()
+    public function testUserSlug()
     {
         $user = new User;
         $user->firstName = 'Kirk';

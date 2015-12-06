@@ -168,16 +168,16 @@ trait CamelCasing
         return $this->enforceCamelCase or (isset($this->parent) && method_exists($this->parent, 'isCamelCase') && $this->parent->isCamelCase());
     }
 
-	/**
-	 * If the field names need to be converted so that they can be accessed by camelCase, then we can do that here.
-	 *
-	 * @param $key
-	 * @return string
-	 */
-	protected function getSnakeKey($key)
-	{
-		return snake_case($key);
-	}
+    /**
+     * If the field names need to be converted so that they can be accessed by camelCase, then we can do that here.
+     *
+     * @param $key
+     * @return string
+     */
+    protected function getSnakeKey($key)
+    {
+        return snake_case($key);
+    }
 
     /**
      * Because we are changing the case of keys and want to use camelCase throughout the application, whenever

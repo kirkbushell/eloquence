@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Acceptance;
+namespace tests\Acceptance;
 
 use Eloquence\Behaviours\SumCache\SumCacheObserver;
 use Tests\Acceptance\Models\Item;
@@ -14,7 +14,7 @@ class SumCacheTest extends AcceptanceTestCase
         $this->data = $this->setupOrderAndItem();
     }
 
-	public function testOrderSumCache()
+    public function testOrderSumCache()
     {
         $order = Order::first();
 
@@ -46,7 +46,6 @@ class SumCacheTest extends AcceptanceTestCase
 
         $this->assertEquals(34, Order::first()->itemTotalExplicit);
         $this->assertEquals(45, Order::get()[1]->itemTotalExplicit);
-
     }
 
     private function setupOrderAndItem()
