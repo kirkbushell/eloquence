@@ -8,20 +8,20 @@ trait Countable
      */
     public static function bootCountable()
     {
-        static::created(function($model) {
+        static::created(function ($model) {
             $countCache = new CountCache($model);
-            $countCache->apply(function($config) use ($countCache, $model) {
+            $countCache->apply(function ($config) use ($countCache, $model) {
                 $countCache->updateCacheRecord($config, '+', 1, $model->{$config['foreignKey']});
             });
         });
 
-        static::updated(function($model) {
+        static::updated(function ($model) {
             (new CountCache($model))->update();
         });
 
-        static::deleted(function($model) {
+        static::deleted(function ($model) {
             $countCache = new CountCache($model);
-            $countCache->apply(function($config) use ($countCache, $model) {
+            $countCache->apply(function ($config) use ($countCache, $model) {
                 $countCache->updateCacheRecord($config, '-', 1, $model->{$config['foreignKey']});
             });
         });

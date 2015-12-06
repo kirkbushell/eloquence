@@ -38,7 +38,7 @@ class SumCache
      */
     public function update()
     {
-        $this->apply(function($config) {
+        $this->apply(function ($config) {
             $foreignKey = $this->key($config['foreignKey']);
             $amount = $this->model->{$config['columnToSum']};
 
@@ -69,8 +69,7 @@ class SumCache
                 // Smallest number of options provided, figure out the rest
                 $relatedModel = $cacheOptions;
             }
-        }
-        else {
+        } else {
             // Semi-verbose configuration provided
             $relatedModel = $cacheOptions;
             $opts['field'] = $cacheKey;

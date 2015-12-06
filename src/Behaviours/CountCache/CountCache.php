@@ -38,7 +38,7 @@ class CountCache
      */
     public function update()
     {
-        $this->apply(function($config) {
+        $this->apply(function ($config) {
             $foreignKey = $this->key($config['foreignKey']);
 
             if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
@@ -68,8 +68,7 @@ class CountCache
                 // Smallest number of options provided, figure out the rest
                 $relatedModel = $cacheOptions;
             }
-        }
-        else {
+        } else {
             // Semi-verbose configuration provided
             $relatedModel = $cacheOptions;
             $opts['field'] = $cacheKey;

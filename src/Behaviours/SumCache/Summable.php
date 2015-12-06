@@ -12,20 +12,20 @@ trait Summable
      */
     public static function bootSummable()
     {
-        static::created(function($model) {
+        static::created(function ($model) {
             $sumCache = new SumCache($model);
-            $sumCache->apply(function($config) use ($model, $sumCache) {
+            $sumCache->apply(function ($config) use ($model, $sumCache) {
                 $sumCache->updateCacheRecord($config, '+', $model->{$config['columnToSum']}, $model->{$config['foreignKey']});
             });
         });
 
-        static::updated(function($model) {
+        static::updated(function ($model) {
             (new SumCache($model))->update();
         });
 
-        static::deleted(function($model) {
+        static::deleted(function ($model) {
             $sumCache = new SumCache($model);
-            $sumCache->apply(function($config) use ($model, $sumCache) {
+            $sumCache->apply(function ($config) use ($model, $sumCache) {
                 $sumCache->updateCacheRecord($config, '-', $model->{$config['columnToSum']}, $model->{$config['foreignKey']});
             });
         });
@@ -36,5 +36,5 @@ trait Summable
      *
      * @return array
      */
-    public abstract function sumCaches();
+    abstract public function sumCaches();
 }

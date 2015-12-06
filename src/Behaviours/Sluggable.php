@@ -11,11 +11,11 @@ trait Sluggable
      */
     public static function bootSluggable()
     {
-        static::creating(function($model) {
+        static::creating(function ($model) {
             $model->generateSlug();
         });
 
-        static::created(function($model) {
+        static::created(function ($model) {
             if ($model->slugStrategy() == 'id') {
                 $model->generateIdSlug();
                 $model->save();
@@ -59,11 +59,10 @@ trait Sluggable
      */
     public function getTitleFields(array $fields)
     {
-        $fields = array_map(function($field) {
+        $fields = array_map(function ($field) {
             if (str_contains($field, '.')) {
                 return object_get($this, $field); // this acts as a delimiter, which we can replace with /
-            }
-            else {
+            } else {
                 return $this->{$field};
             }
         }, $fields);
@@ -80,8 +79,7 @@ trait Sluggable
 
         if ($strategy == 'uuid') {
             $this->generateIdSlug();
-        }
-        elseif ($strategy != 'id') {
+        } elseif ($strategy != 'id') {
             $this->generateTitleSlug((array) $strategy);
         }
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Acceptance\Models;
+namespace tests\Acceptance\Models;
 
 use Eloquence\Behaviours\SumCache\Summable;
 use Eloquence\Behaviours\CamelCasing;

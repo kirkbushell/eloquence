@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Acceptance;
+namespace tests\Acceptance;
 
 use Eloquence\Behaviours\CountCache\CountCacheObserver;
 use Tests\Acceptance\Models\Comment;
@@ -15,7 +15,7 @@ class CountCacheTest extends AcceptanceTestCase
         $this->data = $this->setupUserAndPost();
     }
 
-	public function testUserCountCache()
+    public function testUserCountCache()
     {
         $user = User::first();
 

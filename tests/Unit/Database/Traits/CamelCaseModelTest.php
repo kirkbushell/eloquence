@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Database\Traits;
+namespace tests\Unit\Database\Traits;
 
 use Carbon\Carbon;
 use Tests\Unit\Stubs\ModelStub;
