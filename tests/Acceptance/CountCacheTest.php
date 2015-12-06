@@ -1,9 +1,9 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
-use tests\Acceptance\Models\Comment;
-use tests\Acceptance\Models\Post;
-use tests\Acceptance\Models\User;
+use Tests\Acceptance\Models\Comment;
+use Tests\Acceptance\Models\Post;
+use Tests\Acceptance\Models\User;
 
 class CountCacheTest extends AcceptanceTestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

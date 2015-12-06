@@ -1,5 +1,5 @@
 <?php
-namespace tests\Acceptance\Models;
+namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\CamelCasing;
 use Eloquence\Behaviours\Sluggable;
@@ -12,7 +12,7 @@ class User extends Model
 
     public function posts()
     {
-        return $this->hasMany('Tests\Acceptance\Models\Post');
+        return $this->hasMany(Post::class);
     }
 
     public function slugStrategy()
