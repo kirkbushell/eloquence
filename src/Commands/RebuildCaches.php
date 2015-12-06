@@ -1,12 +1,14 @@
 <?php
 namespace Eloquence\Commands;
 
+use Eloquence\Behaviours\CountCache\CountCache;
+use Eloquence\Behaviours\SumCache\SumCache;
 use hanneskod\classtools\Iterator\ClassIterator;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\Finder\Finder;
 
-class UpdateCaches extends Command
+class RebuildCaches extends Command
 {
 
     /**
@@ -14,14 +16,14 @@ class UpdateCaches extends Command
      *
      * @var string
      */
-    protected $signature = 'eloquence:update-caches {--class= : Optional classes to update}';
+    protected $signature = 'eloquence:rebuild {--class= : Optional classes to update}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update the caches for one or more eloquent models';
+    protected $description = 'Rebuild the caches for one or more eloquent models';
 
     /**
      * Create a new command instance.
@@ -44,8 +46,8 @@ class UpdateCaches extends Command
         } else {
             $classes = $this->getAllCacheableClasses();
         }
-        foreach ($classes as $class) {
-            $this->updateCaches($class);
+        foreach ($classes as $className) {
+            $this->rebuild($className);
         }
     }
 
@@ -64,6 +66,7 @@ class UpdateCaches extends Command
         $classes = [];
 
         foreach ($iterator->type(Model::class) as $className => $class) {
+            echo "...$className\n";
             if ($class->isInstantiable() && $this->usesCaching($class)) {
                 $classes[] = $className;
             }
@@ -72,17 +75,25 @@ class UpdateCaches extends Command
         return $classes;
     }
 
-    private function updateCaches($class)
+    /**
+     * Rebuilds the caches for the given class.
+     *
+     * @param string $className
+     */
+    private function rebuild($className)
     {
-        $instance = app($class);
+        $instance = new $className;
 
-        if (method_exists($instance, 'rebuildCountCaches')) {
-            $instance->rebuildCountCaches();
-            $this->info("Rebuilt count caches for {$class}.");
+        if (method_exists($instance, 'countCaches')) {
+            $this->info("Rebuilding [$className] count caches");
+            $countCache = new CountCache($instance);
+            $countCache->rebuild();
         }
-        if (method_exists($instance, 'rebuildSumCaches')) {
-            $instance->rebuildSumCaches();
-            $this->info("Rebuilt sum caches for {$class}.");
+
+        if (method_exists($instance, 'sumCaches')) {
+            $this->info("Rebuilding [$className] sum caches");
+            $sumCache = new SumCache($instance);
+            $sumCache->rebuild();
         }
     }
 
@@ -95,8 +106,7 @@ class UpdateCaches extends Command
      */
     private function usesCaching(\ReflectionClass $class)
     {
-
-        return $class->hasMethod('rebuildCacheRecord');
+        return $class->hasMethod('bootCountable') || $class->hasMethod('bootSummable');
     }
 
 }

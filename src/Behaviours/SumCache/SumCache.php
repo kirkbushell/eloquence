@@ -34,15 +34,13 @@ class SumCache
     }
 
     /**
-     * Rebuild the sum caches for all models
+     * Rebuild the count caches from the database
      */
-    public function rebuildSumCaches()
+    public function rebuild()
     {
-        foreach ($this->sumCaches() as $key => $cache) {
-            $config = $this->countCacheConfig($key, $cache);
-            $foreignKey = $this->key($config['foreignKey']);
-            $this->rebuildCacheRecord($config, $foreignKey, 'SUM', $config['columnToSum']);
-        }
+        $this->apply(function($config) {
+            $this->rebuildCacheRecord($config, $this->model, 'SUM', $config['columnToSum']);
+        });
     }
 
     /**

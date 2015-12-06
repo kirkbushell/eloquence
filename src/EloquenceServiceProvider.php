@@ -1,7 +1,7 @@
 <?php
 namespace Eloquence;
 
-use Eloquence\Commands\UpdateCaches;
+use Eloquence\Commands\RebuildCaches;
 use Illuminate\Support\ServiceProvider;
 
 class EloquenceServiceProvider extends ServiceProvider
@@ -33,8 +33,8 @@ class EloquenceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('command.eloquence:update-caches', UpdateCaches::class);
+        $this->app->bind('command.eloquence:rebuild', RebuildCaches::class);
 
-        $this->commands(['command.eloquence:update-caches']);
+        $this->commands(['command.eloquence:rebuild']);
     }
 }

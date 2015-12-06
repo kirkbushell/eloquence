@@ -34,18 +34,6 @@ class CountCache
     }
 
     /**
-     * Rebuild the count caches for all models
-     */
-    public function rebuildCountCaches()
-    {
-        foreach ($this->countCaches() as $key => $cache) {
-            $config = $this->countCacheConfig($key, $cache);
-            $foreignKey = $this->key($config['foreignKey']);
-            $this->rebuildCacheRecord($config, $foreignKey, 'COUNT');
-        }
-    }
-
-    /**
      * Update the cache for all operations.
      */
     public function update()
@@ -57,6 +45,16 @@ class CountCache
                 $this->updateCacheRecord($config, '-', 1, $this->model->getOriginal($foreignKey));
                 $this->updateCacheRecord($config, '+', 1, $this->model->{$foreignKey});
             }
+        });
+    }
+
+    /**
+     * Rebuild the count caches from the database
+     */
+    public function rebuild()
+    {
+        $this->apply(function($config) {
+            $this->rebuildCacheRecord($config, $this->model, 'COUNT');
         });
     }
 

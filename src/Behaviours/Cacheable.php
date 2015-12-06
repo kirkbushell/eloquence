@@ -32,20 +32,16 @@ trait Cacheable
         return DB::update($sql);
     }
 
-    public function rebuildCacheRecord(array $config, $foreignKey, $command, $aggregateField = null)
+    public function rebuildCacheRecord(array $config, Model $model, $command, $aggregateField = null)
     {
 
-        if (is_null($foreignKey)) {
-            return;
-        }
-
         $table = $this->getModelTable($config['model']);
-        $modelTable = $this->getTable();
+        $modelTable = $this->getModelTable($model);
 
         // the following is required for camel-cased models, in case users are defining their attributes as camelCase
         $field = snake_case($config['field']);
-        $key = snake_case($config['key']);
-        $foreignKey = snake_case($foreignKey);
+        $key = snake_case($this->key($config['key']));
+        $foreignKey = snake_case($this->key($config['foreignKey']));
 
         if (is_null($aggregateField)) {
             $aggregateField = $foreignKey;
