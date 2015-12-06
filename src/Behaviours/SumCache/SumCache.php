@@ -1,32 +1,24 @@
 <?php
-namespace Eloquence\Behaviours;
+namespace Eloquence\Behaviours\SumCache;
 
-trait Summable
+use Eloquence\Behaviours\Cacheable;
+use Illuminate\Database\Eloquent\Model;
+
+class SumCache
 {
     use Cacheable;
 
     /**
-     * Boot the trait and its event bindings when a model is created.
+     * @var Model
      */
-    public static function bootSummable()
+    private $model;
+
+    /**
+     * @param Model $model
+     */
+    public function __construct(Model $model)
     {
-        static::created(function($model) {
-            $model->applyToSumCache(function($config) use ($model) {
-                $amount = $model->{$config['columnToSum']};
-                $model->updateCacheRecord($config, '+', $amount, $model->{$config['foreignKey']});
-            });
-        });
-
-        static::updated(function($model) {
-            $model->updateSumCache();
-        });
-
-        static::deleted(function($model) {
-            $model->applyToSumCache(function($config) use ($model) {
-                $amount = $model->{$config['columnToSum']};
-                $model->updateCacheRecord($config, '-', $amount, $model->{$config['foreignKey']});
-            });
-        });
+        $this->model = $model;
     }
 
     /**
@@ -34,25 +26,25 @@ trait Summable
      *
      * @param \Closure $function
      */
-    protected function applyToSumCache(\Closure $function)
+    public function apply(\Closure $function)
     {
-        foreach ($this->sumCaches() as $key => $cache) {
-            $function($this->sumCacheConfig($key, $cache));
+        foreach ($this->model->sumCaches() as $key => $cache) {
+            $function($this->config($key, $cache));
         }
     }
 
     /**
      * Update the cache for all operations.
      */
-    public function updateSumCache()
+    public function update()
     {
-        $this->applyToSumCache(function($config) {
+        $this->apply(function($config) {
             $foreignKey = $this->key($config['foreignKey']);
-            $amount = $this->{$config['columnToSum']};
+            $amount = $this->model->{$config['columnToSum']};
 
-            if ($this->getOriginal($foreignKey) && $this->{$foreignKey} != $this->getOriginal($foreignKey)) {
-                $this->updateCacheRecord($config, '-', $amount, $this->getOriginal($foreignKey));
-                $this->updateCacheRecord($config, '+', $amount, $this->{$foreignKey});
+            if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
+                $this->updateCacheRecord($config, '-', $amount, $this->model->getOriginal($foreignKey));
+                $this->updateCacheRecord($config, '+', $amount, $this->model->{$foreignKey});
             }
         });
     }
@@ -64,7 +56,7 @@ trait Summable
      * @param array $cacheOptions
      * @return array
      */
-    protected function sumCacheConfig($cacheKey, $cacheOptions)
+    protected function config($cacheKey, $cacheOptions)
     {
         $opts = [];
 
@@ -99,7 +91,7 @@ trait Summable
             }
         }
 
-        return $this->sumDefaults($opts, $relatedModel);
+        return $this->defaults($opts, $relatedModel);
     }
 
     /**
@@ -109,23 +101,16 @@ trait Summable
      * @param string $relatedModel
      * @return array
      */
-    protected function sumDefaults($options, $relatedModel)
+    protected function defaults($options, $relatedModel)
     {
         $defaults = [
             'model' => $relatedModel,
             'columnToSum' => 'total',
-            'field' => $this->field($this, 'total'),
+            'field' => $this->field($this->model, 'total'),
             'foreignKey' => $this->field($relatedModel, 'id'),
             'key' => 'id'
         ];
 
         return array_merge($defaults, $options);
     }
-
-    /**
-     * Return the sum cache configuration for the model.
-     *
-     * @return array
-     */
-    public abstract function sumCaches();
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Eloquence\Behaviours;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 trait Cacheable
@@ -26,7 +27,7 @@ trait Cacheable
         $key = snake_case($config['key']);
         $foreignKey = snake_case($foreignKey);
 
-        $sql = "UPDATE `{$table}` SET `{$field}` = `{$field}` {$operation} ({$amount}) WHERE `{$key}` = {$foreignKey}";
+        $sql = "UPDATE `{$table}` SET `{$field}` = `{$field}` {$operation} {$amount} WHERE `{$key}` = {$foreignKey}";
 
         return DB::update($sql);
     }
@@ -54,8 +55,8 @@ trait Cacheable
      */
     protected function key($field)
     {
-        if (method_exists($this, 'getTrueKey')) {
-            return $this->getTrueKey($field);
+        if (method_exists($this->model, 'getTrueKey')) {
+            return $this->model->getTrueKey($field);
         }
 
         return $field;
@@ -65,12 +66,12 @@ trait Cacheable
      * Returns the table for a given model. Model can be an Eloquent model object, or a full namespaced
      * class string.
      *
-     * @param string|object $model
+     * @param string|Model $model
      * @return mixed
      */
     public function getModelTable($model)
     {
-        if (! is_object($model)) {
+        if (!is_object($model)) {
             $model = new $model;
         }
 

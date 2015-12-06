@@ -1,30 +1,24 @@
 <?php
-namespace Eloquence\Behaviours;
+namespace Eloquence\Behaviours\CountCache;
 
-trait Countable
+use Eloquence\Behaviours\Cacheable;
+use Illuminate\Database\Eloquent\Model;
+
+class CountCache
 {
     use Cacheable;
 
     /**
-     * Boot the countable behaviour and setup the appropriate event bindings.
+     * @var Model
      */
-    public static function bootCountable()
+    private $model;
+
+    /**
+     * @param Model $model
+     */
+    public function __construct(Model $model)
     {
-        static::created(function($model) {
-            $model->applyToCountCache(function($config) use ($model) {
-                $model->updateCacheRecord($config, '+', 1, $model->{$config['foreignKey']});
-            });
-        });
-
-        static::updated(function($model) {
-            $model->updateCountCache();
-        });
-
-        static::deleted(function($model) {
-            $model->applyToCountCache(function($config) use ($model) {
-                $model->updateCacheRecord($config, '-', 1, $model->{$config['foreignKey']});
-            });
-        });
+        $this->model = $model;
     }
 
     /**
@@ -32,24 +26,24 @@ trait Countable
      *\
      * @param callable $function
      */
-    protected function applyToCountCache(\Closure $function)
+    public function apply(\Closure $function)
     {
-        foreach ($this->countCaches() as $key => $cache) {
-            $function($this->countCacheConfig($key, $cache));
+        foreach ($this->model->countCaches() as $key => $cache) {
+            $function($this->config($key, $cache));
         }
     }
 
     /**
      * Update the cache for all operations.
      */
-    public function updateCountCache()
+    public function update()
     {
-        $this->applyToCountCache(function($config) {
+        $this->apply(function($config) {
             $foreignKey = $this->key($config['foreignKey']);
 
-            if ($this->getOriginal($foreignKey) && $this->{$foreignKey} != $this->getOriginal($foreignKey)) {
-                $this->updateCacheRecord($config, '-', 1, $this->getOriginal($foreignKey));
-                $this->updateCacheRecord($config, '+', 1, $this->{$foreignKey});
+            if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
+                $this->updateCacheRecord($config, '-', 1, $this->model->getOriginal($foreignKey));
+                $this->updateCacheRecord($config, '+', 1, $this->model->{$foreignKey});
             }
         });
     }
@@ -61,7 +55,7 @@ trait Countable
      * @param array $cacheOptions
      * @return array
      */
-    protected function countCacheConfig($cacheKey, $cacheOptions)
+    protected function config($cacheKey, $cacheOptions)
     {
         $opts = [];
 
@@ -93,7 +87,7 @@ trait Countable
             }
         }
 
-        return $this->countDefaults($opts, $relatedModel);
+        return $this->defaults($opts, $relatedModel);
     }
 
     /**
@@ -103,22 +97,15 @@ trait Countable
      * @param string $relatedModel
      * @return array
      */
-    protected function countDefaults($options, $relatedModel)
+    protected function defaults($options, $relatedModel)
     {
         $defaults = [
             'model' => $relatedModel,
-            'field' => $this->field($this, 'count'),
+            'field' => $this->field($this->model, 'count'),
             'foreignKey' => $this->field($relatedModel, 'id'),
             'key' => 'id'
         ];
 
         return array_merge($defaults, $options);
     }
-
-    /**
-     * Return the count cache configuration for the model.
-     *
-     * @return array
-     */
-    abstract public function countCaches();
 }
