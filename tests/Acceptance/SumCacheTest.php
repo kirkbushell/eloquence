@@ -1,9 +1,8 @@
 <?php
 namespace tests\Acceptance;
 
-use Eloquence\Behaviours\SumCache\SumCacheObserver;
-use Tests\Acceptance\Models\Item;
-use Tests\Acceptance\Models\Order;
+use tests\Acceptance\Models\Item;
+use tests\Acceptance\Models\Order;
 
 class SumCacheTest extends AcceptanceTestCase
 {

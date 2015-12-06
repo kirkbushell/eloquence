@@ -1,9 +1,8 @@
 <?php
 namespace tests\Acceptance;
 
-use Eloquence\Behaviours\Slugged\SlugObserver;
-use Tests\Acceptance\Models\Post;
-use Tests\Acceptance\Models\User;
+use tests\Acceptance\Models\Post;
+use tests\Acceptance\Models\User;
 
 class SluggedTest extends AcceptanceTestCase
 {

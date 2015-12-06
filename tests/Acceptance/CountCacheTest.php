@@ -1,10 +1,9 @@
 <?php
 namespace tests\Acceptance;
 
-use Eloquence\Behaviours\CountCache\CountCacheObserver;
-use Tests\Acceptance\Models\Comment;
-use Tests\Acceptance\Models\Post;
-use Tests\Acceptance\Models\User;
+use tests\Acceptance\Models\Comment;
+use tests\Acceptance\Models\Post;
+use tests\Acceptance\Models\User;
 
 class CountCacheTest extends AcceptanceTestCase
 {

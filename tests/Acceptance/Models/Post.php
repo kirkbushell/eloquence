@@ -10,7 +10,7 @@ class Post extends Model
 {
     use CamelCasing;
     use Sluggable;
-    use \Eloquence\Behaviours\CountCache\Countable;
+    use Countable;
 
     public function countCaches()
     {

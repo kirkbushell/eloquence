@@ -1,11 +1,13 @@
 <?php
 namespace Tests\Unit\Stubs\SumCache;
 
-use Eloquence\Behaviours\SumCache\SumCache;
+use Eloquence\Behaviours\SumCache\Summable;
 use Eloquence\Database\Model;
 
-class Item extends Model implements SumCache
+class Item extends Model
 {
+    use Summable;
+
     public function sumCaches()
     {
         return [
