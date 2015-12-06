@@ -267,6 +267,11 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 2.0.2
+
+* Updated PHP dependency to 5.6+
+* CountCache and SumCache behaviours now supported via a service layer
+
 #### 2.0.0
 
 * Sum cache model behaviour added
