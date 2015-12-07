@@ -1,8 +1,8 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
-use tests\Acceptance\Models\Post;
-use tests\Acceptance\Models\User;
+use Tests\Acceptance\Models\Post;
+use Tests\Acceptance\Models\User;
 
 class SluggedTest extends AcceptanceTestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace tests\Acceptance\Models;
+namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\CountCache\Countable;
 use Eloquence\Behaviours\CamelCasing;

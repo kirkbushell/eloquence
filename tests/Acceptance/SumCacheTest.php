@@ -1,8 +1,8 @@
 <?php
-namespace tests\Acceptance;
+namespace Tests\Acceptance;
 
-use tests\Acceptance\Models\Item;
-use tests\Acceptance\Models\Order;
+use Tests\Acceptance\Models\Item;
+use Tests\Acceptance\Models\Order;
 
 class SumCacheTest extends AcceptanceTestCase
 {
