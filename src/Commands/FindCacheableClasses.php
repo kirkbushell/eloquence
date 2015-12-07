@@ -26,7 +26,6 @@ class FindCacheableClasses
         $classes = [];
 
         foreach ($iterator->type(Model::class) as $className => $class) {
-            echo "...$className\n";
             if ($class->isInstantiable() && $this->usesCaching($class)) {
                 $classes[] = $className;
             }
