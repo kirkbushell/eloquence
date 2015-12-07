@@ -16,14 +16,14 @@ class RebuildCaches extends Command
      *
      * @var string
      */
-    protected $signature = 'eloquence:rebuild {--class= : Optional classes to update}';
+    protected $signature = 'eloquence:rebuild {--class= : Optional classes to update} {--dir= : Directory in which to look for classes}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rebuild the caches for one or more eloquent models';
+    protected $description = 'Rebuild the caches for one or more Eloquent models';
 
     /**
      * Create a new command instance.
@@ -44,35 +44,12 @@ class RebuildCaches extends Command
         if ($class = $this->option('class')) {
             $classes = [$class];
         } else {
-            $classes = $this->getAllCacheableClasses();
+            $directory = $this->option('dir') ?: app_path();
+            $classes = (new FindCacheableClasses($directory))->getAllCacheableClasses();
         }
         foreach ($classes as $className) {
             $this->rebuild($className);
         }
-    }
-
-    /**
-     * Iterate through the application's classes and return all the ones
-     * that implement one of the caching behaviours.
-     *
-     * @return array[string]
-     */
-    private function getAllCacheableClasses()
-    {
-        $finder = new Finder;
-        $iterator = new ClassIterator($finder->in(app_path()));
-        $iterator->enableAutoloading();
-
-        $classes = [];
-
-        foreach ($iterator->type(Model::class) as $className => $class) {
-            echo "...$className\n";
-            if ($class->isInstantiable() && $this->usesCaching($class)) {
-                $classes[] = $className;
-            }
-        }
-
-        return $classes;
     }
 
     /**
@@ -95,18 +72,6 @@ class RebuildCaches extends Command
             $sumCache = new SumCache($instance);
             $sumCache->rebuild();
         }
-    }
-
-    /**
-     * Decide if the class uses any of the caching behaviours.
-     *
-     * @param \ReflectionClass $class
-     *
-     * @return bool
-     */
-    private function usesCaching(\ReflectionClass $class)
-    {
-        return $class->hasMethod('bootCountable') || $class->hasMethod('bootSummable');
     }
 
 }
