@@ -23,8 +23,8 @@ class CountCache
 
     /**
      * Applies the provided function to the count cache setup/configuration.
-     *\
-     * @param callable $function
+     *
+     * @param \Closure $function
      */
     public function apply(\Closure $function)
     {
@@ -45,6 +45,16 @@ class CountCache
                 $this->updateCacheRecord($config, '-', 1, $this->model->getOriginal($foreignKey));
                 $this->updateCacheRecord($config, '+', 1, $this->model->{$foreignKey});
             }
+        });
+    }
+
+    /**
+     * Rebuild the count caches from the database
+     */
+    public function rebuild()
+    {
+        $this->apply(function($config) {
+            $this->rebuildCacheRecord($config, $this->model, 'COUNT');
         });
     }
 

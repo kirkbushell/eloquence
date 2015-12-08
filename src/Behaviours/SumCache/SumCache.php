@@ -34,6 +34,16 @@ class SumCache
     }
 
     /**
+     * Rebuild the count caches from the database
+     */
+    public function rebuild()
+    {
+        $this->apply(function($config) {
+            $this->rebuildCacheRecord($config, $this->model, 'SUM', $config['columnToSum']);
+        });
+    }
+
+    /**
      * Update the cache for all operations.
      */
     public function update()

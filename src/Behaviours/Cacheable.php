@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 trait Cacheable
 {
+
     /**
      * Updates a table's record based on the query information provided in the $config variable.
      *
@@ -20,14 +21,29 @@ trait Cacheable
             return;
         }
 
-        $table = $this->getModelTable($config['model']);
+        $config = $this->processConfig($config);
 
-        // the following is required for camel-cased models, in case users are defining their attributes as camelCase
-        $field = snake_case($config['field']);
-        $key = snake_case($config['key']);
-        $foreignKey = snake_case($foreignKey);
+        $sql = "UPDATE `{$config['table']}` SET `{$config['field']}` = `{$config['field']}` {$operation} {$amount} WHERE `{$config['key']}` = {$foreignKey}";
 
-        $sql = "UPDATE `{$table}` SET `{$field}` = `{$field}` {$operation} {$amount} WHERE `{$key}` = {$foreignKey}";
+        return DB::update($sql);
+    }
+
+    public function rebuildCacheRecord(array $config, Model $model, $command, $aggregateField = null)
+    {
+        $config = $this->processConfig($config);
+
+        $modelTable = $this->getModelTable($model);
+
+        if (is_null($aggregateField)) {
+            $aggregateField = $config['foreignKey'];
+        } else {
+            $aggregateField = snake_case($aggregateField);
+        }
+
+        $sql = "UPDATE `{$config['table']}` INNER JOIN (" .
+            "SELECT `{$config['foreignKey']}`, {$command}(`{$aggregateField}`) AS aggregate FROM `{$modelTable}` GROUP BY `{$config['foreignKey']}`) a " .
+            "ON (a.`{$config['foreignKey']}` = `{$config['table']}`.`{$config['key']}`" .
+            ") SET `{$config['field']}` = aggregate";
 
         return DB::update($sql);
     }
@@ -37,20 +53,40 @@ trait Cacheable
      *
      * @param string $model
      * @param string $field
+     *
      * @return string
      */
     protected function field($model, $field)
     {
         $class = strtolower(class_basename($model));
-        $field = $class.'_'.$field;
+        $field = $class . '_' . $field;
 
         return $field;
+    }
+
+    /**
+     * Process configuration parameters to check key names, fix snake casing, etc..
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    protected function processConfig(array $config)
+    {
+        return [
+            'model'      => $config['model'],
+            'table'      => $this->getModelTable($config['model']),
+            'field'      => snake_case($config['field']),
+            'key'        => snake_case($this->key($config['key'])),
+            'foreignKey' => snake_case($this->key($config['foreignKey'])),
+        ];
     }
 
     /**
      * Returns the true key for a given field.
      *
      * @param string $field
+     *
      * @return mixed
      */
     protected function key($field)
@@ -67,9 +103,10 @@ trait Cacheable
      * class string.
      *
      * @param string|Model $model
+     *
      * @return mixed
      */
-    public function getModelTable($model)
+    protected function getModelTable($model)
     {
         if (!is_object($model)) {
             $model = new $model;
@@ -77,4 +114,5 @@ trait Cacheable
 
         return $model->getTable();
     }
+
 }

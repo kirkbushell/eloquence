@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    use \Eloquence\Behaviours\Sluggable;
+    use Sluggable;
 
-    protected function slugStrategy()
+    public function slugStrategy()
     {
         return ['id'];
     }

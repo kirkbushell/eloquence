@@ -1,5 +1,5 @@
 <?php
-namespace tests\Acceptance\Models;
+namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\CountCache\Countable;
 use Eloquence\Behaviours\CamelCasing;
@@ -10,7 +10,7 @@ class Post extends Model
 {
     use CamelCasing;
     use Sluggable;
-    use \Eloquence\Behaviours\CountCache\Countable;
+    use Countable;
 
     public function countCaches()
     {

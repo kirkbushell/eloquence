@@ -251,7 +251,7 @@ class User extends Eloquent {
         return 'username';
     }
 }
- ```
+```
 
 In the example above, a slug will be created based on the username field of the User model. There are two other
 slugs that are supported however, as well:

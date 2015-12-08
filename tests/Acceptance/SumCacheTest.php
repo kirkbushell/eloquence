@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Acceptance;
 
-use Eloquence\Behaviours\SumCache\SumCacheObserver;
 use Tests\Acceptance\Models\Item;
 use Tests\Acceptance\Models\Order;
 
