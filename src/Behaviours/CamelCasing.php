@@ -129,7 +129,7 @@ trait CamelCasing
      * @param $attributes
      * @return array
      */
-    private function toSnakeCase($attributes)
+    public function toSnakeCase($attributes)
     {
         $convertedAttributes = [];
 
@@ -192,4 +192,76 @@ trait CamelCasing
 
         return parent::__isset($key);
     }
+
+    /**
+     * Save a new model and return the instance.
+     *
+     * @param  array $attributes
+     *
+     * @return static
+     */
+    public static function create(array $attributes = [])
+    {
+        $attributes = (new static)->toSnakeCase($attributes);
+
+        return parent::create($attributes);
+    }
+
+    /**
+     * Save a new model and return the instance. Allow mass-assignment.
+     *
+     * @param  array $attributes
+     *
+     * @return static
+     */
+    public static function forceCreate(array $attributes)
+    {
+        $attributes = (new static)->toSnakeCase($attributes);
+
+        return parent::forceCreate($attributes);
+    }
+
+    /**
+     * Get the first record matching the attributes or create it.
+     *
+     * @param  array $attributes
+     *
+     * @return static
+     */
+    public static function firstOrCreate(array $attributes)
+    {
+        $attributes = (new static)->toSnakeCase($attributes);
+
+        return parent::firstOrCreate($attributes);
+    }
+
+    /**
+     * Get the first record matching the attributes or instantiate it.
+     *
+     * @param  array $attributes
+     *
+     * @return static
+     */
+    public static function firstOrNew(array $attributes)
+    {
+        $attributes = (new static)->toSnakeCase($attributes);
+
+        return parent::firstOrNew($attributes);
+    }
+
+    /**
+     * Create or update a record matching the attributes, and fill it with values.
+     *
+     * @param  array $attributes
+     * @param  array $values
+     *
+     * @return static
+     */
+    public static function updateOrCreate(array $attributes, array $values = [])
+    {
+        $attributes = (new static)->toSnakeCase($attributes);
+
+        return parent::updateOrCreate($attributes, $values);
+    }
+
 }
