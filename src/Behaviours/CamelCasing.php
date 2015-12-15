@@ -68,7 +68,7 @@ trait CamelCasing
     {
         return $this->toCamelCase(parent::relationsToArray());
     }
-    
+
     /**
      * Overloads eloquent's getHidden method to ensure that hidden fields declared
      * in camelCase are actually hidden and not exposed when models are turned
@@ -188,9 +188,19 @@ trait CamelCasing
      */
     public function __isset($key)
     {
-        $key = snake_case($key);
+        return parent::__isset($this->getSnakeKey($key));
+    }
 
-        return parent::__isset($key);
+    /**
+     * Because we are changing the case of keys and want to use camelCase throughout the application, whenever
+     * we do unset variables we need to ensure that we unset using snake_case.
+     *
+     * @param $key
+     * @return void
+     */
+    public function __unset($key)
+    {
+        return parent::__unset($this->getSnakeKey($key));
     }
 
     /**
