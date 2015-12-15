@@ -104,23 +104,23 @@ class CamelCaseModelTest extends TestCase
         $model = new RealModelStub;
 
         // initial check
-        $this->assertEquals(isset($model->my_field) || isset($model->myField), false);
+        $this->assertFalse(isset($model->my_field) || isset($model->myField));
 
         // snake_case set
         $model->my_field = 'value';
-        $this->assertEquals(isset($model->my_field) && isset($model->myField), true);
+        $this->assertTrue(isset($model->my_field) && isset($model->myField));
 
         // snake_case unset
         unset($model->my_field);
-        $this->assertEquals(isset($model->my_field) || isset($model->myField), false);
+        $this->assertFalse(isset($model->my_field) || isset($model->myField));
 
         // camelCase set
         $model->myField = 'value';
-        $this->assertEquals(isset($model->my_field) && isset($model->myField), true);
+        $this->assertTrue(isset($model->my_field) && isset($model->myField));
 
         // camelCase unset
         unset($model->myField);
-        $this->assertEquals(isset($model->my_field) || isset($model->myField), false);
+        $this->assertFalse(isset($model->my_field) || isset($model->myField));
     }
 
     public function testModelHidesHiddenFields()
