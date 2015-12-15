@@ -99,6 +99,30 @@ class CamelCaseModelTest extends TestCase
         $model->fakeRelationship;
     }
 
+    public function testAttributesIssetAndUnset()
+    {
+        $model = new RealModelStub;
+
+        // initial check
+        $this->assertFalse(isset($model->my_field) || isset($model->myField));
+
+        // snake_case set
+        $model->my_field = 'value';
+        $this->assertTrue(isset($model->my_field) && isset($model->myField));
+
+        // snake_case unset
+        unset($model->my_field);
+        $this->assertFalse(isset($model->my_field) || isset($model->myField));
+
+        // camelCase set
+        $model->myField = 'value';
+        $this->assertTrue(isset($model->my_field) && isset($model->myField));
+
+        // camelCase unset
+        unset($model->myField);
+        $this->assertFalse(isset($model->my_field) || isset($model->myField));
+    }
+
     public function testModelHidesHiddenFields()
     {
         $model = new RealModelStub([
@@ -113,7 +137,7 @@ class CamelCaseModelTest extends TestCase
 
         $this->assertFalse(isset($modelArray['hiddenField']));
         $this->assertFalse(isset($modelArray['passwordHash']));
-        
+
         $this->assertEquals('secrets!', $model->getAttribute('hiddenField'));
         $this->assertEquals('1234', $model->getAttribute('passwordHash'));
     }
@@ -132,7 +156,7 @@ class CamelCaseModelTest extends TestCase
 
         $this->assertTrue(isset($hidden['hiddenField']));
         $this->assertTrue(isset($hidden['passwordHash']));
-        
+
         $this->assertEquals('secrets!', $hidden['hiddenField']);
         $this->assertEquals('1234', $hidden['passwordHash']);
     }
