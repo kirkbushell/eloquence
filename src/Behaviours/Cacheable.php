@@ -23,7 +23,7 @@ trait Cacheable
 
         $config = $this->processConfig($config);
 
-        $sql = "UPDATE `{$config['table']}` SET `{$config['field']}` = `{$config['field']}` {$operation} {$amount} WHERE `{$config['key']}` = {$foreignKey}";
+        $sql = "UPDATE `{$config['table']}` SET `{$config['field']}` = `{$config['field']}` {$operation} {$amount} WHERE `{$config['key']}` = '{$foreignKey}'";
 
         return DB::update($sql);
     }
