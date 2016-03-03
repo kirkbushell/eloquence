@@ -112,7 +112,7 @@ trait Cacheable
             $model = new $model;
         }
 
-        return $model->getTable();
+        return DB::getTablePrefix().$model->getTable();
     }
 
 }
