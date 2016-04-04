@@ -1,7 +1,7 @@
 <?php
 namespace Eloquence\Behaviours;
 
-use Rhumsaa\Uuid\Uuid as RhumsaaUuid;
+use Ramsey\Uuid\Uuid as RamseyUuid;
 
 /**
  * Class Uuid
@@ -42,6 +42,6 @@ trait Uuid
      */
     public function generateNewUuid()
     {
-        return RhumsaaUuid::uuid4();
+        return RamseyUuid::uuid4();
     }
 }
