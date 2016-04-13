@@ -267,6 +267,11 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 2.0.3
+
+* Slugs now implement Jsonable, making them easier to handle in API responses
+* New artisan command for rebuilding caches (beta, use at own risk)
+
 #### 2.0.2
 
 * Updated PHP dependency to 5.6+
