@@ -28,6 +28,15 @@ trait Cacheable
         return DB::update($sql);
     }
 
+    /**
+     * Rebuilds the cache for the records in question.
+     *
+     * @param array $config
+     * @param Model $model
+     * @param $command
+     * @param null $aggregateField
+     * @return mixed
+     */
     public function rebuildCacheRecord(array $config, Model $model, $command, $aggregateField = null)
     {
         $config = $this->processConfig($config);
