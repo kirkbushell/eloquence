@@ -18,7 +18,7 @@ class CamelCaseModelTest extends TestCase
         $this->model = new ModelStub;
     }
 
-    public function testAttributesAsArray()
+    public function test_attributes_as_array()
     {
         $attributes = $this->model->attributesToArray();
 
@@ -28,19 +28,19 @@ class CamelCaseModelTest extends TestCase
         $this->assertArrayHasKey('firstName', $attributes);
     }
 
-    public function testAttributeDeclaration()
+    public function test_attribute_declaration()
     {
         $this->model->setAttribute('firstName', 'Andrew');
 
         $this->assertEquals('Andrew', $this->model->getAttribute('firstName'));
     }
 
-    public function testAttributeRetrieval()
+    public function test_attribute_retrieval()
     {
         $this->assertEquals('Kirk', $this->model->getAttribute('firstName'));
     }
 
-    public function testArrayRetrievalOfAttributes()
+    public function test_array_retrieval_of_attributes()
     {
         $expectedArray = [
             'firstName' => 'Kirk',
@@ -54,7 +54,7 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals($expectedArray, $actualArray);
     }
 
-    public function testAttributeConversionOfAllAttributes()
+    public function test_attribute_conversion()
     {
         $expectedAttributes = [
             'address' => 'Home',
@@ -66,7 +66,7 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals($expectedAttributes, $this->model->attributesToArray());
     }
 
-    public function testAttributeConversionLeavesPivotFieldsAlone()
+    public function test_attribute_conversion_leaves_pivots()
     {
         $model = new PivotModelStub;
 
@@ -78,7 +78,7 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals($expectedAttributes, $model->attributesToArray());
     }
 
-    public function testModelFilling()
+    public function test_model_filling()
     {
         $model = new RealModelStub([
             'myField' => 'value',
@@ -91,15 +91,7 @@ class CamelCaseModelTest extends TestCase
         $this->assertNull($model->someField);
     }
 
-    public function testRelationalMethods()
-    {
-        $this->setExpectedException('LogicException');
-
-        $model = new RealModelStub;
-        $model->fakeRelationship;
-    }
-
-    public function testAttributesIssetAndUnset()
+    public function test_isset_unset()
     {
         $model = new RealModelStub;
 
@@ -123,7 +115,7 @@ class CamelCaseModelTest extends TestCase
         $this->assertFalse(isset($model->my_field) || isset($model->myField));
     }
 
-    public function testModelHidesHiddenFields()
+    public function test_model_hidden_fields()
     {
         $model = new RealModelStub([
             'myField' => 'value',
@@ -142,26 +134,7 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals('1234', $model->getAttribute('passwordHash'));
     }
 
-    public function testModelExposesHiddenFields()
-    {
-        $model = new RealModelStub([
-            'myField' => 'value',
-            'anotherField' => 'yeah',
-            'someField' => 'whatever',
-            'hiddenField' => 'secrets!',
-            'passwordHash' => '1234',
-        ]);
-
-        $hidden = $model->withHidden(['hiddenField', 'passwordHash'])->toArray();
-
-        $this->assertTrue(isset($hidden['hiddenField']));
-        $this->assertTrue(isset($hidden['passwordHash']));
-
-        $this->assertEquals('secrets!', $hidden['hiddenField']);
-        $this->assertEquals('1234', $hidden['passwordHash']);
-    }
-
-    public function testModelDateFieldHandling()
+    public function test_model_date_handling()
     {
         $model = new RealModelStub([
             'myField' => '2011-11-11T11:11:11Z',
