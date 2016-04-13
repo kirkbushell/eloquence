@@ -2,9 +2,10 @@
 namespace Eloquence\Behaviours;
 
 use Hashids\Hashids;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
 
-class Slug
+class Slug implements Jsonable
 {
     /**
      * @var string
@@ -56,5 +57,16 @@ class Slug
     public function __toString()
     {
         return (string) $this->slug;
+    }
+
+    /**
+     * Convert the object to its JSON representation.
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return $this->__toString();
     }
 }
