@@ -42,7 +42,7 @@ trait Sluggable
 
         // This is not the first time we've attempted to create a title slug, so - let's make it more unique
         if ($attempts > 0) {
-            $titleSlug . "-{$attempts}";
+            $titleSlug = Slug::fromTitle($titleSlug  . '-' . $attempts);
         }
 
         $this->setSlugValue($titleSlug);
