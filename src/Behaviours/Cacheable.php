@@ -108,10 +108,10 @@ trait Cacheable
     protected function processConfig(array $config)
     {
         return [
-            'model' => $config['model'],
-            'table' => $this->getModelTable($config['model']),
-            'field' => snake_case($config['field']),
-            'key' => snake_case($this->key($config['key'])),
+            'model'      => $config['model'],
+            'table'      => $this->getModelTable($config['model']),
+            'field'      => snake_case($config['field']),
+            'key'        => snake_case($this->key($config['key'])),
             'foreignKey' => snake_case($this->key($config['foreignKey'])),
         ];
     }
@@ -146,7 +146,7 @@ trait Cacheable
             $model = new $model;
         }
 
-        return DB::getTablePrefix() . $model->getTable();
+        return DB::getTablePrefix().$model->getTable();
     }
 
 }
