@@ -23,9 +23,22 @@ trait Cacheable
 
         $config = $this->processConfig($config);
 
-        $sql = "UPDATE `{$config['table']}` SET `{$config['field']}` = `{$config['field']}` {$operation} {$amount} WHERE `{$config['key']}` = '{$foreignKey}'";
+        $sql = DB::table($config['table'])
+            ->where($config['key'], $foreignKey);
 
-        return DB::update($sql);
+        /*
+         * Increment for + operator
+         */
+        if ($operation == '+') {
+            return $sql
+                ->increment($config['field'], $amount);
+        }
+
+        /*
+         * Decrement for - operator
+         */
+        return $sql
+            ->decrement($config['field'], $amount);
     }
 
     /**
@@ -49,12 +62,24 @@ trait Cacheable
             $aggregateField = snake_case($aggregateField);
         }
 
-        $sql = "UPDATE `{$config['table']}` INNER JOIN (" .
-            "SELECT `{$config['foreignKey']}`, {$command}(`{$aggregateField}`) AS aggregate FROM `{$modelTable}` GROUP BY `{$config['foreignKey']}`) a " .
-            "ON (a.`{$config['foreignKey']}` = `{$config['table']}`.`{$config['key']}`" .
-            ") SET `{$config['field']}` = aggregate";
+        $sql = DB::table($modelTable)
+            ->select($config['foreignKey'])
+            ->groupBy($config['foreignKey']);
 
-        return DB::update($sql);
+        if (strtolower($command) == 'count') {
+            $aggregate = $sql->count($aggregateField);
+        } else if (strtolower($command) == 'sum') {
+            $aggregate = $sql->sum($aggregateField);
+        } else if (strtolower($command) == 'avg') {
+            $aggregate = $sql->avg($aggregateField);
+        } else {
+            $aggregate = null;
+        }
+
+        return DB::table($config['table'])
+            ->update([
+                $config['field'] => $aggregate
+            ]);
     }
 
     /**
