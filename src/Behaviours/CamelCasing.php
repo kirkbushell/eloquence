@@ -54,7 +54,7 @@ trait CamelCasing
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes($keys = [])
     {
         return $this->attributesToArray();
     }
