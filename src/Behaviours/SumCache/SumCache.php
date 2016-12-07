@@ -117,7 +117,8 @@ class SumCache
             'columnToSum' => 'total',
             'field' => $this->field($this->model, 'total'),
             'foreignKey' => $this->field($relatedModel, 'id'),
-            'key' => 'id'
+            'key' => 'id',
+            'force' => false
         ];
 
         return array_merge($defaults, $options);

@@ -22,6 +22,20 @@ class CountCacheTest extends AcceptanceTestCase
         $this->assertEquals(1, $user->postCountExplicit);
     }
 
+    public function testUserCountCacheWithForce()
+    {
+        User::where('id', $this->data['user']->id)->update(['comment_count' => 1337]);
+
+        $comment = new Comment;
+        $comment->userId = $this->data['user']->id;
+        $comment->postId = $this->data['post']->id;
+        $comment->save();
+
+        $user = User::first();
+
+        $this->assertEquals(1, $user->commentCount);
+    }
+
     public function testComplexCountCache()
     {
         $post = new Post;
