@@ -14,7 +14,10 @@ class Comment extends Model
     {
         return [
             'Tests\Acceptance\Models\Post',
-            'Tests\Acceptance\Models\User',
+            [
+                'model' => 'Tests\Acceptance\Models\User',
+                'force' => true
+            ]
         ];
     }
 }

@@ -113,6 +113,7 @@ trait Cacheable
             'field'      => snake_case($config['field']),
             'key'        => snake_case($this->key($config['key'])),
             'foreignKey' => snake_case($this->key($config['foreignKey'])),
+            'force'      => $config['force']
         ];
     }
 

@@ -11,7 +11,11 @@ trait Countable
         static::created(function ($model) {
             $countCache = new CountCache($model);
             $countCache->apply(function ($config) use ($countCache, $model) {
-                $countCache->updateCacheRecord($config, '+', 1, $model->{$config['foreignKey']});
+                if ($config['force'] === true) {
+                    $countCache->rebuildCacheRecord($config, $model, 'COUNT');
+                } else {
+                    $countCache->updateCacheRecord($config, '+', 1, $model->{$config['foreignKey']});
+                }
             });
         });
 
@@ -22,7 +26,11 @@ trait Countable
         static::deleted(function ($model) {
             $countCache = new CountCache($model);
             $countCache->apply(function ($config) use ($countCache, $model) {
-                $countCache->updateCacheRecord($config, '-', 1, $model->{$config['foreignKey']});
+                if ($config['force'] === true) {
+                    $countCache->rebuildCacheRecord($config, $model, 'COUNT');
+                } else {
+                    $countCache->updateCacheRecord($config, '-', 1, $model->{$config['foreignKey']});
+                }
             });
         });
     }
