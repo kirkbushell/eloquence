@@ -47,7 +47,9 @@ data from our Eloquent models persist through to our APIs in a camel-case manner
 if you are writing front-end applications, which are also using camelCase. This allows for a
 better standard across our application. To use:
 
+```php
     use \Eloquence\Behaviours\CamelCasing;
+```
 
 Put the above line in your models and that's it.
 
@@ -64,11 +66,15 @@ Eloquence comes bundled with UUID capabilities that you can use in your models.
 
 Simply include the Uuid trait:
 
+```php
     use Eloquence\Behaviours\Uuid;
+```
 
 And then disable auto incrementing ids:
 
+```php
     public $incrementing = false;
+```
 
 This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One
 benefit of this is that you can actually know the id of your record BEFORE it's saved!
@@ -76,7 +82,9 @@ benefit of this is that you can actually know the id of your record BEFORE it's 
 You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following
 properties:
 
+```php
     $table->char('id', $length = 36)->index();
+```
 
 It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID
 field searches are much slower than indexed integer fields (such as autoincrement id fields).
