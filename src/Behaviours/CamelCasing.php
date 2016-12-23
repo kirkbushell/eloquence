@@ -188,7 +188,7 @@ trait CamelCasing
      */
     public function __isset($key)
     {
-        return parent::__isset($this->getSnakeKey($key));
+        return parent::__isset($key) || parent::__isset($this->getSnakeKey($key));
     }
 
     /**
