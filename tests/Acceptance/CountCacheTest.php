@@ -46,6 +46,22 @@ class CountCacheTest extends AcceptanceTestCase
         $this->assertEquals(1, Post::get()[1]->commentCount);
     }
 
+    public function testItCanManageNumerousActions()
+    {
+        $post = new Post;
+        $post->userId = $this->data['user']->id;
+        $post->save();
+
+        $comment = new Comment;
+        $comment->userId = $this->data['user']->id;
+        $comment->postId = $this->data['post']->id;
+        $comment->save();
+        $comment->delete();
+        $comment->delete(); // Make sure we're not hitting negative counts
+
+        $this->assertEquals(0, Post::first()->commentCount);
+    }
+
     private function setupUserAndPost()
     {
         $user = new User;
