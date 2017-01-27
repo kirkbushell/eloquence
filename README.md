@@ -267,6 +267,10 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 2.0.6
+
+* Bug fix when restoring models that was resulting in incorrect count cache values.
+
 #### 2.0.3
 
 * Slugs now implement Jsonable, making them easier to handle in API responses

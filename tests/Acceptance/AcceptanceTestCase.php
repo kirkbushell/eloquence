@@ -55,6 +55,7 @@ class AcceptanceTestCase extends TestCase
             $table->integer('user_id');
             $table->integer('post_id');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('orders', function (Blueprint $table) {

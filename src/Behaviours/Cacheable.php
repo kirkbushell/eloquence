@@ -23,22 +23,19 @@ trait Cacheable
 
         $config = $this->processConfig($config);
 
-        $sql = DB::table($config['table'])
-            ->where($config['key'], $foreignKey);
+        $sql = DB::table($config['table'])->where($config['key'], $foreignKey);
 
         /*
          * Increment for + operator
          */
         if ($operation == '+') {
-            return $sql
-                ->increment($config['field'], $amount);
+            return $sql->increment($config['field'], $amount);
         }
 
         /*
          * Decrement for - operator
          */
-        return $sql
-            ->decrement($config['field'], $amount);
+        return $sql->decrement($config['field'], $amount);
     }
 
     /**
@@ -53,8 +50,7 @@ trait Cacheable
     public function rebuildCacheRecord(array $config, Model $model, $command, $aggregateField = null)
     {
         $config = $this->processConfig($config);
-
-        $modelTable = $this->getModelTable($model);
+        $table = $this->getModelTable($model);
 
         if (is_null($aggregateField)) {
             $aggregateField = $config['foreignKey'];
@@ -62,9 +58,7 @@ trait Cacheable
             $aggregateField = snake_case($aggregateField);
         }
 
-        $sql = DB::table($modelTable)
-            ->select($config['foreignKey'])
-            ->groupBy($config['foreignKey']);
+        $sql = DB::table($table)->select($config['foreignKey'])->groupBy($config['foreignKey']);
 
         if (strtolower($command) == 'count') {
             $aggregate = $sql->count($aggregateField);
@@ -102,7 +96,6 @@ trait Cacheable
      * Process configuration parameters to check key names, fix snake casing, etc..
      *
      * @param array $config
-     *
      * @return array
      */
     protected function processConfig(array $config)
@@ -120,7 +113,6 @@ trait Cacheable
      * Returns the true key for a given field.
      *
      * @param string $field
-     *
      * @return mixed
      */
     protected function key($field)
@@ -137,7 +129,6 @@ trait Cacheable
      * class string.
      *
      * @param string|Model $model
-     *
      * @return mixed
      */
     protected function getModelTable($model)
