@@ -2,6 +2,7 @@
 namespace Eloquence\Behaviours;
 
 use Eloquence\Behaviours\Slug;
+use Eloquence\Exceptions\UnableToCreateSlugException;
 
 trait Sluggable
 {
@@ -28,7 +29,22 @@ trait Sluggable
      */
     public function generateIdSlug()
     {
-        $this->setSlugValue(Slug::fromId($this->getKey()));
+        $slug = Slug::fromId($this->getKey());
+
+        // Ensure slug is unique (since the fromId() algorithm doesn't produce unique slugs)
+        $attempts = 10;
+        while ($this->isExistingSlug($slug)) {
+            if ($attempts <= 0) {
+                throw new UnableToCreateSlugException(
+                    "Unable to find unique slug for record '{$this->getKey()}', tried 10 times..."
+                );
+            }
+
+            $slug = Slug::random();
+            $attempts--;
+        }
+
+        $this->setSlugValue($slug);
     }
 
     /**
@@ -161,5 +177,17 @@ trait Sluggable
     public function getSlugAttribute()
     {
         return new Slug($this->attributes[$this->slugField()]);
+    }
+
+    /**
+     * @param Slug $slug
+     * @return bool
+     */
+    private function isExistingSlug(Slug $slug)
+    {
+        return $this->newQuery()
+            ->where($this->slugField(), (string) $slug)
+            ->where($this->getQualifiedKeyName(), '!=', $this->getKey())
+            ->exists();
     }
 }
