@@ -267,6 +267,10 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 2.0.7
+
+* Slug uniqueness check upon slug creation for id-based slugs.
+
 #### 2.0.6
 
 * Bug fix when restoring models that was resulting in incorrect count cache values.
