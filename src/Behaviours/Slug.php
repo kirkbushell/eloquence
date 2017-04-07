@@ -39,6 +39,26 @@ class Slug implements Jsonable
     }
 
     /**
+     * Generate a new entirely random 8-character slug
+     *
+     * @return Slug
+     */
+    public static function random()
+    {
+        $exclude = ['/', '+', '=', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $length = 8;
+        $string = '';
+
+        while (($len = strlen($string)) < $length) {
+            $size = $length - $len;
+            $bytes = random_bytes($size);
+            $string .= substr(str_replace($exclude, '', base64_encode($bytes)), 0, $size);
+        }
+
+        return new Slug($string);
+    }
+
+    /**
      * Creates a new slug from a string title.
      *
      * @param string $title
