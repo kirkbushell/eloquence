@@ -6,6 +6,8 @@ use Eloquence\Exceptions\UnableToCreateSlugException;
 
 trait Sluggable
 {
+    public static $slugAttempts = 0;
+
     /**
      * When added to a model, the trait will bind to the creating and created
      * events, generating the appropriate slugs as necessary.
@@ -52,18 +54,16 @@ trait Sluggable
      */
     public function generateTitleSlug(array $fields)
     {
-        static $attempts = 0;
-
         $titleSlug = Slug::fromTitle(implode('-', $this->getTitleFields($fields)));
 
         // This is not the first time we've attempted to create a title slug, so - let's make it more unique
-        if ($attempts > 0) {
-            $titleSlug . "-{$attempts}";
+        if (self::$slugAttempts > 0) {
+            $titleSlug = Slug::fromTitle($titleSlug  . '-' . self::$slugAttempts);
         }
 
         $this->setSlugValue($titleSlug);
 
-        $attempts++;
+        self::$slugAttempts++;
     }
 
     /**
