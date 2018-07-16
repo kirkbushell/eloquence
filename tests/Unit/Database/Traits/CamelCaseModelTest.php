@@ -40,20 +40,6 @@ class CamelCaseModelTest extends TestCase
         $this->assertEquals('Kirk', $this->model->getAttribute('firstName'));
     }
 
-    public function test_array_retrieval_of_attributes()
-    {
-        $expectedArray = [
-            'firstName' => 'Kirk',
-            'lastName' => 'Bushell',
-            'address' => 'Home',
-            'countryOfOrigin' => 'Australia'
-        ];
-
-        $actualArray = $this->model->getAttributes();
-
-        $this->assertEquals($expectedArray, $actualArray);
-    }
-
     public function test_attribute_conversion()
     {
         $expectedAttributes = [

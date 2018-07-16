@@ -50,16 +50,6 @@ trait CamelCasing
     }
 
     /**
-     * Converts the attributes to a camel-case version, if applicable.
-     *
-     * @return array
-     */
-    public function getAttributes($keys = [])
-    {
-        return $this->attributesToArray();
-    }
-
-    /**
      * Get the model's relationships, converting field casing if necessary.
      *
      * @return array
@@ -109,18 +99,6 @@ trait CamelCasing
         }
 
         return $convertedAttributes;
-    }
-
-    /**
-     * Get the model's original attribute values.
-     *
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return array
-     */
-    public function getOriginal($key = null, $default = null)
-    {
-        return array_get($this->toCamelCase($this->original), $key, $default);
     }
 
     /**
