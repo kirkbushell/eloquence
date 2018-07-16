@@ -49,7 +49,7 @@ class SumCache
     public function update()
     {
         $this->apply(function ($config) {
-            $foreignKey = $this->key($config['foreignKey']);
+            $foreignKey = snake_case($this->key($config['foreignKey']));
             $amount = $this->model->{$config['columnToSum']};
 
             if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
