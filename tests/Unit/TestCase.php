@@ -6,14 +6,14 @@ use Mockery as m;
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->init();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
