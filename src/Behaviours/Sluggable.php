@@ -15,13 +15,6 @@ trait Sluggable
         static::creating(function ($model) {
             $model->generateSlug();
         });
-
-        static::created(function ($model) {
-            if ($model->slugStrategy() == 'id') {
-                $model->generateIdSlug();
-                $model->save();
-            }
-        });
     }
 
     /**
@@ -29,7 +22,7 @@ trait Sluggable
      */
     public function generateIdSlug()
     {
-        $slug = Slug::fromId($this->getKey());
+        $slug = Slug::fromId($this->getKey() ?? rand());
 
         // Ensure slug is unique (since the fromId() algorithm doesn't produce unique slugs)
         $attempts = 10;
@@ -93,7 +86,7 @@ trait Sluggable
     {
         $strategy = $this->slugStrategy();
 
-        if ($strategy == 'uuid') {
+        if (in_array($strategy, ['uuid', 'id'])) {
             $this->generateIdSlug();
         } elseif ($strategy != 'id') {
             $this->generateTitleSlug((array) $strategy);
