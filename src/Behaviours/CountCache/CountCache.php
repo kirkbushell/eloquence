@@ -3,6 +3,8 @@ namespace Eloquence\Behaviours\CountCache;
 
 use Eloquence\Behaviours\Cacheable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class CountCache
 {
@@ -39,7 +41,7 @@ class CountCache
     public function update()
     {
         $this->apply(function ($config) {
-            $foreignKey = snake_case($this->key($config['foreignKey']));
+            $foreignKey = Str::snake($this->key($config['foreignKey']));
 
             if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
                 $this->updateCacheRecord($config, '-', 1, $this->model->getOriginal($foreignKey));
@@ -73,7 +75,7 @@ class CountCache
             if (is_array($cacheOptions)) {
                 // Most explicit configuration provided
                 $opts = $cacheOptions;
-                $relatedModel = array_get($opts, 'model');
+                $relatedModel = Arr::get($opts, 'model');
             } else {
                 // Smallest number of options provided, figure out the rest
                 $relatedModel = $cacheOptions;

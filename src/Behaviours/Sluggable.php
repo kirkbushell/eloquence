@@ -3,6 +3,7 @@ namespace Eloquence\Behaviours;
 
 use Eloquence\Behaviours\Slug;
 use Eloquence\Exceptions\UnableToCreateSlugException;
+use Illuminate\Support\Str;
 
 trait Sluggable
 {
@@ -69,7 +70,7 @@ trait Sluggable
     public function getTitleFields(array $fields)
     {
         $fields = array_map(function ($field) {
-            if (str_contains($field, '.')) {
+            if (Str::contains($field, '.')) {
                 return object_get($this, $field); // this acts as a delimiter, which we can replace with /
             } else {
                 return $this->{$field};

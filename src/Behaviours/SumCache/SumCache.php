@@ -3,6 +3,8 @@ namespace Eloquence\Behaviours\SumCache;
 
 use Eloquence\Behaviours\Cacheable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SumCache
 {
@@ -49,7 +51,7 @@ class SumCache
     public function update()
     {
         $this->apply(function ($config) {
-            $foreignKey = snake_case($this->key($config['foreignKey']));
+            $foreignKey = Str::snake($this->key($config['foreignKey']));
             $amount = $this->model->{$config['columnToSum']};
 
             if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
@@ -74,7 +76,7 @@ class SumCache
             if (is_array($cacheOptions)) {
                 // Most explicit configuration provided
                 $opts = $cacheOptions;
-                $relatedModel = array_get($opts, 'model');
+                $relatedModel = Arr::get($opts, 'model');
             } else {
                 // Smallest number of options provided, figure out the rest
                 $relatedModel = $cacheOptions;

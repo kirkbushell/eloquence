@@ -3,6 +3,7 @@ namespace Eloquence\Behaviours;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 trait Cacheable
 {
@@ -55,7 +56,7 @@ trait Cacheable
         if (is_null($aggregateField)) {
             $aggregateField = $config['foreignKey'];
         } else {
-            $aggregateField = snake_case($aggregateField);
+            $aggregateField = Str::snake($aggregateField);
         }
 
         $sql = DB::table($table)->select($config['foreignKey'])->groupBy($config['foreignKey']);
@@ -103,9 +104,9 @@ trait Cacheable
         return [
             'model'      => $config['model'],
             'table'      => $this->getModelTable($config['model']),
-            'field'      => snake_case($config['field']),
-            'key'        => snake_case($this->key($config['key'])),
-            'foreignKey' => snake_case($this->key($config['foreignKey'])),
+            'field'      => Str::snake($config['field']),
+            'key'        => Str::snake($this->key($config['key'])),
+            'foreignKey' => Str::snake($this->key($config['foreignKey'])),
         ];
     }
 

@@ -1,6 +1,8 @@
 <?php
 namespace Eloquence\Behaviours;
 
+use Illuminate\Support\Str;
+
 trait CamelCasing
 {
     /**
@@ -68,7 +70,7 @@ trait CamelCasing
      */
     public function getHidden()
     {
-        return array_map('snake_case', $this->hidden);
+        return array_map(Str::class.'::snake', $this->hidden);
     }
 
     /**
@@ -80,7 +82,7 @@ trait CamelCasing
     public function getDates()
     {
         $dates = parent::getDates();
-        return array_map('snake_case', $dates);
+        return array_map(Str::class.'::snake', $dates);
     }
 
     /**
@@ -129,7 +131,7 @@ trait CamelCasing
         // If the key is a pivot key, leave it alone - this is required internal behaviour
         // of Eloquent for dealing with many:many relationships.
         if ($this->isCamelCase() && strpos($key, 'pivot_') === false) {
-            $key = camel_case($key);
+            $key = Str::camel($key);
         }
 
         return $key;
@@ -154,7 +156,7 @@ trait CamelCasing
      */
     protected function getSnakeKey($key)
     {
-        return snake_case($key);
+        return Str::snake($key);
     }
 
     /**
