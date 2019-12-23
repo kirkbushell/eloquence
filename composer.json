@@ -11,15 +11,15 @@
     "require": {
         "php": ">=7.0",
         "hashids/hashids": "^1.0",
-        "illuminate/database": "~5.5",
+        "illuminate/database": "~5.8",
         "ramsey/uuid": "^3.3",
         "hanneskod/classtools": "~1.0"
     },
     "require-dev": {
-        "illuminate/events": "~5.5",
+        "illuminate/events": "~5.8",
         "mockery/mockery": "1.1.0",
-        "orchestra/testbench": "3.5.*",
-        "phpunit/phpunit": "~6.0"
+        "orchestra/testbench": "3.8.*",
+        "phpunit/phpunit": "~7.5"
     },
     "autoload": {
         "psr-4": {
