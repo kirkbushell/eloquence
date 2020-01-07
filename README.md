@@ -267,6 +267,10 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 2.1.0
+
+* Laravel 5.8 support
+
 #### 2.0.7
 
 * Slug uniqueness check upon slug creation for id-based slugs.
