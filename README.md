@@ -13,6 +13,10 @@ such as camel cased attributes (for JSON apis), count caching, uuids and more.
 
 Install the package via composer:
 
+    composer require kirkbushell/eloquence:~4.0
+
+For Laravel 6, please install:
+
     composer require kirkbushell/eloquence:~3.0
 
 For Laravel 5, please install the ~2.0 suite of releases.
@@ -270,6 +274,10 @@ to be generated after the record has been saved - which results in a secondary s
 That's it! Easy huh?
 
 ## Changelog
+
+#### 4.0.0
+
+* Laravel 7 support (thanks, @msiemens!)
 
 #### 3.0.0
 
