@@ -4,7 +4,7 @@
 ![Downloads](https://img.shields.io/packagist/dt/kirkbushell/eloquence.svg)
 ![Status](https://img.shields.io/travis/kirkbushell/eloquence/master.svg)
 
-Eloquence is a package to extend Laravel 6's base Eloquent models and functionality.
+Eloquence is a package to extend Laravel's base Eloquent models and functionality.
 
 It provides a number of utilities and classes to work with Eloquent in new and useful ways, 
 such as camel cased attributes (for JSON apis), count caching, uuids and more.
