@@ -13,7 +13,7 @@
         "hashids/hashids": "^1.0",
         "illuminate/database": "~7.0",
         "illuminate/support": "~7.0",
-        "ramsey/uuid": "^3.3|^4.0",
+        "ramsey/uuid": "^4",
         "hanneskod/classtools": "~1.0"
     },
     "require-dev": {
