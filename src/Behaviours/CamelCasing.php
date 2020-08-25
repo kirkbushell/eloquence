@@ -14,6 +14,18 @@ trait CamelCasing
     public $enforceCamelCase = true;
 
     /**
+     * Overloads the eloquent isGuardableColumn method to ensure that we are checking for the existence of
+     * the snake_cased column name.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    protected function isGuardableColumn($key)
+    {
+        return parent::isGuardableColumn($this->getSnakeKey($key));
+    }
+
+    /**
      * Overloads the eloquent setAttribute method to ensure that fields accessed
      * in any case are converted to snake_case, which is the defacto standard
      * for field names in databases.
