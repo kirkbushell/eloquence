@@ -23,8 +23,7 @@ For Laravel 5, please install the ~2.0 suite of releases.
 
     composer require kirkbushell/eloquence:~2.0
 
-For Laravel 4, please install the 1.1.5 release. Please note that this is no longer supported 
-and won't receive any new features, only security updates.
+For Laravel 4, please install the 1.1.5 release. Please note that this is no longer supported.
 
     composer require kirkbushell/eloquence:1.1.5
 
@@ -274,6 +273,10 @@ to be generated after the record has been saved - which results in a secondary s
 That's it! Easy huh?
 
 ## Changelog
+
+#### 4.0.1
+
+* Fixes a bug that resulted with the new guarded attributes logic in eloquent
 
 #### 4.0.0
 
