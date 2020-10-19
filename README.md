@@ -274,6 +274,13 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 8.0.0
+
+* Boost in version number to match Laravel
+* Support for Laravel 7.3+
+
+* Fixes a bug that resulted with the new guarded attributes logic in eloquent
+
 #### 4.0.1
 
 * Fixes a bug that resulted with the new guarded attributes logic in eloquent
