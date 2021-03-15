@@ -32,10 +32,11 @@ trait CamelCasing
      *
      * @param string $key
      * @param mixed  $value
+     * @return mixed
      */
     public function setAttribute($key, $value)
     {
-        parent::setAttribute($this->getSnakeKey($key), $value);
+        return parent::setAttribute($this->getSnakeKey($key), $value);
     }
 
     /**
