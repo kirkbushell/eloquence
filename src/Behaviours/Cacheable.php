@@ -7,6 +7,31 @@ use Illuminate\Support\Str;
 
 trait Cacheable
 {
+    /**
+     * Applies the provided function to the count cache setup/configuration.
+     *
+     * @param \Closure $function
+     */
+    public function apply(\Closure $function)
+    {
+        foreach ($this->model->countCaches() as $key => $cache) {
+            $config = $this->config($key, $cache);
+            
+            // Check if the model fits the where condition
+            $isRelevant = true;
+            foreach ($config['where'] as $attribute => $value) {
+                if ($this->model->{$attribute} !== $value) {
+                    $isRelevant = false;
+                    break;
+                }
+            }
+            if (!$isRelevant) {
+                continue;
+            }
+            
+            $function($config);
+        }
+    }
 
     /**
      * Updates a table's record based on the query information provided in the $config variable.
@@ -59,7 +84,7 @@ trait Cacheable
             $aggregateField = Str::snake($aggregateField);
         }
 
-        $sql = DB::table($table)->select($config['foreignKey'])->groupBy($config['foreignKey']);
+        $sql = DB::table($table)->select($config['foreignKey'])->groupBy($config['foreignKey'])->where($config['where']);
 
         if (strtolower($command) == 'count') {
             $aggregate = $sql->count($aggregateField);

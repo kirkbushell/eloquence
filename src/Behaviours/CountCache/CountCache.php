@@ -24,18 +24,6 @@ class CountCache
     }
 
     /**
-     * Applies the provided function to the count cache setup/configuration.
-     *
-     * @param \Closure $function
-     */
-    public function apply(\Closure $function)
-    {
-        foreach ($this->model->countCaches() as $key => $cache) {
-            $function($this->config($key, $cache));
-        }
-    }
-
-    /**
      * Update the cache for all operations.
      */
     public function update()
@@ -114,7 +102,8 @@ class CountCache
             'model' => $relatedModel,
             'field' => $this->field($this->model, 'count'),
             'foreignKey' => $this->field($relatedModel, 'id'),
-            'key' => 'id'
+            'key' => 'id',
+            'where' => []
         ];
 
         return array_merge($defaults, $options);
