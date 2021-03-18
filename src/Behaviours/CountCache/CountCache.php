@@ -28,7 +28,7 @@ class CountCache
      */
     public function update()
     {
-        $this->apply(function ($config) {
+        $this->apply('count', function ($config) {
             $foreignKey = Str::snake($this->key($config['foreignKey']));
 
             if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
@@ -43,7 +43,7 @@ class CountCache
      */
     public function rebuild()
     {
-        $this->apply(function($config) {
+        $this->apply('count', function($config) {
             $this->rebuildCacheRecord($config, $this->model, 'COUNT');
         });
     }

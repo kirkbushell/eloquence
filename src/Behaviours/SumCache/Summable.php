@@ -14,7 +14,7 @@ trait Summable
     {
         static::created(function ($model) {
             $sumCache = new SumCache($model);
-            $sumCache->apply(function ($config) use ($model, $sumCache) {
+            $sumCache->apply('sum', function ($config) use ($model, $sumCache) {
                 $sumCache->updateCacheRecord($config, '+', $model->{$config['columnToSum']}, $model->{$config['foreignKey']});
             });
         });
@@ -25,7 +25,7 @@ trait Summable
 
         static::deleted(function ($model) {
             $sumCache = new SumCache($model);
-            $sumCache->apply(function ($config) use ($model, $sumCache) {
+            $sumCache->apply('sum', function ($config) use ($model, $sumCache) {
                 $sumCache->updateCacheRecord($config, '-', $model->{$config['columnToSum']}, $model->{$config['foreignKey']});
             });
         });

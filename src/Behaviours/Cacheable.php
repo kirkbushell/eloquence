@@ -10,11 +10,12 @@ trait Cacheable
     /**
      * Applies the provided function to the count cache setup/configuration.
      *
+     * @param string   $type Either sum or count.
      * @param \Closure $function
      */
-    public function apply(\Closure $function)
+    public function apply(string $type, \Closure $function)
     {
-        foreach ($this->model->countCaches() as $key => $cache) {
+        foreach ($this->model->{$type . 'Caches'}() as $key => $cache) {
             $config = $this->config($key, $cache);
             
             // Check if the model fits the where condition

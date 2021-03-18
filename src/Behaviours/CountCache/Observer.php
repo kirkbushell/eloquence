@@ -57,7 +57,7 @@ class Observer
     private function update($model, $operation)
     {
         $countCache = new CountCache($model);
-        $countCache->apply(function ($config) use ($countCache, $model, $operation) {
+        $countCache->apply('count', function ($config) use ($countCache, $model, $operation) {
             $countCache->updateCacheRecord($config, $operation, 1, $model->{$config['foreignKey']});
         });
     }

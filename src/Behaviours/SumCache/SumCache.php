@@ -28,7 +28,7 @@ class SumCache
      */
     public function rebuild()
     {
-        $this->apply(function($config) {
+        $this->apply('sum', function($config) {
             $this->rebuildCacheRecord($config, $this->model, 'SUM', $config['columnToSum']);
         });
     }
@@ -38,7 +38,7 @@ class SumCache
      */
     public function update()
     {
-        $this->apply(function ($config) {
+        $this->apply('sum', function ($config) {
             $foreignKey = Str::snake($this->key($config['foreignKey']));
             $amount = $this->model->{$config['columnToSum']};
 
