@@ -1,9 +1,11 @@
 <?php
+
 namespace Eloquence\Behaviours;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Eloquence\Exceptions\UnableToCacheException;
 
 trait Cacheable
 {
@@ -17,10 +19,16 @@ trait Cacheable
     {
         foreach ($this->model->{$type . 'Caches'}() as $key => $cache) {
             $config = $this->config($key, $cache);
-            
+
             // Check if the model fits the where condition
             $isRelevant = true;
             foreach ($config['where'] as $attribute => $value) {
+                if (!isset($this->model->{$attribute})) {
+                    throw new UnableToCacheException(
+                        "Unable to cache because the properties of the where condition must explicitly be set on the entity."
+                    );
+                }
+
                 if ($this->model->{$attribute} !== $value) {
                     $isRelevant = false;
                     break;
@@ -29,7 +37,7 @@ trait Cacheable
             if (!$isRelevant) {
                 continue;
             }
-            
+
             $function($config);
         }
     }
@@ -164,7 +172,6 @@ trait Cacheable
             $model = new $model;
         }
 
-        return DB::getTablePrefix().$model->getTable();
+        return DB::getTablePrefix() . $model->getTable();
     }
-
 }

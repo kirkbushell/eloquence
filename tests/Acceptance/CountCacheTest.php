@@ -52,6 +52,7 @@ class CountCacheTest extends AcceptanceTestCase
     {
         $post = new Post;
         $post->userId = $this->data['user']->id;
+        $post->visible = false;
         $post->save();
 
         $comment = new Comment;
@@ -73,6 +74,7 @@ class CountCacheTest extends AcceptanceTestCase
 
         $post = new Post;
         $post->userId = $user->id;
+        $post->visible = false;
         $post->save();
 
         return compact('user', 'post');

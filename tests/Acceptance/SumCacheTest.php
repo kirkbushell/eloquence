@@ -62,6 +62,7 @@ class SumCacheTest extends AcceptanceTestCase
         $item = new Item;
         $item->total = 34;
         $item->orderId = $order->id;
+        $item->billable = false;
         $item->save();
 
         return compact('order', 'item');
