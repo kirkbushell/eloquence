@@ -159,7 +159,8 @@ class Post extends {
                 'model'      => 'User',
                 'field'      => 'num_posts',
                 'foreignKey' => 'users_id',
-                'key'        => 'id'
+                'key'        => 'id',
+                'where'        => [ 'visible' => true ]
             ]
         ];
     }
@@ -235,7 +236,8 @@ class Item extends Eloquent {
                 'columnToSum' => 'total',
                 'field'       => 'item_total'
                 'foreignKey'  => 'order_id',
-                'key'         => 'id'
+                'key'         => 'id',
+                'where'        => [ 'billable' => true ]
             ]
         ];
     }
