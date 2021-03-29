@@ -29,6 +29,7 @@ class SumCacheTest extends AcceptanceTestCase
         $item = new Item;
         $item->orderId = $this->data['order']->id;
         $item->total = 45;
+        $item->billable = true;
         $item->save();
 
         $this->assertEquals(79, Order::first()->itemTotal);
@@ -36,6 +37,9 @@ class SumCacheTest extends AcceptanceTestCase
 
         $this->assertEquals(79, Order::first()->itemTotalExplicit);
         $this->assertEquals(0,  Order::get()[1]->itemTotalExplicit);
+
+        $this->assertEquals(45, Order::first()->itemTotalConditional);
+        $this->assertEquals(0,  Order::get()[1]->itemTotalConditional);
 
         $item->orderId = $order->id;
         $item->save();
@@ -45,6 +49,9 @@ class SumCacheTest extends AcceptanceTestCase
 
         $this->assertEquals(34, Order::first()->itemTotalExplicit);
         $this->assertEquals(45, Order::get()[1]->itemTotalExplicit);
+
+        $this->assertEquals(0, Order::first()->itemTotalConditional);
+        $this->assertEquals(45,  Order::get()[1]->itemTotalConditional);
     }
 
     private function setupOrderAndItem()

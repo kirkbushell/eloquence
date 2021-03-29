@@ -21,6 +21,15 @@ class Post extends Model
                 'field' => 'postCountExplicit',
                 'foreignKey' => 'userId',
                 'key' => 'id',
+            ],
+            [
+                'model' => 'Tests\Acceptance\Models\User',
+                'field' => 'postCountConditional',
+                'foreignKey' => 'userId',
+                'key' => 'id',
+                'where' => [
+                    'visible' => true, 
+                ]
             ]
         ];
     }

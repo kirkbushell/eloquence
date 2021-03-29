@@ -20,6 +20,16 @@ class Item extends Model
                 'columnToSum' => 'total',
                 'foreignKey' => 'orderId',
                 'key' => 'id',
+            ],
+            [
+                'model' => 'Tests\Acceptance\Models\Order',
+                'field' => 'itemTotalConditional',
+                'columnToSum' => 'total',
+                'foreignKey' => 'orderId',
+                'key' => 'id',
+                'where' => [
+                    'billable' => true 
+                ]
             ]
         ];
     }
