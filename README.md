@@ -13,6 +13,10 @@ such as camel cased attributes (for JSON apis), count caching, uuids and more.
 
 Install the package via composer:
 
+    composer require kirkbushell/eloquence:~8.0
+
+For Laravel 7, please install:
+
     composer require kirkbushell/eloquence:~4.0
 
 For Laravel 6, please install:
