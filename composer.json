@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=7.3",
-        "hashids/hashids": "^1.0",
+        "hashids/hashids": "~4.1",
         "illuminate/database": "~8.0",
         "illuminate/support": "~8.0",
         "ramsey/uuid": "^4",
