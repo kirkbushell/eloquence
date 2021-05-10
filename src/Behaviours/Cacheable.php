@@ -23,14 +23,14 @@ trait Cacheable
             // Check if the model fits the where condition
             $isRelevant = true;
             foreach ($config['where'] as $attribute => $value) {
-                if (!isset($this->model->{$attribute})) {
+                $isRelevant = $this->model->{$attribute} === $value;
+                if (!$isRelevant && !isset($this->model->{$attribute})) {
                     throw new UnableToCacheException(
                         "Unable to cache because the properties of the where condition must explicitly be set on the entity."
                     );
                 }
 
-                if ($this->model->{$attribute} !== $value) {
-                    $isRelevant = false;
+                if (!$isRelevant) {
                     break;
                 }
             }
