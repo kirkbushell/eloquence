@@ -30,19 +30,19 @@ trait Cacheable
          * Increment for + operator
          */
         if ($operation == '+') {
-            DB::transaction(function () use ($sql, $config, $amount) {
-                $sql->increment($config['field'], $amount);
+            DB::transaction(function () use ($sql, $config, $amount, &$result) {
+                $result = $sql->increment($config['field'], $amount);
             });
-            return null;
+            return $result;
         }
 
         /*
          * Decrement for - operator
          */
-        DB::transaction(function () use ($sql, $config, $amount) {
-            $sql->decrement($config['field'], $amount);
+        DB::transaction(function () use ($sql, $config, $amount, &$result) {
+            $result = $sql->decrement($config['field'], $amount);
         });
-        return null;
+        return $result;
     }
 
     /**
