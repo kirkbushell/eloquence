@@ -12,7 +12,7 @@
         {
             "type": "vcs",
             "url": "https://github.com/independent-creditview/classtools"
-        },
+        }
     ],
     "require": {
         "php": "^7.3|^8.0",
