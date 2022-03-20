@@ -8,13 +8,19 @@
             "email": "torm3nt@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/independent-creditview/classtools"
+        },
+    ],
     "require": {
         "php": "^7.3|^8.0",
         "hashids/hashids": "^1.0",
         "illuminate/database": "~8.0",
         "illuminate/support": "~8.0",
         "ramsey/uuid": "^4",
-        "hanneskod/classtools": "~1.0"
+        "hanneskod/classtools": "dev-allow-finder-v6x@dev",
     },
     "require-dev": {
         "illuminate/events": "~8.0",
