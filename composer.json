@@ -20,7 +20,7 @@
         "illuminate/database": "~8.0",
         "illuminate/support": "~8.0",
         "ramsey/uuid": "^4",
-        "hanneskod/classtools": "dev-allow-finder-v6x@dev",
+        "hanneskod/classtools": "dev-allow-finder-v6x@dev"
     },
     "require-dev": {
         "illuminate/events": "~8.0",
