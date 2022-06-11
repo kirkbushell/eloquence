@@ -274,6 +274,13 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 9.0.0
+
+* Boost in version number to match Laravel
+* Support for Laravel 9.0+
+* Updated to require PHP 8.1+
+* Resolved method deprecation warnings
+
 #### 8.0.0
 
 * Boost in version number to match Laravel
