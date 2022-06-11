@@ -11,16 +11,15 @@
     "require": {
         "php": ">=7.3",
         "hashids/hashids": "^1.0",
-        "illuminate/database": "~8.0",
-        "illuminate/support": "~8.0",
-        "ramsey/uuid": "^4",
-        "hanneskod/classtools": "~1.0"
+        "illuminate/database": "~9.0",
+        "illuminate/support": "~9.0",
+        "ramsey/uuid": "^4"
     },
     "require-dev": {
-        "illuminate/events": "~8.0",
+        "illuminate/events": "~9.0",
         "mockery/mockery": "^1.3.0",
-        "orchestra/testbench": "~6",
-        "phpunit/phpunit": "~8.0"
+        "orchestra/testbench": "~7",
+        "phpunit/phpunit": "~9.5"
     },
     "autoload": {
         "psr-4": {
