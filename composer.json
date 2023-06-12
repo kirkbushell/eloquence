@@ -1,7 +1,15 @@
 {
     "name": "kirkbushell/eloquence",
     "description": "A set of extensions adding additional functionality and consistency to Laravel's awesome Eloquent library.",
-    "keywords": ["laravel", "eloquent", "camelcase", "camel", "case", "snake_case", "snake"],
+    "keywords": [
+        "laravel",
+        "eloquent",
+        "camelcase",
+        "camel",
+        "case",
+        "snake_case",
+        "snake"
+    ],
     "authors": [
         {
             "name": "Kirk Bushell",
@@ -9,17 +17,17 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
+        "php": "^8.1",
         "hashids/hashids": "^4.1",
-        "illuminate/database": "~9.0",
-        "illuminate/support": "~9.0",
-        "ramsey/uuid": "^4"
+        "illuminate/database": "^10.0",
+        "illuminate/support": "^10.0",
+        "ramsey/uuid": "^4.7"
     },
     "require-dev": {
-        "illuminate/events": "~9.0",
-        "mockery/mockery": "^1.3.0",
-        "orchestra/testbench": "~7",
-        "phpunit/phpunit": "~9.5"
+        "illuminate/events": "^10.0",
+        "mockery/mockery": "^1.4.4",
+        "orchestra/testbench": "^8.0",
+        "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
         "psr-4": {
