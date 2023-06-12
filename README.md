@@ -262,6 +262,12 @@ That's it! Easy huh?
 
 ## Changelog
 
+#### 10.0.0
+
+* Boost in version number to match Laravel
+* Support for Laravel 10.0+
+* Replace date casting with standard Laravel casting (https://laravel.com/docs/10.x/upgrade#model-dates-property)
+
 #### 9.0.0
 
 * Boost in version number to match Laravel
