@@ -27,6 +27,9 @@
             "Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "phpunit --colors=always"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
