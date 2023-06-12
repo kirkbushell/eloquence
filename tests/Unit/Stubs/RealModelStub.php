@@ -12,7 +12,9 @@ class RealModelStub extends Model
 
     protected $dateFormat = \DateTime::ISO8601;
 
-    protected $dates = ['dateField'];
+    protected $casts = [
+        'dateField' => 'datetime',
+    ];
 
     public $hidden = ['hiddenField', 'passwordHash'];
 

@@ -2,30 +2,18 @@
 
 ![Version](https://img.shields.io/packagist/v/kirkbushell/eloquence.svg)
 ![Downloads](https://img.shields.io/packagist/dt/kirkbushell/eloquence.svg)
-![Status](https://img.shields.io/travis/kirkbushell/eloquence/master.svg)
+[![Test](https://github.com/kirkbushell/eloquence/actions/workflows/test.yml/badge.svg)](https://github.com/kirkbushell/eloquence/actions/workflows/test.yml)
 
 Eloquence is a package to extend Laravel's base Eloquent models and functionality.
 
-It provides a number of utilities and classes to work with Eloquent in new and useful ways, 
+It provides a number of utilities and classes to work with Eloquent in new and useful ways,
 such as camel cased attributes (for JSON apis), count caching, uuids and more.
 
 ## Installation
 
 Install the package via composer:
 
-    composer require kirkbushell/eloquence:~4.0
-
-For Laravel 6, please install:
-
-    composer require kirkbushell/eloquence:~3.0
-
-For Laravel 5, please install the ~2.0 suite of releases.
-
-    composer require kirkbushell/eloquence:~2.0
-
-For Laravel 4, please install the 1.1.5 release. Please note that this is no longer supported.
-
-    composer require kirkbushell/eloquence:1.1.5
+    composer require kirkbushell/eloquence
 
 ## Usage
 
@@ -42,10 +30,10 @@ You should now be good to go with your models.
 
 ## Camel case all the things!
 
-For those of us who prefer to work with a single coding standard right across our applications, 
-using the CamelCaseModel trait will ensure that all those attributes, relationships and associated 
-data from our Eloquent models persist through to our APIs in a camel-case manner. This is important 
-if you are writing front-end applications, which are also using camelCase. This allows for a 
+For those of us who prefer to work with a single coding standard right across our applications,
+using the CamelCaseModel trait will ensure that all those attributes, relationships and associated
+data from our Eloquent models persist through to our APIs in a camel-case manner. This is important
+if you are writing front-end applications, which are also using camelCase. This allows for a
 better standard across our application. To use:
 
     use \Eloquence\Behaviours\CamelCasing;
@@ -54,8 +42,8 @@ Put the above line in your models and that's it.
 
 ### Note!
 
-Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case 
-when setting up your fields and tables in your database schema migrations. This is a good thing - 
+Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case
+when setting up your fields and tables in your database schema migrations. This is a good thing -
 snake_case of field names is the defacto standard within the Laravel community :)
 
 
@@ -71,21 +59,21 @@ And then disable auto incrementing ids:
 
     public $incrementing = false;
 
-This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One 
+This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One
 benefit of this is that you can actually know the id of your record BEFORE it's saved!
 
-You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following 
+You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following
 properties:
 
     $table->char('id', $length = 36)->index();
 
-It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID 
+It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID
 field searches are much slower than indexed integer fields (such as autoincrement id fields).
 
 
 ### Custom UUIDs
 
-Should you need a custom UUID solution (aka, maybe you don't want to use a UUID4 id), you can simply define the value you wish on 
+Should you need a custom UUID solution (aka, maybe you don't want to use a UUID4 id), you can simply define the value you wish on
 the id field. The UUID model trait will not set the id if it has already been defined. In this use-case however, it's probably no good
 to use the Uuid trait, as it's practically useless in this scenario.
 
@@ -103,7 +91,7 @@ has created on the user's record.
 
 To get this working, you need to do two steps:
 
-1. Use the Countable trait on the model and 
+1. Use the Countable trait on the model and
 2. Configure the count cache settings
 
 #### Configure the count cache
@@ -113,7 +101,7 @@ To setup the count cache configuration, we need to have the model use Countable 
 ```php
 class Post extends Eloquent {
     use Countable;
-    
+
     public function countCaches() {
         return [User::class];
     }
@@ -135,7 +123,7 @@ These are, however, configurable:
 ```php
 class Post extends Eloquent {
     use Countable;
-    
+
     public function countCaches() {
         return [
             'num_posts' => ['User', 'users_id', 'id']
@@ -152,7 +140,7 @@ and use the same column name on each of them):
 ```php
 class Post extends {
     use Countable;
-    
+
     public function countCaches() {
         return [
             [
@@ -190,7 +178,7 @@ To setup the sum cache configuration, simply do the following:
 ```php
 class Item extends Eloquent {
     use Summable;
-    
+
     public function sumCaches() {
         return [Order::class];
     }
@@ -204,7 +192,7 @@ on the Order model.
 The example above uses the following conventions:
 
 * `item_total` is a defined field on the Order model table
-* `total` is a defined field on the Item model table (the column we are summing) 
+* `total` is a defined field on the Item model table (the column we are summing)
 * `order_id` is the field representing the foreign key on the item model
 * `id` is the primary key on the order model table
 
@@ -213,7 +201,7 @@ These are, however, configurable:
 ```php
 class Item extends Eloquent {
     use Summable;
-    
+
     public function sumCaches() {
         return [
             'item_total' => ['Order', 'total', 'order_id', 'id']
@@ -221,13 +209,13 @@ class Item extends Eloquent {
     }
 }
 ```
-    
+
 Or using the verbose syntax:
 
 ```php
 class Item extends Eloquent {
     use Summable;
-    
+
     public function sumCaches() {
         return [
             [

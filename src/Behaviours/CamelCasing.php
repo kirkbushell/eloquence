@@ -87,15 +87,18 @@ trait CamelCasing
     }
 
     /**
-     * Overloads the eloquent getDates method to ensure that date field declarations
+     * Overloads the eloquent getCasts method to ensure that cast field declarations
      * can be made in camelCase but mapped to/from DB in snake_case.
      *
      * @return array
      */
-    public function getDates()
+    public function getCasts()
     {
-        $dates = parent::getDates();
-        return array_map(Str::class.'::snake', $dates);
+        return collect(parent::getCasts())
+            ->mapWithKeys(function ($cast, $key) {
+                return [Str::snake($key) => $cast];
+            })
+            ->toArray();
     }
 
     /**
