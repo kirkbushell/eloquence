@@ -23,4 +23,11 @@ class SluggedTest extends AcceptanceTestCase
 
         $this->assertMatchesRegularExpression('/^[a-z0-9]{8}$/i', (string) $post->slug);
     }
+
+    public function testItReturnsNullWhenSlugIsNotSet(): void
+    {
+        $post = new Post;
+
+        $this->assertEquals('', (string) $post->slug);
+    }
 }

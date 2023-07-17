@@ -3,6 +3,7 @@ namespace Eloquence\Behaviours;
 
 use Eloquence\Behaviours\Slug;
 use Eloquence\Exceptions\UnableToCreateSlugException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait Sluggable
@@ -170,7 +171,7 @@ trait Sluggable
      */
     public function getSlugAttribute()
     {
-        return new Slug($this->attributes[$this->slugField()]);
+        return new Slug(Arr::get($this->attributes, $this->slugField()));
     }
 
     /**
