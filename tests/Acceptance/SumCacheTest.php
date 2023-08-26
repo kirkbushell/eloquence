@@ -13,31 +13,38 @@ class SumCacheTest extends AcceptanceTestCase
         $this->data = $this->setupOrderAndItem();
     }
 
-    public function testOrderSumCache()
+    function test_relatedModelSumCacheIsIncreasedWhenModelIsCreated()
     {
         $order = Order::first();
 
-        $this->assertEquals(34, $order->itemTotal);
+        $this->assertEquals(34, $order->totalAmount);
     }
 
-    public function testAdditionalSumCache()
+    function test_relatedModelSumCacheIsDecreasedWhenModelIsDeleted()
+    {
+        $this->data['item']->delete();
+
+        $order = Order::first();
+
+        $this->assertEquals(0, $order->totalAmount);
+    }
+
+    function test_whenAnAggregatedModelValueSwitchesContext()
     {
         $order = new Order;
         $order->save();
 
         $item = new Item;
         $item->orderId = $this->data['order']->id;
-        $item->total = 45;
+        $item->amount = 45;
         $item->save();
 
-        $this->assertEquals(79, Order::first()->itemTotal);
-        $this->assertEquals(0,  Order::get()[1]->itemTotal);
-
+        $item = $item->fresh();
         $item->orderId = $order->id;
         $item->save();
 
-        $this->assertEquals(34, Order::first()->itemTotal);
-        $this->assertEquals(45, Order::get()[1]->itemTotal);
+        $this->assertEquals(34, $this->data['order']->fresh()->totalAmount);
+        $this->assertEquals(45, $order->fresh()->totalAmount);
     }
 
     private function setupOrderAndItem()
@@ -46,7 +53,7 @@ class SumCacheTest extends AcceptanceTestCase
         $order->save();
 
         $item = new Item;
-        $item->total = 34;
+        $item->amount = 34;
         $item->orderId = $order->id;
         $item->save();
 

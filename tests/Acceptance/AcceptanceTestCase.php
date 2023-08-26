@@ -38,7 +38,6 @@ class AcceptanceTestCase extends TestCase
             $table->string('slug')->nullable();
             $table->integer('comment_count')->default(0);
             $table->integer('post_count')->default(0);
-            $table->integer('post_count_explicit')->default(0);
             $table->timestamps();
         });
 
@@ -60,15 +59,14 @@ class AcceptanceTestCase extends TestCase
 
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('item_total')->default(0);
-            $table->integer('item_total_explicit')->default(0);
+            $table->integer('total_amount')->default(0);
             $table->timestamps();
         });
 
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id');
-            $table->integer('total');
+            $table->integer('amount');
             $table->timestamps();
         });
     }

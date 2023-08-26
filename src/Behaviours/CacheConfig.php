@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 class CacheConfig
 {
-    public function __construct(readonly string $relationName, readonly string $aggregateField) {}
+    public function __construct(readonly string $relationName, readonly string $aggregateField, readonly string $sourceField = '') {}
 
     /**
      * Returns the actual Relation object - such as BelongsTo. This method makes a call to the relationship

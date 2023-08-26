@@ -6,19 +6,17 @@ class Observer
 {
     public function created(Summable $model)
     {
-        SumCache::for($model)->apply(function($config) use ($model, $sumCache) {
-            $sumCache->updateCacheRecord($config, '+', $model->{$config['columnToSum']}, $model->{$config['foreignKey']});
-        });
+        SumCache::for($model)->increase();
     }
 
     public function updated(Summable $model)
     {
-
+        SumCache::for($model)->update();
     }
 
     public function deleted(Summable $model)
     {
-
+        SumCache::for($model)->decrease();
     }
 
     public function restored(Summable $model)

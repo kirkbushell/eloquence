@@ -18,7 +18,13 @@ class SluggedTest extends AcceptanceTestCase
 
     public function testPostSlug()
     {
+        $user = new User;
+        $user->firstName = 'Kirk';
+        $user->lastName = 'Bushell';
+        $user->save();
+
         $post = new Post;
+        $post->userId = $user->id;
         $post->save();
 
         $this->assertMatchesRegularExpression('/^[a-z0-9]{8}$/i', (string) $post->slug);

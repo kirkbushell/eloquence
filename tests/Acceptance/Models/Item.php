@@ -13,6 +13,11 @@ class Item extends Model implements Summable
 
     public function summedBy(): array
     {
-        return ['order' => 'total_items'];
+        return ['order' => 'amount'];
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 }

@@ -2,7 +2,6 @@
 namespace Eloquence\Behaviours;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -11,20 +10,22 @@ use Illuminate\Support\Str;
  */
 trait Cacheable
 {
+    /**
+     * Helper method for easier use of the implementing classes.
+     */
+    public static function for(Model $model): self
+    {
+        return new self($model);
+    }
 
     /**
      * Updates a table's record based on the query information provided in the $config variable.
      *
      * @param string $operation Whether to increase or decrease a value. Valid values: +/-
      */
-    public function updateCacheRecord(Model $model, CacheConfig $config, string $operation): void
+    public function updateCacheRecord(Model $model, CacheConfig $config, string $operation, int $amount): void
     {
-        if ($operation == '+') {
-            $this->updateCacheValue($model, $config, 1);
-            return;
-        }
-
-        $this->updateCacheValue($model, $config, -1);
+        $this->updateCacheValue($model, $config, $amount);
     }
 
     /**
@@ -84,19 +85,5 @@ trait Cacheable
         }
 
         return $field;
-    }
-
-    /**
-     * Takes a registered counter cache, and setups up defaults.
-     */
-    protected function config($key, string $value, string $defaultSuffix): CacheConfig
-    {
-        // If the key is numeric, it means only the relationship method has been referenced.
-        if (is_numeric($key)) {
-            $key = $value;
-            $value = Str::lower(Str::snake(class_basename($this->model))).'_'.$defaultSuffix;
-        }
-
-        return new CacheConfig($key, $value);
     }
 }
