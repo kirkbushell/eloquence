@@ -10,11 +10,6 @@ class User extends Model
     use CamelCased;
     use Sluggable;
 
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
-
     public function slugStrategy()
     {
         return ['firstName', 'lastName'];

@@ -67,7 +67,7 @@ trait Cacheable
 
     public function updateCacheValue(Model $model, CacheConfig $config, int $amount): void
     {
-        $model->{$config->countField} = $model->{$config->countField} + $amount;
+        $model->{$config->aggregateField} = $model->{$config->aggregateField} + $amount;
         $model->save();
     }
 
@@ -84,5 +84,19 @@ trait Cacheable
         }
 
         return $field;
+    }
+
+    /**
+     * Takes a registered counter cache, and setups up defaults.
+     */
+    protected function config($key, string $value, string $defaultSuffix): CacheConfig
+    {
+        // If the key is numeric, it means only the relationship method has been referenced.
+        if (is_numeric($key)) {
+            $key = $value;
+            $value = Str::lower(Str::snake(class_basename($this->model))).'_'.$defaultSuffix;
+        }
+
+        return new CacheConfig($key, $value);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 class CacheConfig
 {
-    public function __construct(readonly string $relationName, readonly string $countField) {}
+    public function __construct(readonly string $relationName, readonly string $aggregateField) {}
 
     /**
      * Returns the actual Relation object - such as BelongsTo. This method makes a call to the relationship
@@ -16,6 +16,14 @@ class CacheConfig
     public function relation(Model $model): Relation
     {
         return $model->{$this->relationName}();
+    }
+
+    /**
+     * Returns the current related model.
+     */
+    public function relatedModel(Model $model): Model
+    {
+        return $model->{$this->relationName};
     }
 
     /**

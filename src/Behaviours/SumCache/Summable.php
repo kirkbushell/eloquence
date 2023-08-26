@@ -1,40 +1,21 @@
 <?php
+
 namespace Eloquence\Behaviours\SumCache;
 
-use Eloquence\Behaviours\Cacheable;
-
-trait Summable
+interface Summable
 {
-    use Cacheable;
-
     /**
-     * Boot the trait and its event bindings when a model is created.
-     */
-    public static function bootSummable()
-    {
-        static::created(function ($model) {
-            $sumCache = new SumCache($model);
-            $sumCache->apply(function ($config) use ($model, $sumCache) {
-                $sumCache->updateCacheRecord($config, '+', $model->{$config['columnToSum']}, $model->{$config['foreignKey']});
-            });
-        });
-
-        static::updated(function ($model) {
-            (new SumCache($model))->update();
-        });
-
-        static::deleted(function ($model) {
-            $sumCache = new SumCache($model);
-            $sumCache->apply(function ($config) use ($model, $sumCache) {
-                $sumCache->updateCacheRecord($config, '-', $model->{$config['columnToSum']}, $model->{$config['foreignKey']});
-            });
-        });
-    }
-
-    /**
-     * Return the sum cache configuration for the model.
+     * Returns a key->value array of the relationship you want to utilise to update the sum, followed
+     * by the field on that related model. For example, if you have an order model that has many items
+     * you can return the following:
+     *
+     * ['order']
+     *
+     * Of course you can customise the summed field:
+     *
+     * ['order' => 'total_items']
      *
      * @return array
      */
-    abstract public function sumCaches();
+    public function summedBy(): array;
 }

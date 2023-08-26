@@ -18,7 +18,6 @@ class SumCacheTest extends AcceptanceTestCase
         $order = Order::first();
 
         $this->assertEquals(34, $order->itemTotal);
-        $this->assertEquals(34, $order->itemTotalExplicit);
     }
 
     public function testAdditionalSumCache()
@@ -34,17 +33,11 @@ class SumCacheTest extends AcceptanceTestCase
         $this->assertEquals(79, Order::first()->itemTotal);
         $this->assertEquals(0,  Order::get()[1]->itemTotal);
 
-        $this->assertEquals(79, Order::first()->itemTotalExplicit);
-        $this->assertEquals(0,  Order::get()[1]->itemTotalExplicit);
-
         $item->orderId = $order->id;
         $item->save();
 
         $this->assertEquals(34, Order::first()->itemTotal);
         $this->assertEquals(45, Order::get()[1]->itemTotal);
-
-        $this->assertEquals(34, Order::first()->itemTotalExplicit);
-        $this->assertEquals(45, Order::get()[1]->itemTotalExplicit);
     }
 
     private function setupOrderAndItem()

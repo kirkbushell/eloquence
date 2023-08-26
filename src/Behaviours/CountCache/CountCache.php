@@ -28,7 +28,7 @@ class CountCache
     public function apply(\Closure $function)
     {
         foreach ($this->model->countedBy() as $key => $value) {
-            $function($this->config($key, $value));
+            $function($this->config($key, $value, 'count'));
         }
     }
 
@@ -42,11 +42,9 @@ class CountCache
 
             if (!$this->model->getOriginal($foreignKey) || $this->model->$foreignKey === $this->model->getOriginal($foreignKey)) return;
 
-//            dd($this->model);
             // for the minus operation, we first have to get the model that is no longer associated with this one.
             $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
-
-            $originalRelatedModel->decrement($config->countField);
+            $originalRelatedModel->decrement($config->aggregateField);
 
             $this->increment();
         });
@@ -64,30 +62,11 @@ class CountCache
 
     public function increment(): void
     {
-        $this->apply(fn(CacheConfig $config) => $config->relation($this->model)->increment($config->countField));
+        $this->apply(fn(CacheConfig $config) => $config->relation($this->model)->increment($config->aggregateField));
     }
 
     public function decrement(): void
     {
-        $this->apply(fn(CacheConfig $config) => $config->relation($this->model)->decrement($config->countField));
-    }
-
-    /**
-     * Takes a registered counter cache, and setups up defaults.
-     */
-    protected function config($key, string $value): CacheConfig
-    {
-        // If the key is numeric, it means only the relationship method has been referenced.
-        if (is_numeric($key)) {
-            $key = $value;
-            $value = $this->defaultCountField();
-        }
-
-        return new CacheConfig($key, $value);
-    }
-
-    private function defaultCountField(): string
-    {
-        return Str::lower(Str::snake(class_basename($this->model))).'_count';
+        $this->apply(fn(CacheConfig $config) => $config->relation($this->model)->decrement($config->aggregateField));
     }
 }

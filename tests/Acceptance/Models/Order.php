@@ -10,6 +10,6 @@ class Order extends Model
 
     public function items()
     {
-        return $this->hasMany('Tests\Acceptance\Models\Item');
+        return $this->hasMany(Item::class);
     }
 }

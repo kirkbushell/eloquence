@@ -10,18 +10,7 @@ class SumCache
 {
     use Cacheable;
 
-    /**
-     * @var Model
-     */
-    private $model;
-
-    /**
-     * @param Model $model
-     */
-    public function __construct(Model $model)
-    {
-        $this->model = $model;
-    }
+    private function __construct(private Summable $model) {}
 
     /**
      * Applies the provided function to the count cache setup/configuration.
@@ -30,7 +19,7 @@ class SumCache
      */
     public function apply(\Closure $function)
     {
-        foreach ($this->model->sumCaches() as $key => $cache) {
+        foreach ($this->model->summedBy() as $key => $cache) {
             $function($this->config($key, $cache));
         }
     }
