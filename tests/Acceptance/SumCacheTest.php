@@ -47,6 +47,13 @@ class SumCacheTest extends AcceptanceTestCase
         $this->assertEquals(45, $order->fresh()->totalAmount);
     }
 
+    function test_aggregateValuesAreUpdatedWhenModelsAreRestored()
+    {
+        $this->data['item']->delete();
+
+        $this->assertEquals(0, $this->data['order']->fresh()->totalAmount);
+    }
+
     private function setupOrderAndItem()
     {
         $order = new Order;

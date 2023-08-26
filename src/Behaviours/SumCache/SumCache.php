@@ -13,36 +13,29 @@ class SumCache
 
     private function __construct(private Summable $model) {}
 
-    /**
-     * Applies the provided function to the count cache setup/configuration.
-     *
-     * @param \Closure $function
-     */
-    public function apply(\Closure $function)
+    private function relationsMethod(): array
     {
-        foreach ($this->model->summedBy() as $key => $cache) {
-            $function($this->config($key, $cache));
-        }
+        return $this->model->summedBy();
     }
 
     /**
      * Rebuild the count caches from the database
      */
-    public function rebuild()
+    public function rebuild(): void
     {
         $this->apply(function($config) {
             $this->rebuildCacheRecord($config, $this->model, 'SUM', $config['columnToSum']);
         });
     }
 
-    public function increase()
+    public function increase(): void
     {
         $this->apply(function(CacheConfig $config) {
             $this->updateCacheValue($config->relatedModel($this->model), $config, $this->model->{$config->sourceField});
         });
     }
 
-    public function decrease()
+    public function decrease(): void
     {
         $this->apply(function(CacheConfig $config) {
             $this->updateCacheValue($config->relatedModel($this->model), $config, -$this->model->{$config->sourceField});
@@ -52,7 +45,7 @@ class SumCache
     /**
      * Update the cache for all operations.
      */
-    public function update()
+    public function update(): void
     {
         $this->apply(function($config) {
             $foreignKey = $config->foreignKeyName($this->model);

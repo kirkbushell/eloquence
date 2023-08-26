@@ -1,6 +1,7 @@
 <?php
 namespace Eloquence\Behaviours;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -11,11 +12,28 @@ use Illuminate\Support\Str;
 trait Cacheable
 {
     /**
+     * Allows cacheable to work with implementors and their unique relationship methods.
+     *
+     * @return array
+     */
+    abstract private function relationsMethod(): array;
+
+    /**
      * Helper method for easier use of the implementing classes.
      */
     public static function for(Model $model): self
     {
         return new self($model);
+    }
+
+    /**
+     * Applies the provided function using the relevant configuration to all configured relations.
+     */
+    public function apply(Closure $function): void
+    {
+        foreach ($this->relationsMethod() as $key => $value) {
+            $function($this->config($key, $value));
+        }
     }
 
     /**

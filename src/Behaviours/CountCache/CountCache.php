@@ -14,16 +14,9 @@ class CountCache
 
     private function __construct(private Countable $model) {}
 
-    /**
-     * Applies the provided function to the count cache setup/configuration.
-     *
-     * @param \Closure $function
-     */
-    public function apply(\Closure $function)
+    private function relationsMethod(): array
     {
-        foreach ($this->model->countedBy() as $key => $value) {
-            $function($this->config($key, $value));
-        }
+        return $this->model->countedBy();
     }
 
     /**
