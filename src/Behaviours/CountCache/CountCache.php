@@ -2,25 +2,22 @@
 namespace Eloquence\Behaviours\CountCache;
 
 use Eloquence\Behaviours\Cacheable;
+use Eloquence\Behaviours\CacheConfig;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
+/**
+ * The count cache does operations on the model that has just updated, works out the related models, and calls the appropriate operations on cacheable.
+ */
 class CountCache
 {
     use Cacheable;
 
-    /**
-     * @var Model
-     */
-    private $model;
+    private function __construct(private Countable $model) {}
 
-    /**
-     * @param Model $model
-     */
-    public function __construct(Model $model)
+    public static function for(Countable $model): self
     {
-        $this->model = $model;
+        return new self($model);
     }
 
     /**
@@ -30,23 +27,28 @@ class CountCache
      */
     public function apply(\Closure $function)
     {
-        foreach ($this->model->countCaches() as $key => $cache) {
-            $function($this->config($key, $cache));
+        foreach ($this->model->countedBy() as $key => $value) {
+            $function($this->config($key, $value));
         }
     }
 
     /**
-     * Update the cache for all operations.
+     * Update the count cache for all related models.
      */
     public function update()
     {
-        $this->apply(function ($config) {
-            $foreignKey = Str::snake($this->key($config['foreignKey']));
+        $this->apply(function(CacheConfig $config) {
+            $foreignKey = $config->foreignKeyName($this->model);
 
-            if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
-                $this->updateCacheRecord($config, '-', 1, $this->model->getOriginal($foreignKey));
-                $this->updateCacheRecord($config, '+', 1, $this->model->{$foreignKey});
-            }
+            if (!$this->model->getOriginal($foreignKey) || $this->model->$foreignKey === $this->model->getOriginal($foreignKey)) return;
+
+//            dd($this->model);
+            // for the minus operation, we first have to get the model that is no longer associated with this one.
+            $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
+
+            $originalRelatedModel->decrement($config->countField);
+
+            $this->increment();
         });
     }
 
@@ -60,63 +62,32 @@ class CountCache
         });
     }
 
-    /**
-     * Takes a registered counter cache, and setups up defaults.
-     *
-     * @param string $cacheKey
-     * @param array $cacheOptions
-     * @return array
-     */
-    protected function config($cacheKey, $cacheOptions)
+    public function increment(): void
     {
-        $opts = [];
+        $this->apply(fn(CacheConfig $config) => $config->relation($this->model)->increment($config->countField));
+    }
 
-        if (is_numeric($cacheKey)) {
-            if (is_array($cacheOptions)) {
-                // Most explicit configuration provided
-                $opts = $cacheOptions;
-                $relatedModel = Arr::get($opts, 'model');
-            } else {
-                // Smallest number of options provided, figure out the rest
-                $relatedModel = $cacheOptions;
-            }
-        } else {
-            // Semi-verbose configuration provided
-            $relatedModel = $cacheOptions;
-            $opts['field'] = $cacheKey;
-
-            if (is_array($cacheOptions)) {
-                if (isset($cacheOptions[2])) {
-                    $opts['key'] = $cacheOptions[2];
-                }
-                if (isset($cacheOptions[1])) {
-                    $opts['foreignKey'] = $cacheOptions[1];
-                }
-                if (isset($cacheOptions[0])) {
-                    $relatedModel = $cacheOptions[0];
-                }
-            }
-        }
-
-        return $this->defaults($opts, $relatedModel);
+    public function decrement(): void
+    {
+        $this->apply(fn(CacheConfig $config) => $config->relation($this->model)->decrement($config->countField));
     }
 
     /**
-     * Returns necessary defaults, overwritten by provided options.
-     *
-     * @param array $options
-     * @param string $relatedModel
-     * @return array
+     * Takes a registered counter cache, and setups up defaults.
      */
-    protected function defaults($options, $relatedModel)
+    protected function config($key, string $value): CacheConfig
     {
-        $defaults = [
-            'model' => $relatedModel,
-            'field' => $this->field($this->model, 'count'),
-            'foreignKey' => $this->field($relatedModel, 'id'),
-            'key' => 'id'
-        ];
+        // If the key is numeric, it means only the relationship method has been referenced.
+        if (is_numeric($key)) {
+            $key = $value;
+            $value = $this->defaultCountField();
+        }
 
-        return array_merge($defaults, $options);
+        return new CacheConfig($key, $value);
+    }
+
+    private function defaultCountField(): string
+    {
+        return Str::lower(Str::snake(class_basename($this->model))).'_count';
     }
 }

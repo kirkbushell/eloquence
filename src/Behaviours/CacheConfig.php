@@ -1,0 +1,37 @@
+<?php
+
+namespace Eloquence\Behaviours;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
+
+class CacheConfig
+{
+    public function __construct(readonly string $relationName, readonly string $countField) {}
+
+    /**
+     * Returns the actual Relation object - such as BelongsTo. This method makes a call to the relationship
+     * method specified on the model object, and is used to infer data about the relationship.
+     */
+    public function relation(Model $model): Relation
+    {
+        return $model->{$this->relationName}();
+    }
+
+    /**
+     * Returns -a- related model object - this object is actually empty, and is found on the query builder, used to
+     * infer certain information abut the relationship that cannot be found on CacheConfig::relation.
+     *
+     * @param Model $model
+     * @return Model
+     */
+    public function emptyRelatedModel(Model $model): Model
+    {
+        return $this->relation($model)->getQuery()->getModel();
+    }
+
+    public function foreignKeyName(Model $model): string
+    {
+        return $this->relation($model)->getForeignKeyName();
+    }
+}

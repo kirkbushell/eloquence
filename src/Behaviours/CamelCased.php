@@ -3,7 +3,7 @@ namespace Eloquence\Behaviours;
 
 use Illuminate\Support\Str;
 
-trait CamelCasing
+trait CamelCased
 {
     /**
      * Alter eloquent model behaviour so that model attributes can be accessed via camelCase, but more importantly,
@@ -98,7 +98,7 @@ trait CamelCasing
     }
 
     /**
-     * Converts a given array of attribute keys to the casing required by CamelCaseModel.
+     * Converts a given array of attribute keys to the casing required by CamelCased.
      *
      * @param mixed $attributes
      * @return array
@@ -116,7 +116,7 @@ trait CamelCasing
     }
 
     /**
-     * Converts a given array of attribute keys to the casing required by CamelCaseModel.
+     * Converts a given array of attribute keys to the casing required by CamelCased.
      *
      * @param $attributes
      * @return array

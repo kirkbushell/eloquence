@@ -2,27 +2,26 @@
 namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\CountCache\Countable;
-use Eloquence\Behaviours\CamelCasing;
+use Eloquence\Behaviours\CountCache\HasCounts;
+use Eloquence\Behaviours\CamelCased;
 use Eloquence\Behaviours\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Post extends Model
+class Post extends Model implements Countable
 {
-    use CamelCasing;
+    use CamelCased;
     use Sluggable;
-    use Countable;
+    use HasCounts;
 
-    public function countCaches()
+    public function user(): BelongsTo
     {
-        return [
-            'postCount' => ['Tests\Acceptance\Models\User', 'userId', 'id'],
-            [
-                'model' => 'Tests\Acceptance\Models\User',
-                'field' => 'postCountExplicit',
-                'foreignKey' => 'userId',
-                'key' => 'id',
-            ]
-        ];
+        return $this->belongsTo(User::class);
+    }
+
+    public function countedBy(): array
+    {
+        return ['user'];
     }
 
     public function slugStrategy()

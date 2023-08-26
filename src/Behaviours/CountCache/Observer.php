@@ -1,6 +1,8 @@
 <?php
 namespace Eloquence\Behaviours\CountCache;
 
+use Closure;
+
 /**
  * The Observer is used for watching for model updates and making the appropriate changes
  * as required. This includes watching for created, deleted, updated and restored events.
@@ -13,9 +15,9 @@ class Observer
      *
      * @param $model
      */
-    public function created($model)
+    public function created($model): void
     {
-        $this->update($model, '+');
+        CountCache::for($model)->increment();
     }
 
     /**
@@ -23,9 +25,9 @@ class Observer
      *
      * @param $model
      */
-    public function deleted($model)
+    public function deleted($model): void
     {
-        $this->update($model, '-');
+        CountCache::for($model)->decrement();
     }
 
     /**
@@ -33,9 +35,9 @@ class Observer
      *
      * @param $model
      */
-    public function updated($model)
+    public function updated($model): void
     {
-        (new CountCache($model))->update();
+        CountCache::for($model)->update();
     }
 
     /**
@@ -43,22 +45,20 @@ class Observer
      *
      * @param $model
      */
-    public function restored($model)
+    public function restored($model): void
     {
-        $this->update($model, '+');
+        CountCache::for($model)->increment($model);
     }
 
     /**
      * Handle most update operations of the count cache.
      *
-     * @param $model
      * @param string $operation + or -
      */
-    private function update($model, $operation)
+    private function update(Countable $model, string $operation): void
     {
-        $countCache = new CountCache($model);
-        $countCache->apply(function ($config) use ($countCache, $model, $operation) {
-            $countCache->updateCacheRecord($config, $operation, 1, $model->{$config['foreignKey']});
-        });
+        $countCache = CountCache::for($model);
+
+        $countCache->apply((fn($config) => $this->updateCacheRecord($config->relatedModel($model), $config, $operation))->bindTo($countCache));
     }
 }

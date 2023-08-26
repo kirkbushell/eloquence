@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Unit\Stubs;
 
-use Eloquence\Behaviours\CamelCasing;
+use Eloquence\Behaviours\CamelCased;
 
 class PivotModelStub extends ParentModelStub
 {
-    use \Eloquence\Behaviours\CamelCasing;
+    use \Eloquence\Behaviours\CamelCased;
 
     protected $attributes = [
         'first_name' => 'Kirk',

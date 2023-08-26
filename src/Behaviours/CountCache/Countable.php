@@ -1,13 +1,21 @@
 <?php
+
 namespace Eloquence\Behaviours\CountCache;
 
-trait Countable
+interface Countable
 {
     /**
-     * Boot the countable behaviour and setup the appropriate event bindings.
+     * Returns a key->value array of the relationship you want to utilise to update the count, followed
+     * by the field on that related model. For example, if you have a user model that has many posts
+     * you can return the following:
+     *
+     * ['user']
+     *
+     * Of course you can customise the count field:
+     *
+     * ['user' => 'post_total']
+     *
+     * @return array
      */
-    public static function bootCountable()
-    {
-        static::observe(Observer::class);
-    }
+    public function countedBy(): array;
 }

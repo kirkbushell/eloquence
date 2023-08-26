@@ -14,15 +14,14 @@ class CountCacheTest extends AcceptanceTestCase
         $this->data = $this->setupUserAndPost();
     }
 
-    public function testUserCountCache()
+    function test_userHasASinglePostCount()
     {
         $user = User::first();
 
         $this->assertEquals(1, $user->postCount);
-        $this->assertEquals(1, $user->postCountExplicit);
     }
 
-    public function testComplexCountCache()
+    function test_whenRelatedModelsAreSwitchedBothCountCachesAreUpdated()
     {
         $post = new Post;
         $post->userId = $this->data['user']->id;
@@ -34,16 +33,14 @@ class CountCacheTest extends AcceptanceTestCase
         $comment->save();
 
         $this->assertEquals(2, User::first()->postCount);
-        $this->assertEquals(2, User::first()->postCountExplicit);
-
         $this->assertEquals(1, User::first()->commentCount);
         $this->assertEquals(1, Post::first()->commentCount);
 
         $comment->postId = $post->id;
         $comment->save();
 
-        $this->assertEquals(0, Post::first()->commentCount);
-        $this->assertEquals(1, Post::get()[1]->commentCount);
+        $this->assertEquals(0, $this->data['post']->fresh()->commentCount);
+        $this->assertEquals(1, $post->fresh()->commentCount);
     }
 
     public function testItCanHandleNegativeCounts()

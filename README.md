@@ -37,7 +37,7 @@ data from our Eloquent models persist through to our APIs in a camel-case manner
 if you are writing front-end applications, which are also using camelCase. This allows for a
 better standard across our application. To use:
 
-    use \Eloquence\Behaviours\CamelCasing;
+    use \Eloquence\Behaviours\CamelCased;
 
 Put the above line in your models and that's it.
 
@@ -49,15 +49,15 @@ snake_case of field names is the defacto standard within the Laravel community :
 
 ## Behaviours
 
-Eloquence comes with a system for setting up behaviours, which are really just small libraries that you can use with your Eloquent models.
-The first of these is the count cache.
+Eloquence comes with a system for setting up behaviours, which are really just small libraries that you can use with your 
+Eloquent models. The first of these is the count cache.
 
 ### Count cache
 
-Count caching is where you cache the result of a count of a related table's records. A simple example of this is where you have a user who
-has many posts. In this example, you may want to count the number of posts a user has regularly - and perhaps even order by this. In SQL,
-ordering by a counted field is slow and unable to be indexed. You can get around this by caching the count of the posts the user
-has created on the user's record.
+Count caching is where you cache the result of a count of a related table's records. A simple example of this is where you 
+have a user who has many posts. In this example, you may want to count the number of posts a user has regularly - and perhaps 
+even order by this. In SQL, ordering by a counted field is slow and unable to be indexed. You can get around this by caching 
+the count of the posts the user has created on the user's record.
 
 To get this working, you need to do two steps:
 
@@ -66,13 +66,14 @@ To get this working, you need to do two steps:
 
 #### Configure the count cache
 
-To setup the count cache configuration, we need to have the model use Countable trait, like so:
+To setup the count cache configuration, we need to have the model use the Countable interface, and setup the basic
+functionality with the HasCounts trait, like so:
 
 ```php
-class Post extends Eloquent {
-    use Countable;
+class Post extends Eloquent implements Countable {
+    use HasCounts;
 
-    public function countCaches() {
+    public function countedBy() {
         return [User::class];
     }
 }
@@ -91,10 +92,10 @@ The example above uses the following standard conventions:
 These are, however, configurable:
 
 ```php
-class Post extends Eloquent {
-    use Countable;
+class Post extends Eloquent implements Countable {
+    use HasCounts;
 
-    public function countCaches() {
+    public function countedBy() {
         return [
             'num_posts' => ['User', 'users_id', 'id']
         ];
@@ -128,6 +129,10 @@ If using the explicit configuration, at a minimum you will need to define the "m
 and "key" parameters will be calculated using the standard conventions mentioned above if they are omitted.
 
 With this configuration now setup - you're ready to go!
+
+Note: Because the various behaviours often execute multiple queries at once for updating relevant
+models, it's a good idea to wrap your save operations in database transaction calls, in case one of them fails.
+This will help to prevent your database getting out of sync if there's ever a problem with a single datbabase query.
 
 
 ### Sum cache

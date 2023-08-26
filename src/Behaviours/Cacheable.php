@@ -2,41 +2,29 @@
 namespace Eloquence\Behaviours;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * The cacheable trait is concerned with the related models.
+ */
 trait Cacheable
 {
 
     /**
      * Updates a table's record based on the query information provided in the $config variable.
      *
-     * @param array $config
      * @param string $operation Whether to increase or decrease a value. Valid values: +/-
-     * @param int|float|double $amount
-     * @param string $foreignKey
      */
-    public function updateCacheRecord(array $config, $operation, $amount, $foreignKey)
+    public function updateCacheRecord(Model $model, CacheConfig $config, string $operation): void
     {
-        if (is_null($foreignKey)) {
+        if ($operation == '+') {
+            $this->updateCacheValue($model, $config, 1);
             return;
         }
 
-        $config = $this->processConfig($config);
-
-        $sql = DB::table($config['table'])->where($config['key'], $foreignKey);
-
-        /*
-         * Increment for + operator
-         */
-        if ($operation == '+') {
-            return $sql->increment($config['field'], $amount);
-        }
-
-        /*
-         * Decrement for - operator
-         */
-        return $sql->decrement($config['field'], $amount);
+        $this->updateCacheValue($model, $config, -1);
     }
 
     /**
@@ -77,37 +65,10 @@ trait Cacheable
             ]);
     }
 
-    /**
-     * Creates the key based on model properties and rules.
-     *
-     * @param string $model
-     * @param string $field
-     *
-     * @return string
-     */
-    protected function field($model, $field)
+    public function updateCacheValue(Model $model, CacheConfig $config, int $amount): void
     {
-        $class = strtolower(class_basename($model));
-        $field = $class . '_' . $field;
-
-        return $field;
-    }
-
-    /**
-     * Process configuration parameters to check key names, fix snake casing, etc..
-     *
-     * @param array $config
-     * @return array
-     */
-    protected function processConfig(array $config)
-    {
-        return [
-            'model'      => $config['model'],
-            'table'      => $this->getModelTable($config['model']),
-            'field'      => Str::snake($config['field']),
-            'key'        => Str::snake($this->key($config['key'])),
-            'foreignKey' => Str::snake($this->key($config['foreignKey'])),
-        ];
+        $model->{$config->countField} = $model->{$config->countField} + $amount;
+        $model->save();
     }
 
     /**
@@ -124,21 +85,4 @@ trait Cacheable
 
         return $field;
     }
-
-    /**
-     * Returns the table for a given model. Model can be an Eloquent model object, or a full namespaced
-     * class string.
-     *
-     * @param string|Model $model
-     * @return mixed
-     */
-    protected function getModelTable($model)
-    {
-        if (!is_object($model)) {
-            $model = new $model;
-        }
-
-        return DB::getTablePrefix().$model->getTable();
-    }
-
 }
