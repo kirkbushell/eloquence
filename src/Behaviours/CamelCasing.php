@@ -47,10 +47,6 @@ trait CamelCasing
      */
     public function getAttribute($key)
     {
-        if (method_exists($this, $key)) {
-            return $this->getRelationValue($key);
-        }
-
         return parent::getAttribute($this->getSnakeKey($key));
     }
 
