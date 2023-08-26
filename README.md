@@ -46,37 +46,6 @@ Eloquence DOES NOT CHANGE how you write your schema migrations. You should still
 when setting up your fields and tables in your database schema migrations. This is a good thing -
 snake_case of field names is the defacto standard within the Laravel community :)
 
-
-## UUIDs
-
-Eloquence comes bundled with UUID capabilities that you can use in your models.
-
-Simply include the Uuid trait:
-
-    use Eloquence\Behaviours\Uuid;
-
-And then disable auto incrementing ids:
-
-    public $incrementing = false;
-
-This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One
-benefit of this is that you can actually know the id of your record BEFORE it's saved!
-
-You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following
-properties:
-
-    $table->char('id', $length = 36)->index();
-
-It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID
-field searches are much slower than indexed integer fields (such as autoincrement id fields).
-
-
-### Custom UUIDs
-
-Should you need a custom UUID solution (aka, maybe you don't want to use a UUID4 id), you can simply define the value you wish on
-the id field. The UUID model trait will not set the id if it has already been defined. In this use-case however, it's probably no good
-to use the Uuid trait, as it's practically useless in this scenario.
-
 ## Behaviours
 
 Eloquence comes with a system for setting up behaviours, which are really just small libraries that you can use with your Eloquent models.
@@ -261,6 +230,10 @@ to be generated after the record has been saved - which results in a secondary s
 That's it! Easy huh?
 
 ## Changelog
+
+#### 11.0.0
+
+* UUID support removed - both UUIDs and ULIDs are now natively supported in Laravel
 
 #### 10.0.0
 
