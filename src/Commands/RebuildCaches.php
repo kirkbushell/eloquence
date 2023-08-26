@@ -26,14 +26,6 @@ class RebuildCaches extends Command
     protected $description = 'Rebuild the caches for one or more Eloquent models';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
