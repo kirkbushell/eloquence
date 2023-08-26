@@ -17,7 +17,8 @@ Install the package via composer:
 
 ## Usage
 
-First, add the eloquence service provider to your config/app.php file:
+Eloquence is automatically discoverable by Laravel, and shouldn't require any further steps. For those on earlier versions of Laravel,
+you can add the package as per normal in your config/app.php file:
 
     'Eloquence\EloquenceServiceProvider',
 
