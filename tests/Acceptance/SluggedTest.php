@@ -6,7 +6,7 @@ use Tests\Acceptance\Models\User;
 
 class SluggedTest extends AcceptanceTestCase
 {
-    public function testUserSlug()
+    function test_slugsCanBeGeneratedWithCustomStrategy()
     {
         $user = new User;
         $user->firstName = 'Kirk';
@@ -16,7 +16,7 @@ class SluggedTest extends AcceptanceTestCase
         $this->assertEquals('kirk-bushell', (string) $user->slug);
     }
 
-    public function testPostSlug()
+    function test_slugsCanBeGeneratedUsingRandomValues()
     {
         $user = new User;
         $user->firstName = 'Kirk';
