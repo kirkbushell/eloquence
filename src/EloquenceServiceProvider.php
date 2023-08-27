@@ -15,16 +15,4 @@ class EloquenceServiceProvider extends ServiceProvider
     {
         DBQueryLog::enable();
     }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->bind('command.eloquence:rebuild', RebuildCaches::class);
-
-        $this->commands(['command.eloquence:rebuild']);
-    }
 }

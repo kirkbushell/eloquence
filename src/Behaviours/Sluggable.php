@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Behaviours;
 
 use Eloquence\Exceptions\UnableToCreateSlugException;
@@ -10,7 +11,7 @@ trait Sluggable
      * When added to a model, the trait will bind to the creating and created
      * events, generating the appropriate slugs as necessary.
      */
-    public static function bootSluggable()
+    public static function bootSluggable(): void
     {
         static::creating(function ($model) {
             $model->generateSlug();
@@ -20,13 +21,13 @@ trait Sluggable
     /**
      * Generate a slug based on the main model key.
      */
-    public function generateIdSlug()
+    public function generateIdSlug(): void
     {
         $slug = Slug::fromId($this->getKey() ?? rand());
 
         // Ensure slug is unique (since the fromId() algorithm doesn't produce unique slugs)
         $attempts = 10;
-        while ($this->isExistingSlug($slug)) {
+        while ($this->slugExists($slug)) {
             if ($attempts <= 0) {
                 throw new UnableToCreateSlugException(
                     "Unable to find unique slug for record '{$this->getKey()}', tried 10 times..."
@@ -43,7 +44,7 @@ trait Sluggable
     /**
      * Generate a slug string based on the fields required.
      */
-    public function generateTitleSlug(array $fields)
+    public function generateTitleSlug(array $fields): void
     {
         static $attempts = 0;
 
@@ -62,27 +63,22 @@ trait Sluggable
     /**
      * Because a title slug can be created from multiple sources (such as an article title, a category title.etc.),
      * this allows us to search out those fields from related objects and return the combined values.
-     *
-     * @param array $fields
-     * @return array
      */
-    public function getTitleFields(array $fields)
+    public function getTitleFields(array $fields): array
     {
-        $fields = array_map(function ($field) {
+        return array_map(function ($field) {
             if (Str::contains($field, '.')) {
                 return object_get($this, $field); // this acts as a delimiter, which we can replace with /
             } else {
                 return $this->{$field};
             }
         }, $fields);
-
-        return $fields;
     }
 
     /**
      * Generate the slug for the model based on the model's slug strategy.
      */
-    public function generateSlug()
+    public function generateSlug(): void
     {
         $strategy = $this->slugStrategy();
 
@@ -95,20 +91,16 @@ trait Sluggable
 
     /**
      * Set the value of the slug.
-     *
-     * @param $value
      */
-    public function setSlugValue(Slug $value)
+    public function setSlugValue(Slug $value): void
     {
         $this->{$this->slugField()} = $value;
     }
 
     /**
      * Allows laravel to start using the sluggable field as the string for routes.
-     *
-     * @return mixed
      */
-    public function getRouteKey()
+    public function getRouteKey(): mixed
     {
         $slug = $this->slugField();
 
@@ -117,10 +109,8 @@ trait Sluggable
 
     /**
      * Return the name of the field you wish to use for the slug.
-     *
-     * @return string
      */
-    protected function slugField()
+    protected function slugField(): string
     {
         return 'slug';
     }
@@ -147,36 +137,28 @@ trait Sluggable
      *
      * @return string
      */
-    public function slugStrategy()
+    public function slugStrategy(): string
     {
         return 'id';
     }
 
     /**
      * Sets the slug attribute with the Slug value object.
-     *
-     * @param Slug $slug
      */
-    public function setSlugAttribute(Slug $slug)
+    public function setSlugAttribute(Slug $slug): void
     {
         $this->attributes[$this->slugField()] = (string) $slug;
     }
 
     /**
      * Returns the slug attribute as a Slug value object.
-     *
-     * @return \Eloquence\Behaviours\Slug
      */
-    public function getSlugAttribute()
+    public function getSlugAttribute(): Slug
     {
         return new Slug($this->attributes[$this->slugField()]);
     }
 
-    /**
-     * @param Slug $slug
-     * @return bool
-     */
-    private function isExistingSlug(Slug $slug)
+    private function slugExists(Slug $slug): bool
     {
         return $this->newQuery()
             ->where($this->slugField(), (string) $slug)
