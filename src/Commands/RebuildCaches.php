@@ -1,10 +1,9 @@
 <?php
+
 namespace Eloquence\Commands;
 
-use Eloquence\Behaviours\CountCache\Countable;
 use Eloquence\Behaviours\CountCache\CountCache;
 use Eloquence\Behaviours\SumCache\SumCache;
-use Eloquence\Behaviours\SumCache\Summable;
 use hanneskod\classtools\Iterator\ClassIterator;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -48,17 +47,17 @@ class RebuildCaches extends Command
     {
         $model = new $className;
 
-        if ($model instanceof Countable) {
-            $this->info("Rebuilding [$className] count caches");
-            $countCache = CountCache::for($model);
-            $countCache->rebuild();
-        }
-
-        if ($model instanceof Summable) {
-            $this->info("Rebuilding [$className] sum caches");
-            $sumCache = SumCache::for($model);
-            $sumCache->rebuild();
-        }
+//        if ($model instanceof Countable) {
+//            $this->info("Rebuilding [$className] count caches");
+//            $countCache = CountCache::for($model);
+//            $countCache->rebuild();
+//        }
+//
+//        if ($model instanceof Summable) {
+//            $this->info("Rebuilding [$className] sum caches");
+//            $sumCache = SumCache::for($model);
+//            $sumCache->rebuild();
+//        }
     }
 
     /**

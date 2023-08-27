@@ -1,15 +1,12 @@
 <?php
 namespace Eloquence\Behaviours\CountCache;
 
-use Closure;
-
 /**
  * The Observer is used for watching for model updates and making the appropriate changes
  * as required. This includes watching for created, deleted, updated and restored events.
  */
 class Observer
 {
-
     /**
      * When the model has been created, increment the count cache by 1.
      *
@@ -55,7 +52,7 @@ class Observer
      *
      * @param string $operation + or -
      */
-    private function update(Countable $model, string $operation): void
+    private function update($model, string $operation): void
     {
         $countCache = CountCache::for($model);
 

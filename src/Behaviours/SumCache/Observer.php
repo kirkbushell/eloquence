@@ -4,23 +4,23 @@ namespace Eloquence\Behaviours\SumCache;
 
 class Observer
 {
-    public function created(Summable $model)
+    public function created($model)
     {
         SumCache::for($model)->increase();
     }
 
-    public function updated(Summable $model)
+    public function updated($model)
     {
         SumCache::for($model)->update();
     }
 
-    public function deleted(Summable $model)
+    public function deleted($model)
     {
         SumCache::for($model)->decrease();
     }
 
-    public function restored(Summable $model)
+    public function restored($model)
     {
-
+        // @TODO
     }
 }

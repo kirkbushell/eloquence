@@ -1,21 +1,23 @@
 <?php
+
 namespace Eloquence\Behaviours\SumCache;
 
 use Eloquence\Behaviours\Cacheable;
 use Eloquence\Behaviours\CacheConfig;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use ReflectionMethod;
 
 class SumCache
 {
     use Cacheable;
 
-    private function __construct(private Summable $model) {}
+    private function __construct(private Model $model) {}
 
     private function configuration(): array
     {
-        return $this->model->summedBy();
+        return $this->reflect(SummedBy::class, function(array $config) {
+            return [$config['name'] => [$config['attribute']->as => $config['attribute']->from]];
+        });
     }
 
     /**
@@ -68,14 +70,10 @@ class SumCache
      */
     protected function config($relation, string|array $sourceField): CacheConfig
     {
-        if (is_array($sourceField)) {
-            $keys = array_keys($sourceField);
-            $aggregateField = $keys[0];
-            $sourceField = $sourceField[$aggregateField];
-        }
-        else {
-            $aggregateField = 'total_'.$sourceField;
-        }
+        $keys = array_keys($sourceField);
+
+        $aggregateField = $keys[0];
+        $sourceField = $sourceField[$aggregateField];
 
         return new CacheConfig($relation, $aggregateField, $sourceField);
     }

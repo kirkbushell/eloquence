@@ -2,7 +2,10 @@
 namespace Eloquence\Behaviours;
 
 use Closure;
+use Eloquence\Behaviours\SumCache\SummedBy;
 use Illuminate\Database\Eloquent\Model;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * The cacheable trait is concerned with the related models.
@@ -22,6 +25,26 @@ trait Cacheable
     public static function for(Model $model): self
     {
         return new self($model);
+    }
+
+    public function reflect(string $attributeClass, \Closure $fn)
+    {
+        $reflect = new ReflectionClass($this->model);
+
+        // This behemoth cycles through all valid methods, and then gets only the attributes we care about,
+        // formatting it in a way that is usable by our various aggregate service classes.
+        return collect($reflect->getMethods())
+            ->filter(fn(ReflectionMethod $method) => count($method->getAttributes($attributeClass)) > 0)
+            ->flatten()
+            ->map(function(ReflectionMethod $method) use ($attributeClass) {
+                return collect($method->getAttributes($attributeClass))->map(fn(\ReflectionAttribute $attribute) => [
+                    'name' => $method->name,
+                    'attribute' => $attribute->newInstance(),
+                ])->toArray();
+            })
+            ->flatten(1)
+            ->mapWithKeys($fn)
+            ->toArray();
     }
 
     /**

@@ -1,8 +1,10 @@
 <?php
+
 namespace Eloquence\Behaviours\CountCache;
 
 use Eloquence\Behaviours\Cacheable;
 use Eloquence\Behaviours\CacheConfig;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
@@ -12,11 +14,14 @@ class CountCache
 {
     use Cacheable;
 
-    private function __construct(private Countable $model) {}
+    private function __construct(private Model $model) {}
 
     private function configuration(): array
     {
-        return $this->model->countedBy();
+        return $this->reflect(CountedBy::class, function(array $config) {
+            $aggregateField = $config['attribute']->as ?? Str::lower(Str::snake(class_basename($this->model))).'_count';
+            return [$config['name'] => $aggregateField];
+        });
     }
 
     /**
@@ -68,12 +73,6 @@ class CountCache
      */
     protected function config($key, string $value): CacheConfig
     {
-        // If the key is numeric, it means only the relationship method has been referenced.
-        if (is_numeric($key)) {
-            $key = $value;
-            $value = Str::lower(Str::snake(class_basename($this->model))).'_count';
-        }
-
         return new CacheConfig($key, $value);
     }
 }

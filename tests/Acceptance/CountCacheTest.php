@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Acceptance;
 
-use Tests\Acceptance\Models\Category;
 use Tests\Acceptance\Models\Comment;
 use Tests\Acceptance\Models\Post;
 use Tests\Acceptance\Models\User;

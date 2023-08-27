@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\CountCache\Countable;
+use Eloquence\Behaviours\CountCache\CountedBy;
 use Eloquence\Behaviours\CountCache\HasCounts;
 use Eloquence\Behaviours\CamelCased;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Comment extends Model implements Countable
+class Comment extends Model
 {
     use CamelCased;
     use HasCounts;
@@ -22,19 +22,16 @@ class Comment extends Model implements Countable
         'post_id',
     ];
 
+    #[CountedBy]
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
 
+    #[CountedBy]
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function countedBy(): array
-    {
-        return ['post', 'user'];
     }
 
     protected static function newFactory(): Factory

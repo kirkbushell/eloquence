@@ -1,7 +1,7 @@
-<?php namespace Eloquence\Commands;
+<?php
 
-use Eloquence\Behaviours\CountCache\Countable;
-use Eloquence\Behaviours\SumCache\Summable;
+namespace Eloquence\Commands;
+
 use hanneskod\classtools\Iterator\ClassIterator;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\Finder\Finder;
