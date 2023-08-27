@@ -1,5 +1,7 @@
 <?php namespace Eloquence\Commands;
 
+use Eloquence\Behaviours\CountCache\Countable;
+use Eloquence\Behaviours\SumCache\Summable;
 use hanneskod\classtools\Iterator\ClassIterator;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\Finder\Finder;
@@ -43,6 +45,6 @@ class FindCacheableClasses
      */
     private function usesCaching(\ReflectionClass $class)
     {
-        return $class->hasMethod('bootCountable') || $class->hasMethod('bootSummable');
+        return $class instanceof Summable || $class instanceof Countable;
     }
 }

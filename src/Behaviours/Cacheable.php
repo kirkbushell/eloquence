@@ -16,7 +16,7 @@ trait Cacheable
      *
      * @return array
      */
-    abstract private function relationsMethod(): array;
+    abstract private function configuration(): array;
 
     /**
      * Helper method for easier use of the implementing classes.
@@ -27,11 +27,12 @@ trait Cacheable
     }
 
     /**
-     * Applies the provided function using the relevant configuration to all configured relations.
+     * Applies the provided function using the relevant configuration to all configured relations. Configuration
+     * would be one of countedBy, summedBy, averagedBy.etc.
      */
-    public function apply(Closure $function): void
+    protected function apply(Closure $function): void
     {
-        foreach ($this->relationsMethod() as $key => $value) {
+        foreach ($this->configuration() as $key => $value) {
             $function($this->config($key, $value));
         }
     }
@@ -41,67 +42,31 @@ trait Cacheable
      *
      * @param string $operation Whether to increase or decrease a value. Valid values: +/-
      */
-    public function updateCacheRecord(Model $model, CacheConfig $config, string $operation, int $amount): void
+    protected function updateCacheRecord(Model $model, CacheConfig $config, string $operation, int $amount): void
     {
         $this->updateCacheValue($model, $config, $amount);
     }
 
     /**
-     * Rebuilds the cache for the records in question.
+     * It's a bit hard to read what's going on in this method, so let's elaborate.
      *
-     * @param array $config
-     * @param Model $model
-     * @param $command
-     * @param null $aggregateField
-     * @return mixed
+     * 1. Get the foreign key of the model that needs to be queried.
+     * 2. Get the aggregate value for all records with that foreign key.
+     * 3. Update the related model wth the relevant aggregate value.
      */
-    public function rebuildCacheRecord(array $config, Model $model, $command, $aggregateField = null)
+    public function rebuildCacheRecord(CacheConfig $config, Model $model, $command)
     {
-        $config = $this->processConfig($config);
-        $table = $this->getModelTable($model);
-
-        if (is_null($aggregateField)) {
-            $aggregateField = $config['foreignKey'];
-        } else {
-            $aggregateField = Str::snake($aggregateField);
-        }
-
-        $sql = DB::table($table)->select($config['foreignKey'])->groupBy($config['foreignKey']);
-
-        if (strtolower($command) == 'count') {
-            $aggregate = $sql->count($aggregateField);
-        } else if (strtolower($command) == 'sum') {
-            $aggregate = $sql->sum($aggregateField);
-        } else if (strtolower($command) == 'avg') {
-            $aggregate = $sql->avg($aggregateField);
-        } else {
-            $aggregate = null;
-        }
-
-        return DB::table($config['table'])
-            ->update([
-                $config['field'] => $aggregate
-            ]);
-    }
-
-    public function updateCacheValue(Model $model, CacheConfig $config, int $amount): void
-    {
-        $model->{$config->aggregateField} = $model->{$config->aggregateField} + $amount;
-        $model->save();
+        $foreignKey = $config->foreignKeyName($model);
+        $value = $model->newQuery()->select($foreignKey)->groupBy($foreignKey)->$command($config->aggregateField);
+        $config->relatedModel($model)->update([$config->aggregateField => $value]);
     }
 
     /**
-     * Returns the true key for a given field.
-     *
-     * @param string $field
-     * @return mixed
+     * Update the cache value for the model.
      */
-    protected function key($field)
+    protected function updateCacheValue(Model $model, CacheConfig $config, int $amount): void
     {
-        if (method_exists($this->model, 'getTrueKey')) {
-            return $this->model->getTrueKey($field);
-        }
-
-        return $field;
+        $model->{$config->aggregateField} = $model->{$config->aggregateField} + $amount;
+        $model->save();
     }
 }

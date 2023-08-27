@@ -13,7 +13,7 @@ class SumCache
 
     private function __construct(private Summable $model) {}
 
-    private function relationsMethod(): array
+    private function configuration(): array
     {
         return $this->model->summedBy();
     }
@@ -24,7 +24,7 @@ class SumCache
     public function rebuild(): void
     {
         $this->apply(function($config) {
-            $this->rebuildCacheRecord($config, $this->model, 'SUM', $config['columnToSum']);
+            $this->rebuildCacheRecord($config, $this->model, 'sum');
         });
     }
 
@@ -47,16 +47,19 @@ class SumCache
      */
     public function update(): void
     {
-        $this->apply(function($config) {
+        $this->apply(function(CacheConfig $config) {
             $foreignKey = $config->foreignKeyName($this->model);
 
-            if (!$this->model->getOriginal($foreignKey) || $this->model->$foreignKey === $this->model->getOriginal($foreignKey)) return;
-
-            // for the minus operation, we first have to get the model that is no longer associated with this one.
-            $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
-
-            $this->updateCacheValue($originalRelatedModel, $config, -$this->model->{$config->sourceField});
-            $this->updateCacheValue($config->relatedModel($this->model), $config, $this->model->{$config->sourceField});
+            if ($this->model->wasChanged($foreignKey)) {
+                // for the minus operation, we first have to get the model that is no longer associated with this one.
+                $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
+                $this->updateCacheValue($originalRelatedModel, $config, -$this->model->getOriginal($config->sourceField));
+                $this->updateCacheValue($config->relatedModel($this->model), $config, $this->model->{$config->sourceField});
+            }
+            else {
+                $difference = $this->model->{$config->sourceField} - $this->model->getOriginal($config->sourceField);
+                $this->updateCacheValue($config->relatedModel($this->model), $config, $difference);
+            }
         });
     }
 

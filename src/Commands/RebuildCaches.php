@@ -1,8 +1,10 @@
 <?php
 namespace Eloquence\Commands;
 
+use Eloquence\Behaviours\CountCache\Countable;
 use Eloquence\Behaviours\CountCache\CountCache;
 use Eloquence\Behaviours\SumCache\SumCache;
+use Eloquence\Behaviours\SumCache\Summable;
 use hanneskod\classtools\Iterator\ClassIterator;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +25,7 @@ class RebuildCaches extends Command
      *
      * @var string
      */
-    protected $description = 'Rebuild the caches for one or more Eloquent models';
+    protected $description = 'Rebuild the caches for one or more Eloquent models.';
 
     /**
      * Execute the console command.
@@ -32,14 +34,7 @@ class RebuildCaches extends Command
      */
     public function handle()
     {
-
-        if ($class = $this->option('class')) {
-            $classes = [$class];
-        } else {
-            $directory = $this->option('dir') ?: app_path();
-            $classes = (new FindCacheableClasses($directory))->getAllCacheableClasses();
-        }
-        foreach ($classes as $className) {
+        foreach ($this->classes() as $className) {
             $this->rebuild($className);
         }
     }
@@ -49,21 +44,35 @@ class RebuildCaches extends Command
      *
      * @param string $className
      */
-    private function rebuild($className)
+    private function rebuild(string $className): void
     {
-        $instance = new $className;
+        $model = new $className;
 
-        if (method_exists($instance, 'countCaches')) {
+        if ($model instanceof Countable) {
             $this->info("Rebuilding [$className] count caches");
-            $countCache = new CountCache($instance);
+            $countCache = CountCache::for($model);
             $countCache->rebuild();
         }
 
-        if (method_exists($instance, 'sumCaches')) {
+        if ($model instanceof Summable) {
             $this->info("Rebuilding [$className] sum caches");
-            $sumCache = new SumCache($instance);
+            $sumCache = SumCache::for($model);
             $sumCache->rebuild();
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function classes(): array
+    {
+        if ($class = $this->option('class')) {
+            $classes = [$class];
+        } else {
+            $directory = $this->option('dir') ?: app_path();
+            $classes = (new FindCacheableClasses($directory))->getAllCacheableClasses();
+        }
+        return $classes;
     }
 
 }

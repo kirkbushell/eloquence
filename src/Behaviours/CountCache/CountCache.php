@@ -14,15 +14,16 @@ class CountCache
 
     private function __construct(private Countable $model) {}
 
-    private function relationsMethod(): array
+    private function configuration(): array
     {
         return $this->model->countedBy();
     }
 
     /**
-     * Update the count cache for all related models.
+     * When a model is updated, its foreign keys may have changed. In this situation, we need to update both the original
+     * related model, and the new one.The original would be deducted the value, whilst the new one is increased.
      */
-    public function update()
+    public function update(): void
     {
         $this->apply(function(CacheConfig $config) {
             $foreignKey = $config->foreignKeyName($this->model);
@@ -40,10 +41,10 @@ class CountCache
     /**
      * Rebuild the count caches from the database
      */
-    public function rebuild()
+    public function rebuild(): void
     {
         $this->apply(function($config) {
-            $this->rebuildCacheRecord($config, $this->model, 'COUNT');
+            $this->rebuildCacheRecord($config, $this->model, 'count');
         });
     }
 

@@ -10,7 +10,15 @@ class SumCacheTest extends AcceptanceTestCase
 
     public function init()
     {
-        $this->data = $this->setupOrderAndItem();
+        $order = new Order;
+        $order->save();
+
+        $item = new Item;
+        $item->amount = 34;
+        $item->orderId = $order->id;
+        $item->save();
+
+        $this->data = compact('order', 'item');
     }
 
     function test_relatedModelSumCacheIsIncreasedWhenModelIsCreated()
@@ -31,8 +39,8 @@ class SumCacheTest extends AcceptanceTestCase
 
     function test_whenAnAggregatedModelValueSwitchesContext()
     {
-        $order = new Order;
-        $order->save();
+        $newOrder = new Order;
+        $newOrder->save();
 
         $item = new Item;
         $item->orderId = $this->data['order']->id;
@@ -40,11 +48,11 @@ class SumCacheTest extends AcceptanceTestCase
         $item->save();
 
         $item = $item->fresh();
-        $item->orderId = $order->id;
+        $item->orderId = $newOrder->id;
         $item->save();
 
         $this->assertEquals(34, $this->data['order']->fresh()->totalAmount);
-        $this->assertEquals(45, $order->fresh()->totalAmount);
+        $this->assertEquals(45, $newOrder->fresh()->totalAmount);
     }
 
     function test_aggregateValuesAreUpdatedWhenModelsAreRestored()
@@ -54,16 +62,29 @@ class SumCacheTest extends AcceptanceTestCase
         $this->assertEquals(0, $this->data['order']->fresh()->totalAmount);
     }
 
-    private function setupOrderAndItem()
+    function test_aggregateValueIsSetToCorrectAmountWhenSourceFieldChanges()
     {
-        $order = new Order;
-        $order->save();
+        $item = $this->data['item'];
 
-        $item = new Item;
-        $item->amount = 34;
-        $item->orderId = $order->id;
+        $item->amount = 20;
         $item->save();
 
-        return compact('order', 'item');
+        $this->assertEquals(20, $this->data['order']->fresh()->totalAmount);
+    }
+
+    function test_aggregateValueOnOriginalRelatedModelIsUpdatedCorrectlyWhenTheForeignKeyAndAmountIsChanged()
+    {
+        $item = $this->data['item'];
+
+        $newOrder = new Order;
+        $newOrder->save();
+
+        $item = $item->fresh();
+        $item->amount = 20;
+        $item->orderId = $newOrder->id;
+        $item->save();
+
+        $this->assertEquals(0, $this->data['order']->fresh()->totalAmount);
+        $this->assertEquals(20, $newOrder->fresh()->totalAmount);
     }
 }

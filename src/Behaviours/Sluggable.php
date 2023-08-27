@@ -1,7 +1,6 @@
 <?php
 namespace Eloquence\Behaviours;
 
-use Eloquence\Behaviours\Slug;
 use Eloquence\Exceptions\UnableToCreateSlugException;
 use Illuminate\Support\Str;
 
