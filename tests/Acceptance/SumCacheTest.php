@@ -6,7 +6,7 @@ use Tests\Acceptance\Models\Order;
 
 class SumCacheTest extends AcceptanceTestCase
 {
-    private $data = [];
+    private array $data = [];
 
     public function init()
     {

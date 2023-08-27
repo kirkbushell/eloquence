@@ -13,7 +13,11 @@ interface Summable
      *
      * Of course, if you want to customise the field saving the total as well, you can do that too:
      *
-     * ['order' => ['amount' => 'total_amount']].
+     * ['relationshp' => ['aggregate_field' => 'source_field']]
+     *
+     * In real-world terms:
+     *
+     * ['order' => ['total_amount' => 'amount']]
      *
      * By default, the sum cache will take the source field, and add "_total" to it on the related model.
      *

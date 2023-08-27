@@ -31,14 +31,14 @@ class SumCache
     public function increase(): void
     {
         $this->apply(function(CacheConfig $config) {
-            $this->updateCacheValue($config->relatedModel($this->model), $config, $this->model->{$config->sourceField});
+            $this->updateCacheValue($config->relatedModel($this->model), $config, (int) $this->model->{$config->sourceField});
         });
     }
 
     public function decrease(): void
     {
         $this->apply(function(CacheConfig $config) {
-            $this->updateCacheValue($config->relatedModel($this->model), $config, -$this->model->{$config->sourceField});
+            $this->updateCacheValue($config->relatedModel($this->model), $config, -(int) $this->model->{$config->sourceField});
         });
     }
 

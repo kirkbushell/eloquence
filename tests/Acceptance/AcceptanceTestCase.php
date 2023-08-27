@@ -33,8 +33,8 @@ class AcceptanceTestCase extends TestCase
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('slug')->nullable();
             $table->integer('comment_count')->default(0);
             $table->integer('post_count')->default(0);
@@ -43,6 +43,7 @@ class AcceptanceTestCase extends TestCase
 
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('category_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('slug')->nullable();
             $table->integer('comment_count')->default(0);
@@ -67,6 +68,13 @@ class AcceptanceTestCase extends TestCase
             $table->increments('id');
             $table->integer('order_id');
             $table->integer('amount');
+            $table->timestamps();
+        });
+
+        Schema::create('categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('post_count')->default(0);
+            $table->integer('total_comments')->default(0);
             $table->timestamps();
         });
     }

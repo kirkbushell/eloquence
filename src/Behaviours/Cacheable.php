@@ -3,8 +3,6 @@ namespace Eloquence\Behaviours;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 /**
  * The cacheable trait is concerned with the related models.

@@ -8,24 +8,14 @@ class SluggedTest extends AcceptanceTestCase
 {
     function test_slugsCanBeGeneratedWithCustomStrategy()
     {
-        $user = new User;
-        $user->firstName = 'Kirk';
-        $user->lastName = 'Bushell';
-        $user->save();
+        $user = User::factory(['firstName' => 'Kirk', 'lastName' => 'Bushell'])->create();
 
         $this->assertEquals('kirk-bushell', (string) $user->slug);
     }
 
     function test_slugsCanBeGeneratedUsingRandomValues()
     {
-        $user = new User;
-        $user->firstName = 'Kirk';
-        $user->lastName = 'Bushell';
-        $user->save();
-
-        $post = new Post;
-        $post->userId = $user->id;
-        $post->save();
+        $post = Post::factory()->create();
 
         $this->assertMatchesRegularExpression('/^[a-z0-9]{8}$/i', (string) $post->slug);
     }

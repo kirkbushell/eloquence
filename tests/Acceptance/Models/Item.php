@@ -4,12 +4,15 @@ namespace Tests\Acceptance\Models;
 use Eloquence\Behaviours\SumCache\HasSums;
 use Eloquence\Behaviours\CamelCased;
 use Eloquence\Behaviours\SumCache\Summable;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model implements Summable
 {
     use CamelCased;
     use HasSums;
+    use HasFactory;
 
     public function summedBy(): array
     {
@@ -19,5 +22,10 @@ class Item extends Model implements Summable
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return ItemFactory::new();
     }
 }

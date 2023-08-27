@@ -28,7 +28,8 @@ class CountCache
         $this->apply(function(CacheConfig $config) {
             $foreignKey = $config->foreignKeyName($this->model);
 
-            if (!$this->model->getOriginal($foreignKey) || $this->model->$foreignKey === $this->model->getOriginal($foreignKey)) return;
+            // We only need to do anything if the foreign key was changed.
+            if (!$this->model->wasChanged($foreignKey)) return;
 
             // for the minus operation, we first have to get the model that is no longer associated with this one.
             $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
