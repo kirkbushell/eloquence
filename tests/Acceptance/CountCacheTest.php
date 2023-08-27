@@ -9,11 +9,9 @@ class CountCacheTest extends AcceptanceTestCase
 {
     function test_userHasASinglePostCount()
     {
-        $user = User::factory()->create();
+        Post::factory()->create();
 
-        Post::factory()->for($user)->create();
-
-        $this->assertEquals(1, $user->fresh()->postCount);
+        $this->assertEquals(1, User::first()->postCount);
     }
 
     function test_whenRelatedModelsAreSwitchedBothCountCachesAreUpdated()

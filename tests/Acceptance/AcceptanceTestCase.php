@@ -69,6 +69,7 @@ class AcceptanceTestCase extends TestCase
             $table->integer('order_id');
             $table->integer('amount');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('categories', function (Blueprint $table) {

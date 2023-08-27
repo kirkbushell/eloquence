@@ -8,8 +8,11 @@ class ItemFactory extends Factory
 {
     protected $model = Item::class;
     
-    public function definition()
+    public function definition(): array
     {
-        // TODO: Implement definition() method.
+        return [
+            'order_id' => Order::factory(),
+            'amount' => fake()->numberBetween(0, 100),
+        ];
     }
 }

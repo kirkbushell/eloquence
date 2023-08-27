@@ -5,7 +5,6 @@ namespace Eloquence\Behaviours\SumCache;
 use Eloquence\Behaviours\Cacheable;
 use Eloquence\Behaviours\CacheConfig;
 use Illuminate\Database\Eloquent\Model;
-use ReflectionMethod;
 
 class SumCache
 {

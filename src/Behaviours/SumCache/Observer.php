@@ -21,6 +21,6 @@ class Observer
 
     public function restored($model)
     {
-        // @TODO
+        SumCache::for($model)->increase();
     }
 }

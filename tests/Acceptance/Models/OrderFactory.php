@@ -10,6 +10,6 @@ class OrderFactory extends Factory
     
     public function definition()
     {
-        // TODO: Implement definition() method.
+        return [];
     }
 }

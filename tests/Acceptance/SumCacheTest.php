@@ -6,85 +6,64 @@ use Tests\Acceptance\Models\Order;
 
 class SumCacheTest extends AcceptanceTestCase
 {
-    private array $data = [];
-
-    public function init()
-    {
-        $order = new Order;
-        $order->save();
-
-        $item = new Item;
-        $item->amount = 34;
-        $item->orderId = $order->id;
-        $item->save();
-
-        $this->data = compact('order', 'item');
-    }
-
     function test_relatedModelSumCacheIsIncreasedWhenModelIsCreated()
     {
-        $order = Order::first();
+        Item::factory()->create(['amount' => 34]);
 
-        $this->assertEquals(34, $order->totalAmount);
+        $this->assertEquals(34, Order::first()->totalAmount);
     }
 
     function test_relatedModelSumCacheIsDecreasedWhenModelIsDeleted()
     {
-        $this->data['item']->delete();
+        $item = Item::factory()->create(['amount' => 19]);
+        $item->delete();
 
-        $order = Order::first();
-
-        $this->assertEquals(0, $order->totalAmount);
+        $this->assertEquals(0, Order::first()->totalAmount);
     }
 
     function test_whenAnAggregatedModelValueSwitchesContext()
     {
-        $newOrder = new Order;
-        $newOrder->save();
-
-        $item = new Item;
-        $item->orderId = $this->data['order']->id;
-        $item->amount = 45;
-        $item->save();
+        $item = Item::factory()->create();
+        $newOrder = Order::factory()->create();
 
         $item = $item->fresh();
         $item->orderId = $newOrder->id;
         $item->save();
 
-        $this->assertEquals(34, $this->data['order']->fresh()->totalAmount);
-        $this->assertEquals(45, $newOrder->fresh()->totalAmount);
+        $this->assertEquals(0, Order::first()->totalAmount);
+        $this->assertEquals($item->amount, $newOrder->fresh()->totalAmount);
     }
 
     function test_aggregateValuesAreUpdatedWhenModelsAreRestored()
     {
-        $this->data['item']->delete();
+        $item = Item::factory()->create();
+        $item->delete(); // Triggers decrease in order total
+        $item->restore(); // Restores order total
 
-        $this->assertEquals(0, $this->data['order']->fresh()->totalAmount);
+        $this->assertEquals($item->amount, Order::first()->totalAmount);
     }
 
     function test_aggregateValueIsSetToCorrectAmountWhenSourceFieldChanges()
     {
-        $item = $this->data['item'];
-
+        $item = Item::factory()->create();
         $item->amount = 20;
         $item->save();
 
-        $this->assertEquals(20, $this->data['order']->fresh()->totalAmount);
+        $this->assertEquals(20, Order::first()->totalAmount);
     }
 
     function test_aggregateValueOnOriginalRelatedModelIsUpdatedCorrectlyWhenTheForeignKeyAndAmountIsChanged()
     {
-        $item = $this->data['item'];
+        $item = Item::factory()->create();
 
-        $newOrder = new Order;
-        $newOrder->save();
+        $newOrder = Order::factory()->create();
 
         $item = $item->fresh();
         $item->amount = 20;
         $item->orderId = $newOrder->id;
         $item->save();
 
-        $this->assertEquals(0, $this->data['order']->fresh()->totalAmount);
+        $this->assertEquals(0, Order::first()->totalAmount);
         $this->assertEquals(20, $newOrder->fresh()->totalAmount);
     }
 }

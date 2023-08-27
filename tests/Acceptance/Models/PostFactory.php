@@ -8,7 +8,7 @@ class PostFactory extends Factory
 {
     protected $model = Post::class;
     
-    public function definition()
+    public function definition(): array
     {
         return [
             'category_id' => Category::factory(),
