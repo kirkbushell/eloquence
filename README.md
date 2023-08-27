@@ -63,8 +63,9 @@ To setup a count cache configuration, we add the HasCounts trait, and setup the 
 ```php
 use Eloquence\Behaviours\CountCache\CountedBy;
 use Eloquence\Behaviours\CountCache\HasCounts;
+use Illuminate\Database\Eloquent\Model;
 
-class Post extends Eloquent {
+class Post extends Model {
     use HasCounts;
 
     #[CountedBy]
@@ -88,7 +89,7 @@ It uses your own relationship to find the related record, so no other configurat
 Of course, if you have a different setup, you can alter the count cache behaviour:
 
 ```php
-class Post extends Eloquent {
+class Post extends Model {
     use HasCounts;
 
     #[CountedBy(as: 'total_posts')]
@@ -123,8 +124,9 @@ To setup the sum cache configuration, simply do the following:
 ```php
 use Eloquence\Behaviours\SumCache\HasSums;
 use Eloquence\Behaviours\SumCache\SummedBy;
+use Illuminate\Database\Eloquent\Model;
 
-class Item extends Eloquent {
+class Item extends Model {
     use HasSums;
 
     #[SummedBy(from: 'amount', as: 'total_amount')]
@@ -166,7 +168,7 @@ parent Author model, you'll end up with erroneous data that can be quite difficu
 Sluggable is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
 
 ```php
-class User extends Eloquent {
+class User extends Model {
     use Sluggable;
 
     public function slugStrategy(): string
