@@ -12,6 +12,10 @@ class Category extends Model
     use CamelCased;
     use HasFactory;
 
+    protected $fillable = [
+        'post_count'
+    ];
+
     protected static function newFactory(): Factory
     {
         return CategoryFactory::new();

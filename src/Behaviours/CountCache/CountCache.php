@@ -45,11 +45,11 @@ class CountCache
     }
 
     /**
-     * Rebuild the count caches from the database
+     * Rebuild the count caches from the database for each matching model.
      */
     public function rebuild(): void
     {
-        $this->apply(function($config) {
+        $this->apply(function(CacheConfig $config) {
             $this->rebuildCacheRecord($config, $this->model, 'count');
         });
     }

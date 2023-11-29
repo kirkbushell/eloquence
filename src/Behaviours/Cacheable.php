@@ -4,6 +4,7 @@ namespace Eloquence\Behaviours;
 use Closure;
 use Eloquence\Behaviours\SumCache\SummedBy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -75,11 +76,24 @@ trait Cacheable
      * 2. Get the aggregate value for all records with that foreign key.
      * 3. Update the related model wth the relevant aggregate value.
      */
-    public function rebuildCacheRecord(CacheConfig $config, Model $model, $command)
+    public function rebuildCacheRecord(CacheConfig $config, Model $model, $command): void
     {
         $foreignKey = $config->foreignKeyName($model);
-        $value = $model->newQuery()->select($foreignKey)->groupBy($foreignKey)->$command($config->aggregateField);
-        $config->relatedModel($model)->update([$config->aggregateField => $value]);
+        $related = $config->emptyRelatedModel($model);
+
+        $updateSql = sprintf('UPDATE %s SET %s = (SELECT %s(%s) FROM %s WHERE %s = %s.%s GROUP BY %s)',
+            $related->getTable(),
+            $config->aggregateField,
+            $command,
+            $config->sourceField,
+            $model->getTable(),
+            $foreignKey,
+            $related->getTable(),
+            $related->getKeyName(),
+            $foreignKey
+        );
+
+        DB::update($updateSql);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Behaviours\CountCache;
 
 trait HasCounts
@@ -6,5 +7,10 @@ trait HasCounts
     public static function bootHasCounts()
     {
         static::observe(Observer::class);
+    }
+
+    public static function rebuildCountCache(): void
+    {
+        CountCache::for(new self)->rebuild();
     }
 }

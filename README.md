@@ -190,6 +190,15 @@ generated after the record has been saved - which results in a secondary save ca
 
 That's it! Easy huh?
 
+# Upgrading from v10
+Version 11 of Eloquence is a complete rebuild and departure from the original codebase, utilising instead PHP 8.1 attributes
+and moving away from traits/class extensions where possible. This means that in some projects a lot of udpates will need to 
+be made to ensure that your use of Eloquence continues to work.
+
+## 1. Class renames
+
+* Camelcasing has been renamed to CamelCased
+
 ## Changelog
 
 #### 11.0.0

@@ -15,7 +15,7 @@ class DBQueryLog
      *
      * @return void
      */
-    public static function enable(): void
+    public static function initialise(): void
     {
         if (!config('eloquence.logging.enabled')) return;
 

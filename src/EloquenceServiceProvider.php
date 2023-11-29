@@ -1,7 +1,6 @@
 <?php
 namespace Eloquence;
 
-use Eloquence\Commands\RebuildCaches;
 use Eloquence\Utilities\DBQueryLog;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,6 +12,6 @@ class EloquenceServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        DBQueryLog::enable();
+        DBQueryLog::initialise();
     }
 }

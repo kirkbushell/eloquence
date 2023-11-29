@@ -7,4 +7,9 @@ trait HasSums
     {
         static::observe(Observer::class);
     }
+
+    public static function rebuildSumCache(): void
+    {
+        SumCache::for(new self)->rebuild();
+    }
 }

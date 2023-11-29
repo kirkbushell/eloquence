@@ -29,13 +29,18 @@ class CacheConfig
     /**
      * Returns -a- related model object - this object is actually empty, and is found on the query builder, used to
      * infer certain information abut the relationship that cannot be found on CacheConfig::relation.
-     *
-     * @param Model $model
-     * @return Model
      */
     public function emptyRelatedModel(Model $model): Model
     {
-        return $this->relation($model)->getQuery()->getModel();
+        return $this->relation($model)->getModel();
+    }
+
+    /**
+     * Returns the related model class name.
+     */
+    public function relatedModelClass($model): string
+    {
+        return get_class($this->emptyRelatedModel($model));
     }
 
     public function foreignKeyName(Model $model): string
