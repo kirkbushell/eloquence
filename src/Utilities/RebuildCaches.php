@@ -24,7 +24,7 @@ class RebuildCaches extends Command
     public function handle(): void
     {
         $path = $this->argument('path') ?? app_path();
-        
+
         $this->allModelsUsingCaches($path)->each(function(string $class) {
             $traits = class_uses_recursive($class);
 

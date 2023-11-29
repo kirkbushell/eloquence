@@ -81,7 +81,7 @@ trait Cacheable
         $foreignKey = $config->foreignKeyName($model);
         $related = $config->emptyRelatedModel($model);
 
-        $updateSql = sprintf('UPDATE %s SET %s = (SELECT %s(%s) FROM %s WHERE %s = %s.%s GROUP BY %s)',
+        $updateSql = sprintf('UPDATE %s SET %s = COALESCE((SELECT %s(%s) FROM %s WHERE %s = %s.%s), 0)',
             $related->getTable(),
             $config->aggregateField,
             $command,
@@ -89,9 +89,12 @@ trait Cacheable
             $model->getTable(),
             $foreignKey,
             $related->getTable(),
-            $related->getKeyName(),
-            $foreignKey
+            $related->getKeyName()
         );
+
+//        dd($updateSql);
+
+//        echo "\n".$updateSql;
 
         DB::update($updateSql);
     }

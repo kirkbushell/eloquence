@@ -3,6 +3,7 @@ namespace Tests\Acceptance;
 
 use Eloquence\EloquenceServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 
