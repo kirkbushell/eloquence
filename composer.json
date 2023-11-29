@@ -22,7 +22,8 @@
         "illuminate/database": "^10.0",
         "illuminate/support": "^10.0",
         "ramsey/uuid": "^4.7",
-        "hanneskod/classtools": "^0.1.0"
+        "hanneskod/classtools": "^0.1.0",
+        "symfony/finder": "^6.3"
     },
     "require-dev": {
         "illuminate/events": "^10.0",
@@ -37,7 +38,18 @@
         }
     },
     "scripts": {
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -46,6 +58,13 @@
             "providers": [
                 "Eloquence\\EloquenceServiceProvider"
             ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     }
 }

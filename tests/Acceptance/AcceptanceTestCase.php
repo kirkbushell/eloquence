@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Acceptance;
 
+use Eloquence\EloquenceServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
@@ -13,6 +14,13 @@ class AcceptanceTestCase extends TestCase
 
         $this->migrate();
         $this->init();
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            EloquenceServiceProvider::class,
+        ];
     }
 
     protected function getEnvironmentSetUp($app)
