@@ -17,9 +17,11 @@ class DBQueryLog
      */
     public static function initialise(): void
     {
-        if (!config('eloquence.logging.enabled')) return;
+        if (!config('eloquence.logging.enabled')) {
+            return;
+        }
 
-        DB::listen(function(QueryExecuted $query) {
+        DB::listen(function (QueryExecuted $query) {
             Log::driver(config('eloquence.logging.driver'))->debug("[{$query->time}ms] $query->sql", $query->bindings);
         });
     }

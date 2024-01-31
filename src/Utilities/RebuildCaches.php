@@ -25,11 +25,13 @@ class RebuildCaches extends Command
     {
         $path = $this->argument('path') ?? app_path();
 
-        $this->allModelsUsingCaches($path)->each(function(string $class) {
+        $this->allModelsUsingCaches($path)->each(function (string $class) {
             $traits = class_uses_recursive($class);
 
             foreach ($this->caches as $trait => $method) {
-                if (!in_array($trait, $traits)) continue;
+                if (!in_array($trait, $traits)) {
+                    continue;
+                }
 
                 $class::$method();
             }
@@ -45,10 +47,10 @@ class RebuildCaches extends Command
     private function allModelsUsingCaches(string $path): Collection
     {
         return collect(Finder::create()->files()->in($path)->name('*.php'))
-            ->filter(fn(SplFileInfo $file) => $file->getFilename()[0] === Str::upper($file->getFilename()[0]))
-            ->map(fn(SplFileInfo $file) => $this->fullyQualifiedClassName($file))
-            ->filter(fn(string $class) => is_subclass_of($class, Model::class))
-            ->filter(fn(string $class) => $this->usesCaches($class));
+            ->filter(fn (SplFileInfo $file) => $file->getFilename()[0] === Str::upper($file->getFilename()[0]))
+            ->map(fn (SplFileInfo $file) => $this->fullyQualifiedClassName($file))
+            ->filter(fn (string $class) => is_subclass_of($class, Model::class))
+            ->filter(fn (string $class) => $this->usesCaches($class));
     }
 
     /**
@@ -65,11 +67,11 @@ class RebuildCaches extends Command
 
         foreach ($tokens as $i => $token) {
             if ($token->is(T_NAMESPACE)) {
-                $namespace = $tokens[$i+2]->text;
+                $namespace = $tokens[$i + 2]->text;
             }
 
             if ($token->is(T_CLASS)) {
-                $class = $tokens[$i+2]->text;
+                $class = $tokens[$i + 2]->text;
             }
 
             if ($namespace && $class) {

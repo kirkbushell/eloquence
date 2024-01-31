@@ -32,7 +32,8 @@
         "illuminate/events": "^10.0",
         "mockery/mockery": "^1.4.4",
         "orchestra/testbench": "^8.0",
-        "phpunit/phpunit": "^9.5.10"
+        "phpunit/phpunit": "^9.5.10",
+        "friendsofphp/php-cs-fixer": "^3.48"
     },
     "autoload": {
         "psr-4": {
@@ -68,6 +69,11 @@
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
         }
     }
 }

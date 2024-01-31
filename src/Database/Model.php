@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Database;
 
 use Eloquence\Behaviours\HasCamelCasing;

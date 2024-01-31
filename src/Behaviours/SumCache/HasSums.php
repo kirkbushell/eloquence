@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Behaviours\SumCache;
 
 trait HasSums
@@ -10,6 +11,6 @@ trait HasSums
 
     public static function rebuildSumCache(): void
     {
-        SumCache::for(new self)->rebuild();
+        SumCache::for(new self())->rebuild();
     }
 }

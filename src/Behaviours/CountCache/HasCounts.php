@@ -11,6 +11,6 @@ trait HasCounts
 
     public static function rebuildCountCache(): void
     {
-        CountCache::for(new self)->rebuild();
+        CountCache::for(new self())->rebuild();
     }
 }

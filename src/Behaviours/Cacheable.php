@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Behaviours;
 
 use Closure;
@@ -36,10 +37,10 @@ trait Cacheable
         // This behemoth cycles through all valid methods, and then gets only the attributes we care about,
         // formatting it in a way that is usable by our various aggregate service classes.
         return collect($reflect->getMethods())
-            ->filter(fn(ReflectionMethod $method) => count($method->getAttributes($attributeClass)) > 0)
+            ->filter(fn (ReflectionMethod $method) => count($method->getAttributes($attributeClass)) > 0)
             ->flatten()
-            ->map(function(ReflectionMethod $method) use ($attributeClass) {
-                return collect($method->getAttributes($attributeClass))->map(fn(\ReflectionAttribute $attribute) => [
+            ->map(function (ReflectionMethod $method) use ($attributeClass) {
+                return collect($method->getAttributes($attributeClass))->map(fn (\ReflectionAttribute $attribute) => [
                     'name' => $method->name,
                     'attribute' => $attribute->newInstance(),
                 ])->toArray();
@@ -82,7 +83,8 @@ trait Cacheable
         $foreignKey = $config->foreignKeyName($model);
         $related = $config->emptyRelatedModel($model);
 
-        $updateSql = sprintf('UPDATE %s SET %s = COALESCE((SELECT %s(%s) FROM %s WHERE %s = %s.%s), 0)',
+        $updateSql = sprintf(
+            'UPDATE %s SET %s = COALESCE((SELECT %s(%s) FROM %s WHERE %s = %s.%s), 0)',
             $related->getTable(),
             $config->aggregateField,
             $command,

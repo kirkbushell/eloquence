@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence;
 
 use Eloquence\Utilities\DBQueryLog;

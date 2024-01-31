@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Behaviours;
 
 use Illuminate\Support\Str;
