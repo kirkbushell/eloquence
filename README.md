@@ -31,7 +31,7 @@ will ensure you can do exactly that. It transforms all attribute access from cam
 providing a unified coding style across your application. This means everything from attribute access to JSON API 
 responses will all be camelCased. To use, simply add the CamelCased trait to your model:
 
-    use \Eloquence\Behaviours\CamelCased;
+    use \Eloquence\Behaviours\HasCamelCasing;
 
 ### Note!
 
@@ -169,7 +169,7 @@ Sluggable is another behaviour that allows for the easy addition of model slugs.
 
 ```php
 class User extends Model {
-    use Sluggable;
+    use HasSlugs;
 
     public function slugStrategy(): string
     {
@@ -192,13 +192,17 @@ That's it! Easy huh?
 
 # Upgrading from v10
 Version 11 of Eloquence is a complete rebuild and departure from the original codebase, utilising instead PHP 8.1 attributes
-and moving away from traits/class extensions where possible. This means that in some projects a lot of udpates will need to 
+and moving away from traits/class extensions where possible. This means that in some projects many updates will need to 
 be made to ensure that your use of Eloquence continues to work.
 
 ## 1. Class renames
 
 * Camelcasing has been renamed to HasCamelCasing
 * Sluggable renamed to HasSlugs
+
+## 2. Updates to how caches work
+All your cache implementations will need to be modified following the guide above. But in short, you'll need to import
+and apply the provided attributes to the relationship methods on your models that require aggregated cache values.
 
 ## Changelog
 
