@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\CamelCased;
+use Eloquence\Behaviours\HasCamelCasing;
 use Illuminate\Database\Eloquent\Model;
 
 class GuardedUser extends Model
 {
-    use CamelCased;
+    use HasCamelCasing;
 
     protected $table = 'users';
 

@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\CamelCased;
-use Eloquence\Behaviours\Sluggable;
+use Eloquence\Behaviours\HasCamelCasing;
+use Eloquence\Behaviours\HasSlugs;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model
 {
-    use CamelCased;
+    use HasCamelCasing;
     use HasFactory;
-    use Sluggable;
+    use HasSlugs;
 
     protected $fillable = [
         'post_count'

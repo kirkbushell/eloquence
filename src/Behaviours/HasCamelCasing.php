@@ -3,7 +3,7 @@ namespace Eloquence\Behaviours;
 
 use Illuminate\Support\Str;
 
-trait CamelCased
+trait HasCamelCasing
 {
     /**
      * Alter eloquent model behaviour so that model attributes can be accessed via camelCase, but more importantly,

@@ -2,12 +2,12 @@
 
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\CamelCased;
+use Eloquence\Behaviours\HasCamelCasing;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    use CamelCased;
+    use HasCamelCasing;
 
     
 }

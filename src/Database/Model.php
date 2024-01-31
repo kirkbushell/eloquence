@@ -1,7 +1,7 @@
 <?php
 namespace Eloquence\Database;
 
-use Eloquence\Behaviours\CamelCased;
+use Eloquence\Behaviours\HasCamelCasing;
 
 /**
  * Class Model
@@ -12,5 +12,5 @@ use Eloquence\Behaviours\CamelCased;
  */
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
-    use CamelCased;
+    use HasCamelCasing;
 }

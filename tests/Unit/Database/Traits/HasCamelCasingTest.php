@@ -7,7 +7,7 @@ use Tests\Unit\Stubs\PivotModelStub;
 use Tests\Unit\Stubs\RealModelStub;
 use Tests\Unit\TestCase;
 
-class CamelCaseModelTest extends TestCase
+class HasCamelCasingTest extends TestCase
 {
     private $model;
 

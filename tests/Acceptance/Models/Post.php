@@ -3,8 +3,8 @@ namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\CountCache\CountedBy;
 use Eloquence\Behaviours\CountCache\HasCounts;
-use Eloquence\Behaviours\CamelCased;
-use Eloquence\Behaviours\Sluggable;
+use Eloquence\Behaviours\HasCamelCasing;
+use Eloquence\Behaviours\HasSlugs;
 use Eloquence\Behaviours\SumCache\HasSums;
 use Eloquence\Behaviours\SumCache\SummedBy;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
-    use CamelCased;
-    use Sluggable;
+    use HasCamelCasing;
+    use HasSlugs;
     use HasCounts;
     use HasFactory;
     use HasSums;

@@ -4,7 +4,7 @@ namespace Tests\Acceptance;
 use Tests\Acceptance\Models\Post;
 use Tests\Acceptance\Models\User;
 
-class SluggedTest extends AcceptanceTestCase
+class HasSlugsTest extends AcceptanceTestCase
 {
     function test_slugsCanBeGeneratedWithCustomStrategy()
     {

@@ -5,13 +5,13 @@ namespace Eloquence\Behaviours;
 use Eloquence\Exceptions\UnableToCreateSlugException;
 use Illuminate\Support\Str;
 
-trait Sluggable
+trait HasSlugs
 {
     /**
      * When added to a model, the trait will bind to the creating and created
      * events, generating the appropriate slugs as necessary.
      */
-    public static function bootSluggable(): void
+    public static function bootHasSlugs(): void
     {
         static::creating(function ($model) {
             $model->generateSlug();

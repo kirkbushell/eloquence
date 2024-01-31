@@ -2,13 +2,17 @@
     "name": "kirkbushell/eloquence",
     "description": "A set of extensions adding additional functionality and consistency to Laravel's awesome Eloquent library.",
     "keywords": [
-        "laravel",
-        "eloquent",
+        "aggregates",
+        "cache",
         "camelcase",
         "camel",
         "case",
+        "count",
+        "eloquent",
+        "laravel",
         "snake_case",
-        "snake"
+        "snake",
+        "sum"
     ],
     "authors": [
         {

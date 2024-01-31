@@ -2,14 +2,14 @@
 
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\CamelCased;
+use Eloquence\Behaviours\HasCamelCasing;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use CamelCased;
+    use HasCamelCasing;
     use HasFactory;
 
     protected $fillable = [

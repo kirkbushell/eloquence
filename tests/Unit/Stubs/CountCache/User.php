@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Unit\Stubs\CountCache;
 
-use Eloquence\Behaviours\Sluggable;
+use Eloquence\Behaviours\HasSlugs;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    use Sluggable;
+    use HasSlugs;
 
     public function slugStrategy()
     {

@@ -197,7 +197,8 @@ be made to ensure that your use of Eloquence continues to work.
 
 ## 1. Class renames
 
-* Camelcasing has been renamed to CamelCased
+* Camelcasing has been renamed to HasCamelCasing
+* Sluggable renamed to HasSlugs
 
 ## Changelog
 

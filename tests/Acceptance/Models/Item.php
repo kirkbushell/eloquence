@@ -2,7 +2,7 @@
 namespace Tests\Acceptance\Models;
 
 use Eloquence\Behaviours\SumCache\HasSums;
-use Eloquence\Behaviours\CamelCased;
+use Eloquence\Behaviours\HasCamelCasing;
 use Eloquence\Behaviours\SumCache\SummedBy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
-    use CamelCased;
+    use HasCamelCasing;
     use HasSums;
     use HasFactory;
     use SoftDeletes;
