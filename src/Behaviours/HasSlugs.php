@@ -89,16 +89,13 @@ trait HasSlugs
         }
     }
 
-    /**
-     * Set the value of the slug.
-     */
     public function setSlugValue(Slug $value): void
     {
         $this->{$this->slugField()} = $value;
     }
 
     /**
-     * Allows laravel to start using the sluggable field as the string for routes.
+     * Allows laravel to start using the slug field as the string for routes.
      */
     public function getRouteKey(): mixed
     {
