@@ -139,22 +139,6 @@ trait HasSlugs
         return 'id';
     }
 
-    /**
-     * Sets the slug attribute with the Slug value object.
-     */
-    public function setSlugAttribute(Slug $slug): void
-    {
-        $this->attributes[$this->slugField()] = (string) $slug;
-    }
-
-    /**
-     * Returns the slug attribute as a Slug value object.
-     */
-    public function getSlugAttribute(): Slug
-    {
-        return new Slug($this->attributes[$this->slugField()]);
-    }
-
     private function slugExists(Slug $slug): bool
     {
         return $this->newQuery()

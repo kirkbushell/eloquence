@@ -10,13 +10,13 @@ class HasSlugsTest extends AcceptanceTestCase
     {
         $user = User::factory(['firstName' => 'Kirk', 'lastName' => 'Bushell'])->create();
 
-        $this->assertEquals('kirk-bushell', (string) $user->slug);
+        $this->assertEquals('kirk-bushell', $user->slug);
     }
 
     function test_slugsCanBeGeneratedUsingRandomValues()
     {
         $post = Post::factory()->create();
 
-        $this->assertMatchesRegularExpression('/^[a-z0-9]{8}$/i', (string) $post->slug);
+        $this->assertMatchesRegularExpression('/^[a-z0-9]{8}$/i', $post->slug);
     }
 }
