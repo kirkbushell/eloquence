@@ -1,26 +1,34 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\SumCache\Summable;
-use Eloquence\Behaviours\CamelCasing;
+use Eloquence\Behaviours\SumCache\HasSums;
+use Eloquence\Behaviours\HasCamelCasing;
+use Eloquence\Behaviours\SumCache\SummedBy;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
-    use CamelCasing;
-    use Summable;
+    use HasCamelCasing;
+    use HasSums;
+    use HasFactory;
+    use SoftDeletes;
 
-    public function sumCaches()
+    protected $fillable = [
+        'amount',
+        'order_id',
+    ];
+
+    #[SummedBy('amount', 'total_amount')]
+    public function order()
     {
-        return [
-            'Tests\Acceptance\Models\Order',
-            [
-                'model' => 'Tests\Acceptance\Models\Order',
-                'field' => 'itemTotalExplicit',
-                'columnToSum' => 'total',
-                'foreignKey' => 'orderId',
-                'key' => 'id',
-            ]
-        ];
+        return $this->belongsTo(Order::class);
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return ItemFactory::new();
     }
 }

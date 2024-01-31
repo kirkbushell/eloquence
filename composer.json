@@ -2,13 +2,17 @@
     "name": "kirkbushell/eloquence",
     "description": "A set of extensions adding additional functionality and consistency to Laravel's awesome Eloquent library.",
     "keywords": [
-        "laravel",
-        "eloquent",
+        "aggregates",
+        "cache",
         "camelcase",
         "camel",
         "case",
+        "count",
+        "eloquent",
+        "laravel",
         "snake_case",
-        "snake"
+        "snake",
+        "sum"
     ],
     "authors": [
         {
@@ -21,13 +25,15 @@
         "hashids/hashids": "^4.1",
         "illuminate/database": "^10.0",
         "illuminate/support": "^10.0",
-        "ramsey/uuid": "^4.7"
+        "hanneskod/classtools": "^0.1.0",
+        "symfony/finder": "^6.3"
     },
     "require-dev": {
         "illuminate/events": "^10.0",
         "mockery/mockery": "^1.4.4",
         "orchestra/testbench": "^8.0",
-        "phpunit/phpunit": "^9.5.10"
+        "phpunit/phpunit": "^9.5.10",
+        "friendsofphp/php-cs-fixer": "^3.48"
     },
     "autoload": {
         "psr-4": {
@@ -36,8 +42,38 @@
         }
     },
     "scripts": {
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ]
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eloquence\\EloquenceServiceProvider"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
+    }
 }

@@ -10,4 +10,9 @@ class SlugTest extends TestCase
     {
         $this->assertNotEquals(Slug::random(), Slug::random());
     }
+
+    public function test_slugs_are_8_characters_long()
+    {
+        $this->assertEquals(8, strlen((string) Slug::random()));
+    }
 }

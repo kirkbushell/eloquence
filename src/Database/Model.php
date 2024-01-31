@@ -1,8 +1,8 @@
 <?php
+
 namespace Eloquence\Database;
 
-use Eloquence\Behaviours\CamelCasing;
-use Eloquence\Behaviours\Uuid;
+use Eloquence\Behaviours\HasCamelCasing;
 
 /**
  * Class Model
@@ -13,6 +13,5 @@ use Eloquence\Behaviours\Uuid;
  */
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
-    use CamelCasing;
-    use Uuid;
+    use HasCamelCasing;
 }

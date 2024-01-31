@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Unit\Stubs\CountCache;
 
-use Eloquence\Behaviours\CountCache\Countable;
+use Eloquence\Behaviours\CountCache\HasCounts;
 use Eloquence\Database\Model;
 
 class Post extends Model
 {
-    use Countable;
+    use HasCounts;
 
     public function countCaches()
     {

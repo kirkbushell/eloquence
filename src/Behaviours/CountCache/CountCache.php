@@ -1,122 +1,82 @@
 <?php
+
 namespace Eloquence\Behaviours\CountCache;
 
 use Eloquence\Behaviours\Cacheable;
+use Eloquence\Behaviours\CacheConfig;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
+/**
+ * The count cache does operations on the model that has just updated, works out the related models, and calls the appropriate operations on cacheable.
+ */
 class CountCache
 {
     use Cacheable;
 
-    /**
-     * @var Model
-     */
-    private $model;
-
-    /**
-     * @param Model $model
-     */
-    public function __construct(Model $model)
+    private function __construct(private Model $model)
     {
-        $this->model = $model;
     }
 
-    /**
-     * Applies the provided function to the count cache setup/configuration.
-     *
-     * @param \Closure $function
-     */
-    public function apply(\Closure $function)
+    private function configuration(): array
     {
-        foreach ($this->model->countCaches() as $key => $cache) {
-            $function($this->config($key, $cache));
-        }
-    }
-
-    /**
-     * Update the cache for all operations.
-     */
-    public function update()
-    {
-        $this->apply(function ($config) {
-            $foreignKey = Str::snake($this->key($config['foreignKey']));
-
-            if ($this->model->getOriginal($foreignKey) && $this->model->{$foreignKey} != $this->model->getOriginal($foreignKey)) {
-                $this->updateCacheRecord($config, '-', 1, $this->model->getOriginal($foreignKey));
-                $this->updateCacheRecord($config, '+', 1, $this->model->{$foreignKey});
-            }
+        return $this->reflect(CountedBy::class, function (array $config) {
+            $aggregateField = $config['attribute']->as ?? Str::lower(Str::snake(class_basename($this->model))).'_count';
+            return [$config['name'] => $aggregateField];
         });
     }
 
     /**
-     * Rebuild the count caches from the database
+     * When a model is updated, its foreign keys may have changed. In this situation, we need to update both the original
+     * related model, and the new one.The original would be deducted the value, whilst the new one is increased.
      */
-    public function rebuild()
+    public function update(): void
     {
-        $this->apply(function($config) {
-            $this->rebuildCacheRecord($config, $this->model, 'COUNT');
+        $this->apply(function (CacheConfig $config) {
+            $foreignKey = $config->foreignKeyName($this->model);
+
+            // We only need to do anything if the foreign key was changed.
+            if (!$this->model->wasChanged($foreignKey)) {
+                return;
+            }
+
+            // for the minus operation, we first have to get the model that is no longer associated with this one.
+            $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
+
+            $this->updateCacheValue($originalRelatedModel, $config, -1);
+            $this->updateCacheValue($config->relatedModel($this->model), $config, 1);
+        });
+    }
+
+    /**
+     * Rebuild the count caches from the database for each matching model.
+     */
+    public function rebuild(): void
+    {
+        $this->apply(function (CacheConfig $config) {
+            $this->rebuildCacheRecord($config, $this->model, 'count');
+        });
+    }
+
+    public function increment(): void
+    {
+        $this->apply(function (CacheConfig $config) {
+            $this->updateCacheValue($config->relatedModel($this->model), $config, 1);
+        });
+    }
+
+    public function decrement(): void
+    {
+        $this->apply(function (CacheConfig $config) {
+            $this->updateCacheValue($config->relatedModel($this->model), $config, -1);
         });
     }
 
     /**
      * Takes a registered counter cache, and setups up defaults.
-     *
-     * @param string $cacheKey
-     * @param array $cacheOptions
-     * @return array
      */
-    protected function config($cacheKey, $cacheOptions)
+    protected function config($key, string $value): CacheConfig
     {
-        $opts = [];
-
-        if (is_numeric($cacheKey)) {
-            if (is_array($cacheOptions)) {
-                // Most explicit configuration provided
-                $opts = $cacheOptions;
-                $relatedModel = Arr::get($opts, 'model');
-            } else {
-                // Smallest number of options provided, figure out the rest
-                $relatedModel = $cacheOptions;
-            }
-        } else {
-            // Semi-verbose configuration provided
-            $relatedModel = $cacheOptions;
-            $opts['field'] = $cacheKey;
-
-            if (is_array($cacheOptions)) {
-                if (isset($cacheOptions[2])) {
-                    $opts['key'] = $cacheOptions[2];
-                }
-                if (isset($cacheOptions[1])) {
-                    $opts['foreignKey'] = $cacheOptions[1];
-                }
-                if (isset($cacheOptions[0])) {
-                    $relatedModel = $cacheOptions[0];
-                }
-            }
-        }
-
-        return $this->defaults($opts, $relatedModel);
-    }
-
-    /**
-     * Returns necessary defaults, overwritten by provided options.
-     *
-     * @param array $options
-     * @param string $relatedModel
-     * @return array
-     */
-    protected function defaults($options, $relatedModel)
-    {
-        $defaults = [
-            'model' => $relatedModel,
-            'field' => $this->field($this->model, 'count'),
-            'foreignKey' => $this->field($relatedModel, 'id'),
-            'key' => 'id'
-        ];
-
-        return array_merge($defaults, $options);
+        return new CacheConfig($key, $value);
     }
 }

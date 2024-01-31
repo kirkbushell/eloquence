@@ -7,72 +7,40 @@ use Tests\Acceptance\Models\User;
 
 class CountCacheTest extends AcceptanceTestCase
 {
-    private $data = [];
-
-    public function init()
+    function test_userHasASinglePostCount()
     {
-        $this->data = $this->setupUserAndPost();
+        Post::factory()->create();
+
+        $this->assertEquals(1, User::first()->postCount);
     }
 
-    public function testUserCountCache()
+    function test_whenRelatedModelsAreSwitchedBothCountCachesAreUpdated()
     {
-        $user = User::first();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $posts = Post::factory()->count(2)->for($user1)->create();
+        $comment = Comment::factory()->for($user1)->for($posts->first())->create();
 
-        $this->assertEquals(1, $user->postCount);
-        $this->assertEquals(1, $user->postCountExplicit);
+        $this->assertEquals(2, $user1->fresh()->postCount);
+        $this->assertEquals(1, $user1->fresh()->commentCount);
+        $this->assertEquals(1, $posts->first()->fresh()->commentCount);
+
+        $comment = $comment->fresh();
+        $comment->userId = $user2->id;
+        $comment->save();
+
+        $this->assertEquals(0, $user1->fresh()->commentCount);
+        $this->assertEquals(1, $user2->fresh()->commentCount);
     }
 
-    public function testComplexCountCache()
+    public function testItCanHandleModelRestoration()
     {
-        $post = new Post;
-        $post->userId = $this->data['user']->id;
-        $post->save();
+        $post = Post::factory()->create();
 
-        $comment = new Comment;
-        $comment->userId = $this->data['user']->id;
-        $comment->postId = $this->data['post']->id;
-        $comment->save();
-
-        $this->assertEquals(2, User::first()->postCount);
-        $this->assertEquals(2, User::first()->postCountExplicit);
-
-        $this->assertEquals(1, User::first()->commentCount);
-        $this->assertEquals(1, Post::first()->commentCount);
-
-        $comment->postId = $post->id;
-        $comment->save();
-
-        $this->assertEquals(0, Post::first()->commentCount);
-        $this->assertEquals(1, Post::get()[1]->commentCount);
-    }
-
-    public function testItCanHandleNegativeCounts()
-    {
-        $post = new Post;
-        $post->userId = $this->data['user']->id;
-        $post->save();
-
-        $comment = new Comment;
-        $comment->userId = $this->data['user']->id;
-        $comment->postId = $this->data['post']->id;
-        $comment->save();
+        $comment = Comment::factory()->for($post)->create();
         $comment->delete();
         $comment->restore();
 
-        $this->assertEquals(1, Post::first()->commentCount);
-    }
-
-    private function setupUserAndPost()
-    {
-        $user = new User;
-        $user->firstName = 'Kirk';
-        $user->lastName = 'Bushell';
-        $user->save();
-
-        $post = new Post;
-        $post->userId = $user->id;
-        $post->save();
-
-        return compact('user', 'post');
+        $this->assertEquals(1, $post->fresh()->commentCount);
     }
 }

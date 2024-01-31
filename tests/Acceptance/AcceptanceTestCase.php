@@ -1,7 +1,9 @@
 <?php
 namespace Tests\Acceptance;
 
+use Eloquence\EloquenceServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 
@@ -13,6 +15,13 @@ class AcceptanceTestCase extends TestCase
 
         $this->migrate();
         $this->init();
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            EloquenceServiceProvider::class,
+        ];
     }
 
     protected function getEnvironmentSetUp($app)
@@ -33,17 +42,17 @@ class AcceptanceTestCase extends TestCase
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('slug')->nullable();
             $table->integer('comment_count')->default(0);
             $table->integer('post_count')->default(0);
-            $table->integer('post_count_explicit')->default(0);
             $table->timestamps();
         });
 
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('category_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('slug')->nullable();
             $table->integer('comment_count')->default(0);
@@ -60,15 +69,22 @@ class AcceptanceTestCase extends TestCase
 
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('item_total')->default(0);
-            $table->integer('item_total_explicit')->default(0);
+            $table->integer('total_amount')->default(0);
             $table->timestamps();
         });
 
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id');
-            $table->integer('total');
+            $table->integer('amount');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('post_count')->default(0);
+            $table->integer('total_comments')->default(0);
             $table->timestamps();
         });
     }

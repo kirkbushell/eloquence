@@ -1,5 +1,5 @@
 <?php
-namespace tests\Unit;
+namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase as PHPUnit_Framework_TestCase;
 use Mockery as m;

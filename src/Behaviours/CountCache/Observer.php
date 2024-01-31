@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Behaviours\CountCache;
 
 /**
@@ -7,15 +8,14 @@ namespace Eloquence\Behaviours\CountCache;
  */
 class Observer
 {
-
     /**
      * When the model has been created, increment the count cache by 1.
      *
      * @param $model
      */
-    public function created($model)
+    public function created($model): void
     {
-        $this->update($model, '+');
+        CountCache::for($model)->increment();
     }
 
     /**
@@ -23,9 +23,9 @@ class Observer
      *
      * @param $model
      */
-    public function deleted($model)
+    public function deleted($model): void
     {
-        $this->update($model, '-');
+        CountCache::for($model)->decrement();
     }
 
     /**
@@ -33,9 +33,9 @@ class Observer
      *
      * @param $model
      */
-    public function updated($model)
+    public function updated($model): void
     {
-        (new CountCache($model))->update();
+        CountCache::for($model)->update();
     }
 
     /**
@@ -43,22 +43,8 @@ class Observer
      *
      * @param $model
      */
-    public function restored($model)
+    public function restored($model): void
     {
-        $this->update($model, '+');
-    }
-
-    /**
-     * Handle most update operations of the count cache.
-     *
-     * @param $model
-     * @param string $operation + or -
-     */
-    private function update($model, $operation)
-    {
-        $countCache = new CountCache($model);
-        $countCache->apply(function ($config) use ($countCache, $model, $operation) {
-            $countCache->updateCacheRecord($config, $operation, 1, $model->{$config['foreignKey']});
-        });
+        CountCache::for($model)->increment();
     }
 }

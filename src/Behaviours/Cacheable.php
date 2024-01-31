@@ -1,144 +1,109 @@
 <?php
+
 namespace Eloquence\Behaviours;
 
+use Closure;
+use Eloquence\Behaviours\SumCache\SummedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use ReflectionClass;
+use ReflectionMethod;
+use Tests\Acceptance\Models\User;
 
+/**
+ * The cacheable trait is concerned with the related models.
+ */
 trait Cacheable
 {
+    /**
+     * Allows cacheable to work with implementors and their unique relationship methods.
+     *
+     * @return array
+     */
+    abstract private function configuration(): array;
+
+    /**
+     * Helper method for easier use of the implementing classes.
+     */
+    public static function for(Model $model): self
+    {
+        return new self($model);
+    }
+
+    public function reflect(string $attributeClass, \Closure $fn)
+    {
+        $reflect = new ReflectionClass($this->model);
+
+        // This behemoth cycles through all valid methods, and then gets only the attributes we care about,
+        // formatting it in a way that is usable by our various aggregate service classes.
+        return collect($reflect->getMethods())
+            ->filter(fn (ReflectionMethod $method) => count($method->getAttributes($attributeClass)) > 0)
+            ->flatten()
+            ->map(function (ReflectionMethod $method) use ($attributeClass) {
+                return collect($method->getAttributes($attributeClass))->map(fn (\ReflectionAttribute $attribute) => [
+                    'name' => $method->name,
+                    'attribute' => $attribute->newInstance(),
+                ])->toArray();
+            })
+            ->flatten(1)
+            ->mapWithKeys($fn)
+            ->toArray();
+    }
+
+    /**
+     * Applies the provided function using the relevant configuration to all configured relations. Configuration
+     * would be one of countedBy, summedBy, averagedBy.etc.
+     */
+    protected function apply(Closure $function): void
+    {
+        foreach ($this->configuration() as $key => $value) {
+            $function($this->config($key, $value));
+        }
+    }
 
     /**
      * Updates a table's record based on the query information provided in the $config variable.
      *
-     * @param array $config
      * @param string $operation Whether to increase or decrease a value. Valid values: +/-
-     * @param int|float|double $amount
-     * @param string $foreignKey
      */
-    public function updateCacheRecord(array $config, $operation, $amount, $foreignKey)
+    protected function updateCacheRecord(Model $model, CacheConfig $config, string $operation, int $amount): void
     {
-        if (is_null($foreignKey)) {
-            return;
-        }
-
-        $config = $this->processConfig($config);
-
-        $sql = DB::table($config['table'])->where($config['key'], $foreignKey);
-
-        /*
-         * Increment for + operator
-         */
-        if ($operation == '+') {
-            return $sql->increment($config['field'], $amount);
-        }
-
-        /*
-         * Decrement for - operator
-         */
-        return $sql->decrement($config['field'], $amount);
+        $this->updateCacheValue($model, $config, $amount);
     }
 
     /**
-     * Rebuilds the cache for the records in question.
+     * It's a bit hard to read what's going on in this method, so let's elaborate.
      *
-     * @param array $config
-     * @param Model $model
-     * @param $command
-     * @param null $aggregateField
-     * @return mixed
+     * 1. Get the foreign key of the model that needs to be queried.
+     * 2. Get the aggregate value for all records with that foreign key.
+     * 3. Update the related model wth the relevant aggregate value.
      */
-    public function rebuildCacheRecord(array $config, Model $model, $command, $aggregateField = null)
+    public function rebuildCacheRecord(CacheConfig $config, Model $model, $command): void
     {
-        $config = $this->processConfig($config);
-        $table = $this->getModelTable($model);
+        $foreignKey = $config->foreignKeyName($model);
+        $related = $config->emptyRelatedModel($model);
 
-        if (is_null($aggregateField)) {
-            $aggregateField = $config['foreignKey'];
-        } else {
-            $aggregateField = Str::snake($aggregateField);
-        }
+        $updateSql = sprintf(
+            'UPDATE %s SET %s = COALESCE((SELECT %s(%s) FROM %s WHERE %s = %s.%s), 0)',
+            $related->getTable(),
+            $config->aggregateField,
+            $command,
+            $config->sourceField,
+            $model->getTable(),
+            $foreignKey,
+            $related->getTable(),
+            $related->getKeyName()
+        );
 
-        $sql = DB::table($table)->select($config['foreignKey'])->groupBy($config['foreignKey']);
-
-        if (strtolower($command) == 'count') {
-            $aggregate = $sql->count($aggregateField);
-        } else if (strtolower($command) == 'sum') {
-            $aggregate = $sql->sum($aggregateField);
-        } else if (strtolower($command) == 'avg') {
-            $aggregate = $sql->avg($aggregateField);
-        } else {
-            $aggregate = null;
-        }
-
-        return DB::table($config['table'])
-            ->update([
-                $config['field'] => $aggregate
-            ]);
+        DB::update($updateSql);
     }
 
     /**
-     * Creates the key based on model properties and rules.
-     *
-     * @param string $model
-     * @param string $field
-     *
-     * @return string
+     * Update the cache value for the model.
      */
-    protected function field($model, $field)
+    protected function updateCacheValue(Model $model, CacheConfig $config, int $amount): void
     {
-        $class = strtolower(class_basename($model));
-        $field = $class . '_' . $field;
-
-        return $field;
+        $model->{$config->aggregateField} = $model->{$config->aggregateField} + $amount;
+        $model->save();
     }
-
-    /**
-     * Process configuration parameters to check key names, fix snake casing, etc..
-     *
-     * @param array $config
-     * @return array
-     */
-    protected function processConfig(array $config)
-    {
-        return [
-            'model'      => $config['model'],
-            'table'      => $this->getModelTable($config['model']),
-            'field'      => Str::snake($config['field']),
-            'key'        => Str::snake($this->key($config['key'])),
-            'foreignKey' => Str::snake($this->key($config['foreignKey'])),
-        ];
-    }
-
-    /**
-     * Returns the true key for a given field.
-     *
-     * @param string $field
-     * @return mixed
-     */
-    protected function key($field)
-    {
-        if (method_exists($this->model, 'getTrueKey')) {
-            return $this->model->getTrueKey($field);
-        }
-
-        return $field;
-    }
-
-    /**
-     * Returns the table for a given model. Model can be an Eloquent model object, or a full namespaced
-     * class string.
-     *
-     * @param string|Model $model
-     * @return mixed
-     */
-    protected function getModelTable($model)
-    {
-        if (!is_object($model)) {
-            $model = new $model;
-        }
-
-        return DB::getTablePrefix().$model->getTable();
-    }
-
 }

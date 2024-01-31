@@ -6,8 +6,8 @@
 
 Eloquence is a package to extend Laravel's base Eloquent models and functionality.
 
-It provides a number of utilities and classes to work with Eloquent in new and useful ways,
-such as camel cased attributes (for JSON apis), count caching, uuids and more.
+It provides a number of utilities and attributes to work with Eloquent in new and useful ways,
+such as camel cased attributes (such as for JSON apis and code style cohesion), data aggregation and more.
 
 ## Installation
 
@@ -17,113 +17,219 @@ Install the package via composer:
 
 ## Usage
 
-First, add the eloquence service provider to your config/app.php file:
+Eloquence is automatically discoverable by Laravel, and shouldn't require any further steps. For those on earlier 
+versions of Laravel, you can add the package as per normal in your config/app.php file:
 
     'Eloquence\EloquenceServiceProvider',
 
-It's important to note that this will automatically re-bind the Model class
-that Eloquent uses for many-to-many relationships. This is necessary because
-when the Pivot model is instantiated, we need it to utilise the parent model's
-information and traits that may be needed.
-
-You should now be good to go with your models.
+The service provider doesn't do much, other than enable the query log, if configured.
 
 ## Camel case all the things!
 
-For those of us who prefer to work with a single coding standard right across our applications,
-using the CamelCaseModel trait will ensure that all those attributes, relationships and associated
-data from our Eloquent models persist through to our APIs in a camel-case manner. This is important
-if you are writing front-end applications, which are also using camelCase. This allows for a
-better standard across our application. To use:
+For those of us who prefer to work with a single coding style right across our applications, using the CamelCased trait 
+will ensure you can do exactly that. It transforms all attribute access from camelCase to snake_case in real-time,
+providing a unified coding style across your application. This means everything from attribute access to JSON API 
+responses will all be camelCased. To use, simply add the CamelCased trait to your model:
 
-    use \Eloquence\Behaviours\CamelCasing;
-
-Put the above line in your models and that's it.
+    use \Eloquence\Behaviours\HasCamelCasing;
 
 ### Note!
 
-Eloquence DOES NOT CHANGE how you write your schema migrations. You should still be using snake_case
-when setting up your fields and tables in your database schema migrations. This is a good thing -
-snake_case of field names is the defacto standard within the Laravel community :)
-
-
-## UUIDs
-
-Eloquence comes bundled with UUID capabilities that you can use in your models.
-
-Simply include the Uuid trait:
-
-    use Eloquence\Behaviours\Uuid;
-
-And then disable auto incrementing ids:
-
-    public $incrementing = false;
-
-This will turn off id auto-incrementing in your model, and instead automatically generate a UUID4 value for your id field. One
-benefit of this is that you can actually know the id of your record BEFORE it's saved!
-
-You must ensure that your id column is setup to handle UUID values. This can be done by creating a migration with the following
-properties:
-
-    $table->char('id', $length = 36)->index();
-
-It's important to note that you should do your research before using UUID functionality and whether it works for you. UUID
-field searches are much slower than indexed integer fields (such as autoincrement id fields).
-
-
-### Custom UUIDs
-
-Should you need a custom UUID solution (aka, maybe you don't want to use a UUID4 id), you can simply define the value you wish on
-the id field. The UUID model trait will not set the id if it has already been defined. In this use-case however, it's probably no good
-to use the Uuid trait, as it's practically useless in this scenario.
+Eloquence ***DOES NOT CHANGE*** how you write your schema migrations. You should still be using snake_case when setting 
+up your columns and tables in your database schema migrations. This is a good thing - snake_case of columns names is the 
+defacto standard within the Laravel community and is widely-used across database schemas, as well.
 
 ## Behaviours
 
-Eloquence comes with a system for setting up behaviours, which are really just small libraries that you can use with your Eloquent models.
-The first of these is the count cache.
+Eloquence comes with a system for setting up behaviours, which are really just small libraries that you can use with your 
+Eloquent models. The first of these is the count cache.
 
 ### Count cache
 
-Count caching is where you cache the result of a count of a related table's records. A simple example of this is where you have a user who
-has many posts. In this example, you may want to count the number of posts a user has regularly - and perhaps even order by this. In SQL,
-ordering by a counted field is slow and unable to be indexed. You can get around this by caching the count of the posts the user
-has created on the user's record.
+Count caching is where you cache the result of a count on a related model's record. A simple example of this is where you 
+have posts that belong to authors. In this situation, you may want to count the number of posts an author has regularly,
+and perhaps even order by this count. In SQL, ordering by an aggregated value is unable to be indexed and therefore - slow.
+You can get around this by caching the count of the posts the author has created on the author's model record.
 
 To get this working, you need to do two steps:
 
-1. Use the Countable trait on the model and
-2. Configure the count cache settings
+1. Use the HasCounts trait on the child model (in this, case Post) and
+2. Configure the count cache settings by using the CountedBy attribute.
 
-#### Configure the count cache
+#### Configuring a count cache
 
-To setup the count cache configuration, we need to have the model use Countable trait, like so:
+To setup a count cache configuration, we add the HasCounts trait, and setup the CountedBy attribute:
 
 ```php
-class Post extends Eloquent {
-    use Countable;
+use Eloquence\Behaviours\CountCache\CountedBy;
+use Eloquence\Behaviours\CountCache\HasCounts;
+use Illuminate\Database\Eloquent\Model;
 
-    public function countCaches() {
-        return [User::class];
+class Post extends Model {
+    use HasCounts;
+
+    #[CountedBy]
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Author::class);
     }
 }
 ```
 
-This tells the count cache that the Post model has a count cache on the User model. So, whenever a post is added, or modified or
-deleted, the count cache behaviour will update the appropriate user's count cache for their posts. In this case, it would update `post_count`
-on the user model.
+This tells the count cache behaviour that the model has an aggregate count cache on the Author model. So, whenever a post 
+is added, modified or deleted, the count cache behaviour will update the appropriate author's count cache for their 
+posts. In this case, it would update `post_count` field on the author model.
 
 The example above uses the following standard conventions:
 
 * `post_count` is a defined field on the User model table
-* `user_id` is the field representing the foreign key on the post model
-* `id` is the primary key on the user model table
 
-These are, however, configurable:
+It uses your own relationship to find the related record, so no other configuration is required!
+
+Of course, if you have a different setup, or different field names, you can alter the count cache behaviour by defining
+the appropriate field to update:
 
 ```php
-class Post extends Eloquent {
-    use Countable;
+class Post extends Model {
+    use HasCounts;
 
+    #[CountedBy(as: 'total_posts')]
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Author::class);
+    }
+}
+```
+
+When setting the as: value (using named parameters here from PHP 8.0 for illustrative and readability purposes), you're 
+telling the count cache that the aggregate field on the Author model is actually called `total_posts`.
+
+HasCounts is not limited to just one count cache configuration. You can define as many as you need for each BelongsTo
+relationship, like so:
+
+```php
+#[CountedBy(as: 'total_posts')]
+public function author(): BelongsTo
+{
+    return $this->belongsTo(Author::class);
+}
+
+#[CountedBy(as: 'num_posts')]
+public function category(): BelongsTo
+{
+    return $this->belongsTo(Category::class);
+}
+```
+
+### Sum cache
+
+Sum caching is similar to count caching, except that instead of caching a _count_ of the related model objects, you cache a _sum_
+of a particular field on the child model's object. A simple example of this is where you have an order that has many items.
+Using sum caching, you can cache the sum of all the items' prices, and store that as a cached sum on the Order model.
+
+To get this working -- just like count caching -- you need to do two steps:
+
+1. Add the HasSums to your child model and
+2. Add SummedBy attribute to each relationship method that requires it.
+
+#### Configure the sum cache
+
+To setup the sum cache configuration, simply do the following:
+
+```php
+use Eloquence\Behaviours\SumCache\HasSums;
+use Eloquence\Behaviours\SumCache\SummedBy;
+use Illuminate\Database\Eloquent\Model;
+
+class Item extends Model {
+    use HasSums;
+
+    #[SummedBy(from: 'amount', as: 'total_amount')]
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
+    }
+}
+```
+
+Unlike the count cache which can assume sensible defaults, the sum cache needs a bit more guidance. The example above 
+tells the sum cache that there is an `amount` field on Item that needs to be summed to the `total_amount` field on Order.
+
+### Cache recommendations
+
+Because the cache system works directly with other model objects and requires multiple writes to the database, it is
+strongly recommended that you wrap your model saves that utilise caches in a transaction. In databases like Postgres,
+this is automatic, but for databases like MySQL you need to make sure you're using a transactional database engine
+like InnoDB.
+
+The reason for needing transactions is that if any one of your queries fail, your caches will end up out of sync. It's 
+better for the entire operation to fail, than to have this happen. Below is an example of using a database transaction
+using Laravel's DB facade:
+
+```php
+DB::transaction(function() {
+    $post = new Post;
+    $post->authorId = $author->id;
+    $post->save();
+});
+```
+
+If we return to the example above with posts having authors - if this save was not wrapped in a transaction, and the post
+was created but for some reason the database failed immediately after, you would never see the count cache update in the
+parent Author model, you'll end up with erroneous data that can be quite difficult to debug.
+
+### Sluggable
+
+Sluggable is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
+
+```php
+class User extends Model {
+    use HasSlugs;
+
+    public function slugStrategy(): string
+    {
+        return 'username';
+    }
+}
+```
+
+In the example above, a slug will be created based on the username field of the User model. There are two other
+slugs that are supported, as well:
+
+* id and
+* uuid
+
+The only difference between the two above, is that if you're using UUIDs, the slug will be generated prior to the model
+being saved, based on the uuid field. With ids, which are generally auto-increase strategies - the slug has to be 
+generated after the record has been saved - which results in a secondary save call to the database.
+
+That's it! Easy huh?
+
+# Upgrading from v10
+Version 11 of Eloquence is a complete rebuild and departure from the original codebase, utilising instead PHP 8.1 attributes
+and moving away from traits/class extensions where possible. This means that in some projects many updates will need to 
+be made to ensure that your use of Eloquence continues to work.
+
+## 1. Class renames
+
+* Camelcasing has been renamed to HasCamelCasing
+* Sluggable renamed to HasSlugs
+
+## 2. Updates to how caches work
+All your cache implementations will need to be modified following the guide above. But in short, you'll need to import
+and apply the provided attributes to the relationship methods on your models that require aggregated cache values.
+
+The best part about the new architecture with Eloquence, is that you can define your relationships however you want! If 
+you have custom where clauses or other conditions that restrict the relationship, Eloquence will respect that. This makes
+Eloquence now considerably more powerful and supportive of individual domain requirements than ever before.
+
+Let's use a real case. This is the old approach, using Countable as an example:
+
+```php
+class Post extends Model
+{
+    use Countable;
+    
     public function countCaches() {
         return [
             'num_posts' => ['User', 'users_id', 'id']
@@ -132,135 +238,38 @@ class Post extends Eloquent {
 }
 ```
 
-This example customises the count cache field, and the related foreign key, with `num_posts` and `users_id`, respectively.
-
-Alternatively, you can be very explicit about the configuration (useful if you are using count caching on several tables
-and use the same column name on each of them):
+To migrate that to v11, we would do the following:
 
 ```php
-class Post extends {
-    use Countable;
+use Eloquence\Behaviours\CountCache\CountedBy;
 
-    public function countCaches() {
-        return [
-            [
-                'model'      => 'User',
-                'field'      => 'num_posts',
-                'foreignKey' => 'users_id',
-                'key'        => 'id'
-            ]
-        ];
+class Post extends Model
+{
+    use \Eloquence\Behaviours\CountCache\HasCounts;
+    
+    #[CountedBy(as: 'num_posts')]
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
 ```
 
-If using the explicit configuration, at a minimum you will need to define the "model" parameter.  The "countField", "foreignKey",
-and "key" parameters will be calculated using the standard conventions mentioned above if they are omitted.
-
-With this configuration now setup - you're ready to go!
-
-
-### Sum cache
-
-Sum caching is similar to count caching, except that instead of caching a _count_ of a related table's records, you cache a _sum_
-of a particular field on the related table's records. A simple example of this is where you have an order that has many items.
-Using sum caching, you can cache the sum of all the items' prices, and store that sum in the order table.
-
-To get this working -- just like count caching -- you need to do two steps:
-
-1. Utilise the Summable trait on the model and
-2. Configure the model for any sum caches
-
-#### Configure the sum cache
-
-To setup the sum cache configuration, simply do the following:
-
-```php
-class Item extends Eloquent {
-    use Summable;
-
-    public function sumCaches() {
-        return [Order::class];
-    }
-}
-```
-
-This tells the sum cache manager that the Item model has a sum cache on the Order model. So, whenever an item is added, modified, or
-deleted, the sum cache behaviour will update the appropriate order's sum cache for their items. In this case, it would update `item_total`
-on the Order model.
-
-The example above uses the following conventions:
-
-* `item_total` is a defined field on the Order model table
-* `total` is a defined field on the Item model table (the column we are summing)
-* `order_id` is the field representing the foreign key on the item model
-* `id` is the primary key on the order model table
-
-These are, however, configurable:
-
-```php
-class Item extends Eloquent {
-    use Summable;
-
-    public function sumCaches() {
-        return [
-            'item_total' => ['Order', 'total', 'order_id', 'id']
-        ];
-    }
-}
-```
-
-Or using the verbose syntax:
-
-```php
-class Item extends Eloquent {
-    use Summable;
-
-    public function sumCaches() {
-        return [
-            [
-                'model'       => 'Order',
-                'columnToSum' => 'total',
-                'field'       => 'item_total'
-                'foreignKey'  => 'order_id',
-                'key'         => 'id'
-            ]
-        ];
-    }
-}
-```
-
-Both of these examples implements the default settings.
-
-With these settings configured, you will now see the related model's sum cache updated every time an item is added, updated, or removed.
-
-### Sluggable models
-
-Sluggable is another behaviour that allows for the easy addition of model slugs. To use, implement the Sluggable trait:
-
-```php
-class User extends Eloquent {
-    use Sluggable;
-
-    public function slugStrategy() {
-        return 'username';
-    }
-}
-```
-
-In the example above, a slug will be created based on the username field of the User model. There are two other
-slugs that are supported however, as well:
-
-* id and
-* uuid
-
-The only difference between the two above, is that if you're using UUIDs, the slug will be generated previous
-to the save, based on the uuid field. With ids, which are generally auto-increase strategies - the slug has
-to be generated after the record has been saved - which results in a secondary save call to the database.
-
-That's it! Easy huh?
+Note the distinct lack of required configuration. The same applies to the sum behaviour - simply migrate your configuration 
+away from the cache functions, and into the attributes above the relationships you wish to have an aggregated cache 
+value for.
 
 ## Changelog
+
+#### 11.0.0
+
+* Complete rework of the Eloquent library - version 11 is **_not_** backwards-compatible
+* UUID support removed - both UUIDs and ULIDs are now natively supported in Laravel and have been for some time
+* Cache system now works directly with models and their relationships, allowing for fine-grained control over the models it works with
+* Console commands removed - model caches can be rebuilt using Model::rebuildCache() if something goes awry
+* Fixed a number of bugs across both count and sum caches
+* CamelCasing renamed to CamelCased
+* Syntax, styling, and standards all modernised
 
 #### 10.0.0
 

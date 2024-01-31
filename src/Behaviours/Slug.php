@@ -1,4 +1,5 @@
 <?php
+
 namespace Eloquence\Behaviours;
 
 use Hashids\Hashids;
@@ -40,10 +41,8 @@ class Slug implements Jsonable
 
     /**
      * Generate a new entirely random 8-character slug
-     *
-     * @return Slug
      */
-    public static function random()
+    public static function random(): Slug
     {
         $exclude = ['/', '+', '=', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         $length = 8;
@@ -58,34 +57,17 @@ class Slug implements Jsonable
         return new Slug($string);
     }
 
-    /**
-     * Creates a new slug from a string title.
-     *
-     * @param string $title
-     * @return Slug
-     */
-    public static function fromTitle($title)
+    public static function fromTitle($title): Slug
     {
         return new Slug(Str::slug($title));
     }
 
-    /**
-     * Returns a string value for the Slug.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->slug;
+        return $this->slug;
     }
 
-    /**
-     * Convert the object to its JSON representation.
-     *
-     * @param  int $options
-     * @return string
-     */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         return $this->__toString();
     }

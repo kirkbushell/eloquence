@@ -1,16 +1,24 @@
 <?php
 namespace Tests\Acceptance\Models;
 
-use Eloquence\Behaviours\CamelCasing;
-use Eloquence\Behaviours\Sluggable;
+use Eloquence\Behaviours\HasCamelCasing;
+use Eloquence\Behaviours\HasSlugs;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model
 {
-    use CamelCasing;
-    use Sluggable;
+    use HasCamelCasing;
+    use HasFactory;
+    use HasSlugs;
 
-    public function posts()
+    protected $fillable = [
+        'post_count'
+    ];
+
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
     }
@@ -18,5 +26,10 @@ class User extends Model
     public function slugStrategy()
     {
         return ['firstName', 'lastName'];
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
     }
 }
