@@ -46,16 +46,4 @@ class Observer
     {
         CountCache::for($model)->increment();
     }
-
-    /**
-     * Handle most update operations of the count cache.
-     *
-     * @param string $operation + or -
-     */
-    private function update($model, string $operation): void
-    {
-        $countCache = CountCache::for($model);
-
-        $countCache->apply((fn($config) => $this->updateCacheRecord($config->relatedModel($model), $config, $operation))->bindTo($countCache));
-    }
 }

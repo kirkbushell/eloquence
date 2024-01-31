@@ -21,7 +21,6 @@
         "hashids/hashids": "^4.1",
         "illuminate/database": "^10.0",
         "illuminate/support": "^10.0",
-        "ramsey/uuid": "^4.7",
         "hanneskod/classtools": "^0.1.0",
         "symfony/finder": "^6.3"
     },
