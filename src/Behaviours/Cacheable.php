@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use ReflectionClass;
 use ReflectionMethod;
+use Tests\Acceptance\Models\User;
 
 /**
  * The cacheable trait is concerned with the related models.
@@ -91,10 +92,6 @@ trait Cacheable
             $related->getTable(),
             $related->getKeyName()
         );
-
-//        dd($updateSql);
-
-//        echo "\n".$updateSql;
 
         DB::update($updateSql);
     }

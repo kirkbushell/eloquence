@@ -2,7 +2,9 @@
 
 namespace Eloquence\Behaviours\SumCache;
 
-#[\Attribute]
+use Attribute;
+
+#[Attribute(Attribute::TARGET_METHOD)]
 class SummedBy
 {
     public function __construct(readonly string $from, readonly string $as) {}

@@ -13,7 +13,7 @@ interface Summable
      *
      * Of course, if you want to customise the field saving the total as well, you can do that too:
      *
-     * ['relationshp' => ['aggregate_field' => 'source_field']]
+     * ['relationship' => ['aggregate_field' => 'source_field']]
      *
      * In real-world terms:
      *

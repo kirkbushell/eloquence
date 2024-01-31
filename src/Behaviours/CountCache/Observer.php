@@ -44,7 +44,7 @@ class Observer
      */
     public function restored($model): void
     {
-        CountCache::for($model)->increment($model);
+        CountCache::for($model)->increment();
     }
 
     /**

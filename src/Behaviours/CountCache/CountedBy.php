@@ -2,7 +2,9 @@
 
 namespace Eloquence\Behaviours\CountCache;
 
-#[\Attribute]
+use Attribute;
+
+#[Attribute(Attribute::TARGET_METHOD)]
 class CountedBy
 {
     public function __construct(readonly ?string $as = null) {}

@@ -110,7 +110,7 @@ relationship.
 
 Sum caching is similar to count caching, except that instead of caching a _count_ of the related model objects, you cache a _sum_
 of a particular field on the child model's object. A simple example of this is where you have an order that has many items.
-Using sum caching, you can cache the sum of all the items' prices, and store that as a cached sum on the order model.
+Using sum caching, you can cache the sum of all the items' prices, and store that as a cached sum on the Order model.
 
 To get this working -- just like count caching -- you need to do two steps:
 

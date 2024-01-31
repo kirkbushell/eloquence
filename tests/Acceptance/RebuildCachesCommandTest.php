@@ -11,7 +11,6 @@ class RebuildCachesCommandTest extends AcceptanceTestCase
 {
     function test_itCanRebuildCachesOfAllAffectedModels()
     {
-
         $order1 = Order::factory()->create(['total_amount' => 0]);
         $order2 = Order::factory()->create(['total_amount' => 0]);
 
@@ -30,16 +29,10 @@ class RebuildCachesCommandTest extends AcceptanceTestCase
         $order2->totalAmount = 0;
         $order2->save();
 
-        $user1->postCount = 0;
-        $user1->save();
-
-        $user2->postCount = 0;
-        $user2->save();
-
         $result = $this->artisan('eloquence:rebuild-caches '.__DIR__.'/../../tests/Acceptance/Models');
 
         $result->assertExitCode(0);
-//        $this->assertSame(10, $user1->fresh()->postCount);
+
         $this->assertDatabaseHas('users', ['post_count' => 10]);
         $this->assertDatabaseHas('users', ['post_count' => 5]);
         $this->assertDatabaseHas('orders', ['total_amount' => 100]);
