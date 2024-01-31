@@ -76,9 +76,9 @@ class Post extends Model {
 }
 ```
 
-This tells HasCounts that the model has a count cache on the Author model. So, whenever a post is added, modified or
-deleted, the count cache behaviour will update the appropriate author's count cache for their posts. In this case, it 
-would update `post_count` field on the author model.
+This tells the count cache behaviour that the model has an aggregate count cache on the Author model. So, whenever a post 
+is added, modified or deleted, the count cache behaviour will update the appropriate author's count cache for their 
+posts. In this case, it would update `post_count` field on the author model.
 
 The example above uses the following standard conventions:
 
@@ -86,7 +86,8 @@ The example above uses the following standard conventions:
 
 It uses your own relationship to find the related record, so no other configuration is required!
 
-Of course, if you have a different setup, you can alter the count cache behaviour:
+Of course, if you have a different setup, or different field names, you can alter the count cache behaviour by defining
+the appropriate field to update:
 
 ```php
 class Post extends Model {
@@ -100,11 +101,25 @@ class Post extends Model {
 }
 ```
 
-When setting the as: value (using named parameters here from PHP 8.0 for illustrative purposes), you're telling the count
-cache that the aggregate field on the Author model is actually called `total_posts`
+When setting the as: value (using named parameters here from PHP 8.0 for illustrative and readability purposes), you're 
+telling the count cache that the aggregate field on the Author model is actually called `total_posts`.
 
 HasCounts is not limited to just one count cache configuration. You can define as many as you need for each BelongsTo
-relationship.
+relationship, like so:
+
+```php
+#[CountedBy(as: 'total_posts')]
+public function author(): BelongsTo
+{
+    return $this->belongsTo(Author::class);
+}
+
+#[CountedBy(as: 'num_posts')]
+public function category(): BelongsTo
+{
+    return $this->belongsTo(Category::class);
+}
+```
 
 ### Sum cache
 
@@ -203,6 +218,46 @@ be made to ensure that your use of Eloquence continues to work.
 ## 2. Updates to how caches work
 All your cache implementations will need to be modified following the guide above. But in short, you'll need to import
 and apply the provided attributes to the relationship methods on your models that require aggregated cache values.
+
+The best part about the new architecture with Eloquence, is that you can define your relationships however you want! If 
+you have custom where clauses or other conditions that restrict the relationship, Eloquence will respect that. This makes
+Eloquence now considerably more powerful and supportive of individual domain requirements than ever before.
+
+Let's use a real case. This is the old approach, using Countable as an example:
+
+```php
+class Post extends Model
+{
+    use Countable;
+    
+    public function countCaches() {
+        return [
+            'num_posts' => ['User', 'users_id', 'id']
+        ];
+    }
+}
+```
+
+To migrate that to v11, we would do the following:
+
+```php
+use Eloquence\Behaviours\CountCache\CountedBy;
+
+class Post extends Model
+{
+    use \Eloquence\Behaviours\CountCache\HasCounts;
+    
+    #[CountedBy(as: 'num_posts')]
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}
+```
+
+Note the distinct lack of required configuration. The same applies to the sum behaviour - simply migrate your configuration 
+away from the cache functions, and into the attributes above the relationships you wish to have an aggregated cache 
+value for.
 
 ## Changelog
 
