@@ -68,13 +68,13 @@ class SumCache
     /**
      * Takes a registered sum cache, and setups up defaults.
      */
-    protected function config($relation, string|array $sourceField): CacheConfig
+    protected function config($relationName, $sourceField): CacheConfig
     {
         $keys = array_keys($sourceField);
 
         $aggregateField = $keys[0];
         $sourceField = $sourceField[$aggregateField];
 
-        return new CacheConfig($relation, $aggregateField, $sourceField);
+        return new CacheConfig($relationName, $aggregateField, $sourceField);
     }
 }

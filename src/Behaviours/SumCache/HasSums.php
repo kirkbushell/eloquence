@@ -4,7 +4,7 @@ namespace Eloquence\Behaviours\SumCache;
 
 trait HasSums
 {
-    public static function bootHasSums()
+    public static function bootHasSums(): void
     {
         static::observe(Observer::class);
     }

@@ -23,6 +23,14 @@ trait Cacheable
     abstract private function configuration(): array;
 
     /**
+     * Template method for setting up the CacheConfig object.
+     */
+    protected function config($relationName, $aggregateField): CacheConfig
+    {
+        return new CacheConfig($relationName, $aggregateField);
+    }
+
+    /**
      * Helper method for easier use of the implementing classes.
      */
     public static function for(Model $model): self
@@ -101,9 +109,9 @@ trait Cacheable
     /**
      * Update the cache value for the model.
      */
-    protected function updateCacheValue(Model $model, CacheConfig $config, int $amount): void
+    protected function updateCacheValue(Model $model, CacheConfig $config, $value): void
     {
-        $model->{$config->aggregateField} = $model->{$config->aggregateField} + $amount;
+        $model->{$config->aggregateField} = $model->{$config->aggregateField} + $value;
         $model->save();
     }
 }

@@ -56,6 +56,7 @@ class AcceptanceTestCase extends TestCase
             $table->integer('user_id')->nullable();
             $table->string('slug')->nullable();
             $table->integer('comment_count')->default(0);
+            $table->dateTime('publish_at')->nullable();
             $table->timestamps();
         });
 
@@ -85,6 +86,7 @@ class AcceptanceTestCase extends TestCase
             $table->increments('id');
             $table->integer('post_count')->default(0);
             $table->integer('total_comments')->default(0);
+            $table->dateTime('last_activity_at')->nullable();
             $table->timestamps();
         });
     }

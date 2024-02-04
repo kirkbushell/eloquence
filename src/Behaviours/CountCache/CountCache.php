@@ -71,12 +71,4 @@ class CountCache
             $this->updateCacheValue($config->relatedModel($this->model), $config, -1);
         });
     }
-
-    /**
-     * Takes a registered counter cache, and setups up defaults.
-     */
-    protected function config($key, string $value): CacheConfig
-    {
-        return new CacheConfig($key, $value);
-    }
 }

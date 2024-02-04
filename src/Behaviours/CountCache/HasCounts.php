@@ -4,7 +4,7 @@ namespace Eloquence\Behaviours\CountCache;
 
 trait HasCounts
 {
-    public static function bootHasCounts()
+    public static function bootHasCounts(): void
     {
         static::observe(Observer::class);
     }
