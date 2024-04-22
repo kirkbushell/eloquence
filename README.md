@@ -261,6 +261,10 @@ value for.
 
 ## Changelog
 
+#### 11.0.1
+
+* Fixed dependency error to support Laravel 11
+
 #### 11.0.0
 
 * Complete rework of the Eloquent library - version 11 is **_not_** backwards-compatible
