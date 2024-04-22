@@ -261,6 +261,10 @@ value for.
 
 ## Changelog
 
+#### 11.0.2
+
+* Fixed a bug where relationships were not being returned
+
 #### 11.0.1
 
 * Fixed dependency error to support Laravel 11
