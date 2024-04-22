@@ -17,4 +17,9 @@ class ParentModelStub
     {
         $this->attributes[$key] = $value;
     }
+
+    public function isRelation($key)
+    {
+        return false;
+    }
 }

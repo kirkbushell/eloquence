@@ -46,9 +46,9 @@ trait HasCamelCasing
      * @param  string $key
      * @return mixed
      */
-    public function getAttribute($key)
+    public function getAttribute($key): mixed
     {
-        return parent::getAttribute($this->getSnakeKey($key));
+        return $this->isRelation($key) ? parent::getAttribute($key) : parent::getAttribute($this->getSnakeKey($key));
     }
 
     /**
