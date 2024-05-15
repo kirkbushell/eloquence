@@ -43,4 +43,18 @@ class CountCacheTest extends AcceptanceTestCase
 
         $this->assertEquals(1, $post->fresh()->commentCount);
     }
+
+    public function testItCanHandleNullableRelation()
+    {
+        $user1 = User::factory()->create();
+        $posts = Post::factory()->count(2)->for($user1)->create();
+
+        $this->assertEquals(2, $user1->fresh()->postCount);
+
+        $firstPost = $posts->first()->fresh();
+        $firstPost->userId = null;
+        $firstPost->save();
+
+        $this->assertEquals(1, $user1->fresh()->postCount);
+    }
 }
