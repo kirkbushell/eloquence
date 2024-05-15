@@ -44,7 +44,11 @@ class CountCache
             $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
 
             $this->updateCacheValue($originalRelatedModel, $config, -1);
-            $this->updateCacheValue($config->relatedModel($this->model), $config, 1);
+
+            // if the relation is null, then we don't need to do anything else.
+            if($this->model->{$foreignKey}) {
+                $this->updateCacheValue($config->relatedModel($this->model), $config, 1);
+            }
         });
     }
 
