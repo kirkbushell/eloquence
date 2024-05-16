@@ -35,7 +35,7 @@ class CountCache
         $this->apply(function (CacheConfig $config) {
             $foreignKey = $config->foreignKeyName($this->model);
 
-            // We only need to do anything if the foreign key was changed.
+            // We only do updates if the foreign key was actually changed
             if (!$this->model->wasChanged($foreignKey)) {
                 return;
             }
@@ -45,10 +45,10 @@ class CountCache
 
             $this->updateCacheValue($originalRelatedModel, $config, -1);
 
-            // if the relation is null, then we don't need to do anything else.
-            if($this->model->{$foreignKey}) {
-                $this->updateCacheValue($config->relatedModel($this->model), $config, 1);
-            }
+            // If there is no longer a relation, nothing more to do.
+            if (null === $this->model->{$foreignKey}) return;
+
+            $this->updateCacheValue($config->relatedModel($this->model), $config, 1);
         });
     }
 

@@ -261,6 +261,11 @@ value for.
 
 ## Changelog
 
+#### 11.0.3
+
+* Bug fix for count cache when relation is removed (#118)
+* Identified and applied a similar bugfix for the sum cache
+
 #### 11.0.2
 
 * Fixed a bug where relationships were not being returned

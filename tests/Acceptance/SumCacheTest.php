@@ -66,4 +66,17 @@ class SumCacheTest extends AcceptanceTestCase
         $this->assertEquals(0, Order::first()->totalAmount);
         $this->assertEquals(20, $newOrder->fresh()->totalAmount);
     }
+
+    public function test_cacheIsNotUsedWhenRelatedFieldIsNull()
+    {
+        $order = Order::factory()->create();
+        $items = Item::factory()->count(5)->for($order)->create(['amount' => 1]);
+
+        $this->assertEquals(5, Order::first()->totalAmount);
+
+        $items->first()->order_id = null;
+        $items->first()->save();
+
+        $this->assertEquals(4, $order->fresh()->totalAmount);
+    }
 }

@@ -76,7 +76,7 @@ class AcceptanceTestCase extends TestCase
 
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_id');
+            $table->integer('order_id')->nullable();
             $table->integer('amount');
             $table->timestamps();
             $table->softDeletes();

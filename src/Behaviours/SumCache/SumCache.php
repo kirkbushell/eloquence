@@ -57,6 +57,9 @@ class SumCache
                 // for the minus operation, we first have to get the model that is no longer associated with this one.
                 $originalRelatedModel = $config->emptyRelatedModel($this->model)->find($this->model->getOriginal($foreignKey));
                 $this->updateCacheValue($originalRelatedModel, $config, -$this->model->getOriginal($config->sourceField));
+
+                if (null === $this->model->{$foreignKey}) return;
+
                 $this->updateCacheValue($config->relatedModel($this->model), $config, $this->model->{$config->sourceField});
             } else {
                 $difference = $this->model->{$config->sourceField} - $this->model->getOriginal($config->sourceField);

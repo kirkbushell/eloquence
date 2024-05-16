@@ -34,7 +34,7 @@ class Slug implements Jsonable
     {
         $salt = md5(uniqid().$id);
         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $slug = with(new Hashids($salt, $length = 8, $alphabet))->encode($id);
+        $slug = with(new Hashids($salt, 8, $alphabet))->encode($id);
 
         return new Slug($slug);
     }

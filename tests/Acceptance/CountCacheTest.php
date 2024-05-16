@@ -33,7 +33,7 @@ class CountCacheTest extends AcceptanceTestCase
         $this->assertEquals(1, $user2->fresh()->commentCount);
     }
 
-    public function testItCanHandleModelRestoration()
+    public function test_itCanHandleModelRestoration()
     {
         $post = Post::factory()->create();
 
@@ -44,7 +44,7 @@ class CountCacheTest extends AcceptanceTestCase
         $this->assertEquals(1, $post->fresh()->commentCount);
     }
 
-    public function testItCanHandleNullableRelation()
+    public function test_cacheIsNotUsedWhenRelatedFieldIsNull()
     {
         $user1 = User::factory()->create();
         $posts = Post::factory()->count(2)->for($user1)->create();
