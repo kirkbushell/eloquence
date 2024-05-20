@@ -3,10 +3,12 @@
 namespace Eloquence\Behaviours;
 
 use Hashids\Hashids;
+use Illuminate\Contracts\Database\Eloquent\Castable;
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
 
-class Slug implements Jsonable
+class Slug implements Castable, Jsonable
 {
     /**
      * @var string
@@ -70,5 +72,23 @@ class Slug implements Jsonable
     public function toJson($options = 0): string
     {
         return $this->__toString();
+    }
+
+    public static function castUsing(array $arguments): CastsAttributes
+    {
+        return new class implements CastsAttributes
+        {
+            public function get($model, string $key, $value, array $attributes): ?Slug
+            {
+                return null === $value ? $value : new Slug($value);
+            }
+
+            public function set($model, string $key, $value, array $attributes): array
+            {
+                return [
+                    $key => null === $value ? $value : (string) $value
+                ];
+            }
+        };
     }
 }
