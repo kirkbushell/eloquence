@@ -109,8 +109,12 @@ trait Cacheable
     /**
      * Update the cache value for the model.
      */
-    protected function updateCacheValue(Model $model, CacheConfig $config, $value): void
+    protected function updateCacheValue(?Model $model, CacheConfig $config, $value): void
     {
+        if(!$model){
+            return;
+        }
+
         $model->{$config->aggregateField} = $model->{$config->aggregateField} + $value;
         $model->save();
     }

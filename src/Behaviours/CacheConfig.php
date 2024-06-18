@@ -23,7 +23,7 @@ class CacheConfig
     /**
      * Returns the current related model.
      */
-    public function relatedModel(Model $model): Model
+    public function relatedModel(Model $model): ?Model
     {
         return $model->{$this->relationName};
     }
