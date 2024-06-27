@@ -39,7 +39,9 @@ class ValueCache
                 return;
             }
 
-            $relatedModel = $config->emptyRelatedModel($this->model)->find($this->model->$foreignKey);
+            if(!$relatedModel = $config->emptyRelatedModel($this->model)->find($this->model->$foreignKey)){
+                return;
+            }
 
             $relatedModel->{$config->aggregateField} = $this->model->{$config->sourceField};
             $relatedModel->save();

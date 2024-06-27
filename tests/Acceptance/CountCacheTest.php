@@ -57,4 +57,12 @@ class CountCacheTest extends AcceptanceTestCase
 
         $this->assertEquals(1, $user1->fresh()->postCount);
     }
+
+    public function test_canCreateModelWithoutRelatedBehavioursModels()
+    {
+        $post = new Post();
+        $post->save();
+
+        $this->assertModelExists($post);
+    }
 }
