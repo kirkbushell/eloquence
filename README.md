@@ -261,6 +261,10 @@ value for.
 
 ## Changelog
 
+#### 11.0.4
+
+* Bug fix provided by #120 addressing the creation of new models without related model objects
+
 #### 11.0.3
 
 * Bug fix for count cache when relation is removed (#118)
