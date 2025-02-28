@@ -261,6 +261,10 @@ value for.
 
 ## Changelog
 
+#### 12.0.0
+
+* Added Laravel 12 support
+
 #### 11.0.4
 
 * Bug fix provided by #120 addressing the creation of new models without related model objects
