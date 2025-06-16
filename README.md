@@ -24,6 +24,22 @@ versions of Laravel, you can add the package as per normal in your config/app.ph
 
 The service provider doesn't do much, other than enable the query log, if configured.
 
+## Readonly models
+
+Eloquence supports the protection of models by ensuring that they can only be loaded from the database, and not
+written to, or have their values changed. This is useful for data you do not wish to be altered, or in cases
+where you may be sharing models across domain boundaries.
+
+To use, simply add the HasReadOnly trait to your model:
+
+```php
+use \Eloquence\Behaviours\Readonly\HasReadOnly;
+
+class Log extends Model {
+    use HasReadOnly;
+}
+```
+
 ## Camel case all the things!
 
 For those of us who prefer to work with a single coding style right across our applications, using the CamelCased trait 
@@ -260,6 +276,10 @@ away from the cache functions, and into the attributes above the relationships y
 value for.
 
 ## Changelog
+
+#### 12.0.1
+
+* Added Readonly model support.
 
 #### 12.0.0
 
