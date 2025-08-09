@@ -1,9 +1,11 @@
 <?php
 namespace Tests\Acceptance;
 
+use PHPUnit\Framework\Attributes\Group;
 use Tests\Acceptance\Models\Post;
 use Tests\Acceptance\Models\User;
 
+#[Group('acceptance')]
 class HasSlugsTest extends AcceptanceTestCase
 {
     function test_slugsCanBeGeneratedWithCustomStrategy()

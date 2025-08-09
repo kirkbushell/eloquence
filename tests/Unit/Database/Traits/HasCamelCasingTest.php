@@ -1,5 +1,5 @@
 <?php
-namespace tests\Unit\Database\Traits;
+namespace Tests\Unit\Database\Traits;
 
 use Carbon\Carbon;
 use Tests\Unit\Stubs\ModelStub;
@@ -7,7 +7,7 @@ use Tests\Unit\Stubs\PivotModelStub;
 use Tests\Unit\Stubs\RealModelStub;
 use Tests\Unit\TestCase;
 
-class HasCamelCasingTest extends TestCase
+final class HasCamelCasingTest extends TestCase
 {
     private $model;
 

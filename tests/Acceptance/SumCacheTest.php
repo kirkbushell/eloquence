@@ -1,9 +1,11 @@
 <?php
 namespace Tests\Acceptance;
 
+use PHPUnit\Framework\Attributes\Group;
 use Tests\Acceptance\Models\Item;
 use Tests\Acceptance\Models\Order;
 
+#[Group('acceptance')]
 class SumCacheTest extends AcceptanceTestCase
 {
     function test_relatedModelSumCacheIsIncreasedWhenModelIsCreated()

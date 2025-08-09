@@ -2,9 +2,11 @@
 
 namespace Tests\Acceptance;
 
+use PHPUnit\Framework\Attributes\Group;
 use Tests\Acceptance\Models\Category;
 use Tests\Acceptance\Models\Post;
 
+#[Group('acceptance')]
 class ValueCacheTest extends AcceptanceTestCase
 {
     function test_values_from_related_models_are_cached()
