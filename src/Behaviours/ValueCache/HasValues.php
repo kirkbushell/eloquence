@@ -6,7 +6,8 @@ trait HasValues
 {
     public static function bootHasValues(): void
     {
-        static::observe(Observer::class);
+        static::created(Observer::class.'@created');
+        static::updated(Observer::class.'@updated');
     }
 
     public static function rebuildValueCache(): void

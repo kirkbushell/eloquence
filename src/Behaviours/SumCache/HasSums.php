@@ -6,7 +6,10 @@ trait HasSums
 {
     public static function bootHasSums(): void
     {
-        static::observe(Observer::class);
+        static::created(Observer::class.'@created');
+        static::updated(Observer::class.'@updated');
+        static::deleted(Observer::class.'@deleted');
+        static::restored(Observer::class.'@restored');
     }
 
     public static function rebuildSumCache(): void
