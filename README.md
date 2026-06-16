@@ -277,6 +277,10 @@ value for.
 
 ## Changelog
 
+#### 13.0.0
+
+* Added Laravel 13 support
+
 #### 12.0.1
 
 * Added Readonly model support.
